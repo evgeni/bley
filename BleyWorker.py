@@ -28,21 +28,19 @@ from BleyHelpers import *
 class BleyWorker (Thread):
 	
 	csocket = None
+	settings = None
 	postfix_params = {}
 	db = None
 	dbc = None
 	adns_handle = None
-	dnsbls = []
-	dnswls = []
 	
-	def __init__ (self, csocket):
+	def __init__ (self, csocket, settings):
 		self.csocket = csocket
+		self.settings = settings
 		self.postfix_params = {}
-		self.db = psycopg2.connect("dbname=bley")
+		self.db = self.settings.database.connect(self.settings.dsn)
 		self.dbc = self.db.cursor()
 		self.adns_handle = adns.init()
-		self.dnsbls = ['ix.dnsbl.manitu.net', 'dnsbl.njabl.org', 'dnsbl.ahbl.org', 'dnsbl.sorbs.net']
-		self.dnswls = ['list.dnswl.org', 'exemptions.ahbl.org']
 		Thread.__init__(self)
 	
 	def run(self):
@@ -74,13 +72,13 @@ class BleyWorker (Thread):
 			elif status == -1: # not found in local db...
 				in_dnswl = self.check_dnswls(self.postfix_params['client_address'])
 				in_dnsbl = 0
-				if in_dnswl >= 1:
+				if in_dnswl >= self.settings.dnswl_threshold:
 					new_status = 1
 				else:
 					in_dnsbl = self.check_dnsbls(self.postfix_params['client_address'])
-					if in_dnsbl >= 2 or check_helo(self.postfix_params) >= 2:
+					if in_dnsbl >= self.settings.dnsbl_threshold or check_helo(self.postfix_params) >= self.settings.rfc_threshold:
 						new_status = 2
-						action = 'DEFER_IF_PERMIT greylisted, try again later.'
+						action = 'DEFER_IF_PERMIT %s' % self.settings.reject_msg
 					else:
 						new_status = 0
 	                        query = "INSERT INTO bley_status (ip, status, last_action, last_from, last_to) VALUES(%(client_address)s, %(new_status)s, 'now', %(sender)s, %(recipient)s)"
@@ -98,7 +96,7 @@ class BleyWorker (Thread):
 					self.dbc.execute(query, self.postfix_params)
 					self.db.commit()
 				else:
-					action = 'DEFER_IF_PERMIT greylisted, try again later.'
+					action = 'DEFER_IF_PERMIT %s' % self.settings.reject_msg
 			else: # found to be clean
 				action = 'DUNNO'
 				query = "UPDATE bley_status SET last_action='now', last_from=%(sender)s, last_to=%(recipient)s WHERE ip=%(client_address)s"
@@ -118,14 +116,14 @@ class BleyWorker (Thread):
 
 	def check_dnswls(self, ip):
 		result = 0
-		for l in self.dnswls:
+		for l in self.settings.dnswls:
 			if self.check_dnsl(l, ip):
 				result += 1
 		return result
 
 	def check_dnsbls(self, ip):
 		result = 0
-                for l in self.dnsbls:
+                for l in self.settings.dnsbls:
                         if self.check_dnsl(l, ip):
                                 result += 1
                 return result

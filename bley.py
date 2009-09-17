@@ -22,17 +22,18 @@
 
 import socket
 from BleyWorker import BleyWorker
+import settings
 
 def main():
 	
 	serversocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-	serversocket.bind(('192.168.0.1', 1337))
+	serversocket.bind((settings.listen_addr, settings.listen_port))
 	serversocket.listen(5)
 	
 	running = True
 	while running:
 		(clientsocket, address) = serversocket.accept()
-		worker = BleyWorker(clientsocket)
+		worker = BleyWorker(clientsocket, settings)
 		worker.start()
 		#running = False
 	
