@@ -1,6 +1,7 @@
 def reverse_ip(ip):
     ip = ip.split('.')
-    rev = '%s.%s.%s.%s' % (ip[3], ip[2], ip[1], ip[0])
+    ip.reverse()
+    rev = '.'.join(ip)
     return rev
 
 def domain_from_host(host):
