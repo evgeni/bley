@@ -1,3 +1,5 @@
+import spf
+
 def reverse_ip(ip):
     ip = ip.split('.')
     ip.reverse()
@@ -26,5 +28,14 @@ def check_helo(params):
 		
 	if is_dyn_host(params['client_name']):
 		score += 1
+
+	if not check_spf(params):
+		score += 1
+
 	print "Checked EHLO to score=%s" % score
 	return score
+
+def check_spf(params):
+	s = spf.query(params['client_address'], params['sender'], params['helo_name'])
+	r = s.check()
+	return r[0] not in ['fail', 'softfail']
