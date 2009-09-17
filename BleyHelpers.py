@@ -1,10 +1,7 @@
 import spf
 
 def reverse_ip(ip):
-    ip = ip.split('.')
-    ip.reverse()
-    rev = '.'.join(ip)
-    return rev
+    return spf.reverse_dots(ip)
 
 def domain_from_host(host):
     d = host.split('.')
