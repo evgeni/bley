@@ -65,10 +65,16 @@ def check_helo(params):
 def check_spf(params):
 	s = spf.query(params['client_address'], params['sender'], params['helo_name'])
 	r = s.check()
+	score = 0
 	if r[0] in ['fail', 'softfail']:
-		return -1
+		score = -1
 	elif r[0] in ['pass']:
-		return 1
+		score = 1
 	else:
-		return 0
+		r = s.best_guess()
+		if r[0] in ['fail', 'softfail']:
+			score = -1
+		elif r[0] in ['pass']:
+			score = 1
+	return score
 
