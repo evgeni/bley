@@ -14,3 +14,6 @@ reject_msg = 'greylisted, try again later'
 
 database = psycopg2
 dsn = "dbname=bley"
+
+pid_file = '/home/bley/bley/bley.pid'
+log_file = '/home/bley/bley/bley.log'

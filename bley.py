@@ -21,22 +21,44 @@
 
 
 import socket
+import daemon
+import os
+import signal
+
 from BleyWorker import BleyWorker
 import settings
 
-def main():
-	
-	serversocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-	serversocket.bind((settings.listen_addr, settings.listen_port))
-	serversocket.listen(5)
-	
-	running = True
-	while running:
-		(clientsocket, address) = serversocket.accept()
-		worker = BleyWorker(clientsocket, settings)
-		worker.start()
-		#running = False
-	
-	return 0
+def bley_start():
+    if settings.pid_file:
+        f = open(settings.pid_file, 'w')
+        f.write(str(os.getpid()))
+        f.close()
 
-if __name__ == '__main__': main()
+    serversocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    serversocket.bind((settings.listen_addr, settings.listen_port))
+    serversocket.listen(5)
+	
+    while running:
+        (clientsocket, address) = serversocket.accept()
+        worker = BleyWorker(clientsocket, settings)
+        worker.start()
+
+def bley_stop(signum, frame):
+    running = False
+    if settings.pid_file:
+        os.unlink(settings.pid_file)
+
+context = daemon.DaemonContext(
+    stderr=open(settings.log_file, 'a')
+    )
+
+context.signal_map = {
+    signal.SIGTERM: bley_stop,
+    signal.SIGHUP: 'terminate',
+    }
+
+
+running = True
+
+context.open()
+bley_start()
