@@ -98,7 +98,7 @@ class BleyWorker (Thread):
 				print 'Found %s in %i DNSWLs and %i DNSBLs (saved status %i)' % (self.postfix_params['client_address'], in_dnswl, in_dnsbl, new_status)
 			elif status[0] >= 2: # found to be greyed
 				delta = datetime.datetime.now()-status[1]
-				if delta > datetime.timedelta(0, 60*60, 0): # older than a hour
+				if delta > self.settings.greylist_period or delta > self.settings.greylist_max:
 					action = 'DUNNO'
 					query = "UPDATE bley_status SET status=0, last_action='now', last_from=%(sender)s, last_to=%(recipient)s WHERE ip=%(client_address)s"
 					self.dbc.execute(query, self.postfix_params)
