@@ -21,3 +21,4 @@ log_file = '/home/bley/bley/bley.log'
 
 greylist_period = datetime.timedelta(0, 30*60, 0)
 greylist_max    = datetime.timedelta(0, 24*60*60, 0)
+greylist_penalty= datetime.timedelta(0, 10*60, 0)

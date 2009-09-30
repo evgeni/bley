@@ -98,13 +98,16 @@ class BleyWorker (Thread):
 				print 'Found %s in %i DNSWLs and %i DNSBLs (saved status %i)' % (self.postfix_params['client_address'], in_dnswl, in_dnsbl, new_status)
 			elif status[0] >= 2: # found to be greyed
 				delta = datetime.datetime.now()-status[1]
-				if delta > self.settings.greylist_period or delta > self.settings.greylist_max:
+				if delta > self.settings.greylist_period+status[2]*self.settings.greylist_penalty or delta > self.settings.greylist_max:
 					action = 'DUNNO'
 					query = "UPDATE bley_status SET status=0, last_action='now', last_from=%(sender)s, last_to=%(recipient)s WHERE ip=%(client_address)s"
 					self.dbc.execute(query, self.postfix_params)
 					self.db.commit()
 				else:
 					action = 'DEFER_IF_PERMIT %s' % self.settings.reject_msg
+					query = "UPDATE bley_status SET fail_count=fail_count+1, last_action='now', last_from=%(sender)s, last_to=%(recipient)s WHERE ip=%(client_address)s"
+					self.dbc.execute(query, self.postfix_params)
+					self.db.commit()
 			else: # found to be clean
 				action = 'DUNNO'
 				query = "UPDATE bley_status SET last_action='now', last_from=%(sender)s, last_to=%(recipient)s WHERE ip=%(client_address)s"
@@ -114,7 +117,7 @@ class BleyWorker (Thread):
 			self.csocket.sendall('action=%s\n\n' % action)
 
 	def check_local_db(self, postfix_params):
-		query = "SELECT status,last_action FROM bley_status WHERE ip=%(client_address)s LIMIT 1"
+		query = "SELECT status,last_action,fail_count FROM bley_status WHERE ip=%(client_address)s LIMIT 1"
 		self.dbc.execute(query, postfix_params)
 		result = self.dbc.fetchone()
 		if not result:
