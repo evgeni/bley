@@ -30,6 +30,7 @@
 import socket
 import daemon
 import os
+import sys
 import signal
 
 from BleyWorker import BleyWorker
@@ -40,13 +41,55 @@ if settings.log_file == 'syslog':
     syslog.openlog('bley', syslog.LOG_PID, syslog.LOG_MAIL)
     settings.logger = syslog.syslog
 else:
-    settings.logger = print
+    settings.logger = sys.stdout.write
+
+__CREATE_DB_QUERY = '''
+  CREATE TABLE IF NOT EXISTS bley_status
+  (
+    ip VARCHAR(39) NOT NULL,
+    status SMALLINT NOT NULL DEFAULT 1,
+    penalty INT NOT NULL DEFAULT 0,
+    last_action TIMESTAMP NOT NULL,
+    last_from VARCHAR(254),
+    last_to VARCHAR(254),
+    fail_count INT DEFAULT 0,
+    PRIMARY KEY ( `ip` )
+  );
+'''
+__CREATE_DB_QUERY_PG = '''
+  CREATE TABLE bley_status
+  (
+    ip VARCHAR(39) NOT NULL,
+    status SMALLINT NOT NULL DEFAULT 1,
+    penalty INT NOT NULL DEFAULT 0,
+    last_action TIMESTAMP NOT NULL,
+    last_from VARCHAR(254),
+    last_to VARCHAR(254),
+    fail_count INT DEFAULT 0,
+    PRIMARY KEY ( ip )
+  );
+'''
+__CHECK_DB_QUERY_PG = '''
+  SELECT tablename FROM pg_catalog.pg_tables WHERE tablename = 'bley_status'
+'''
 
 def bley_start():
     if settings.pid_file:
         f = open(settings.pid_file, 'w')
         f.write(str(os.getpid()))
         f.close()
+
+    db = settings.database.connect(settings.dsn)
+    dbc = db.cursor()
+    if settings.database.__name__ == 'psycopg2':
+        dbc.execute(__CHECK_DB_QUERY_PG)
+        if not dbc.fetchall():
+            dbc.execute(__CREATE_DB_QUERY_PG)
+    else:
+        dbc.execute(__CREATE_DB_QUERY)
+    db.commit()
+    dbc.close()
+    db.close()
 
     serversocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     serversocket.bind((settings.listen_addr, settings.listen_port))
@@ -61,7 +104,7 @@ def bley_stop(signum, frame):
     running = False
     if settings.pid_file:
         os.unlink(settings.pid_file)
-    if settings.log_file == 'syslog'
+    if settings.log_file == 'syslog':
         syslog.closelog()
 
 context = daemon.DaemonContext()
