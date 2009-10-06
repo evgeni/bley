@@ -35,6 +35,13 @@ import signal
 from BleyWorker import BleyWorker
 import settings
 
+if settings.log_file == 'syslog':
+    import syslog
+    syslog.openlog('bley', syslog.LOG_PID, syslog.LOG_MAIL)
+    settings.logger = syslog.syslog
+else:
+    settings.logger = print
+
 def bley_start():
     if settings.pid_file:
         f = open(settings.pid_file, 'w')
@@ -54,10 +61,13 @@ def bley_stop(signum, frame):
     running = False
     if settings.pid_file:
         os.unlink(settings.pid_file)
+    if settings.log_file == 'syslog'
+        syslog.closelog()
 
-context = daemon.DaemonContext(
-    stderr=open(settings.log_file, 'a')
-    )
+context = daemon.DaemonContext()
+
+if settings.log_file != 'syslog':
+    context.stderr=open(settings.log_file, 'a')
 
 context.signal_map = {
     signal.SIGTERM: bley_stop,
