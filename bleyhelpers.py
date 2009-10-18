@@ -39,36 +39,36 @@ def domain_from_host(host):
     return domain
 
 def is_dyn_host(host):
-	host = host.lower()
-	return host.find('dyn') != -1 or host.find('dial') != -1
+    host = host.lower()
+    return host.find('dyn') != -1 or host.find('dial') != -1
 
 def check_helo(params):
-	if params['client_name'] != 'unknown' and params['client_name'] == params['helo_name']:
-		score = 0
-	elif domain_from_host(params['helo_name']) == domain_from_host(params['client_name']) or params['helo_name'] == '[%s]' % params['client_address']:
-		score = 1
-	else:
-		score = 2
-		
-	return score
+    if params['client_name'] != 'unknown' and params['client_name'] == params['helo_name']:
+        score = 0
+    elif domain_from_host(params['helo_name']) == domain_from_host(params['client_name']) or params['helo_name'] == '[%s]' % params['client_address']:
+        score = 1
+    else:
+        score = 2
+        
+    return score
 
 def check_spf(params):
-	score = 0
-	try:
-		s = spf.query(params['client_address'], params['sender'], params['helo_name'])
-		r = s.check()
-		if r[0] in ['fail', 'softfail']:
-			score = 1
-		elif r[0] in ['pass']:
-			score = -2
-		else:
-			r = s.best_guess()
-			if r[0] in ['fail', 'softfail']:
-				score = 1
-			elif r[0] in ['pass']:
-				score = -1
-	except:
-		# DNS Errors, yay...
-		pass
-	return score
+    score = 0
+    try:
+        s = spf.query(params['client_address'], params['sender'], params['helo_name'])
+        r = s.check()
+        if r[0] in ['fail', 'softfail']:
+            score = 1
+        elif r[0] in ['pass']:
+            score = -2
+        else:
+            r = s.best_guess()
+            if r[0] in ['fail', 'softfail']:
+                score = 1
+            elif r[0] in ['pass']:
+                score = -1
+    except:
+        # DNS Errors, yay...
+        print 'something went wrong in check_spf()'
+    return score
 

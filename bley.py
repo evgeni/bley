@@ -94,7 +94,7 @@ def bley_start():
     serversocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     serversocket.bind((settings.listen_addr, settings.listen_port))
     serversocket.listen(5)
-	
+
     while running:
         (clientsocket, address) = serversocket.accept()
         worker = BleyWorker(clientsocket, settings)
