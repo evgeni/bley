@@ -48,7 +48,7 @@ class PostfixPolicy:
                     break
                 else:
                     try:
-                        (pkey, pval) = line.split('=')
+                        (pkey, pval) = line.split('=', 1)
                         postfix_params[pkey] = pval
                     except:
                         print 'Could not parse "%s"' % line
