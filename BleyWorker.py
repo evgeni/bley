@@ -87,7 +87,7 @@ class BleyWorker (Thread):
 					check_results['SPF'] = check_spf(self.postfix_params)
 					if self.postfix_params['sender']==self.postfix_params['recipient']:
 						check_results['S_EQ_R'] = 1
-					if check_results['DNSBL'] >= self.settings.dnsbl_threshold or check_results['HELO']+int(dyn)+check_results['SPF']+check_results['S_EQ_R'] >= self.settings.rfc_threshold:
+					if check_results['DNSBL'] >= self.settings.dnsbl_threshold or check_results['HELO']+int(check_results['DYN'])+check_results['SPF']+check_results['S_EQ_R'] >= self.settings.rfc_threshold:
 						new_status = 2
 						action = 'DEFER_IF_PERMIT %s' % self.settings.reject_msg
 					else:
