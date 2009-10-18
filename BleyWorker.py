@@ -142,5 +142,9 @@ class BleyWorker (Thread):
 	def check_dnsl(self, lst, ip):
 		rip = reverse_ip(ip)
 		lookup = '%s.%s' % (rip, lst)
-		res = self.adns_handle.synchronous(lookup, adns.rr.A)
-		return res[3] != ()
+		try:
+			res = self.adns_handle.synchronous(lookup, adns.rr.A)
+			return res[3] != ()
+		except:
+			# DNS Errors
+			return False
