@@ -93,7 +93,6 @@ class BleyWorker (Thread):
 	                        self.dbc.execute(query, params)
 	                        self.db.commit()
 
-				print 'Found %s in %i DNSWLs and %i DNSBLs (saved status %i)' % (self.postfix_params['client_address'], in_dnswl, in_dnsbl, new_status)
 			elif status[0] >= 2: # found to be greyed
 				delta = datetime.datetime.now()-status[1]
 				if delta > self.settings.greylist_period+status[2]*self.settings.greylist_penalty or delta > self.settings.greylist_max:
