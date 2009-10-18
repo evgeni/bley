@@ -27,6 +27,8 @@
 # OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 
+from socket import SHUT_RD
+
 class PostfixPolicy:
     '''Basic implementation of a Postfix policy service.'''
 
@@ -54,6 +56,7 @@ class PostfixPolicy:
                         print 'Could not parse "%s"' % line
 
             self.check_policy(postfix_params)
+        self.__csocket.shutdown(SHUT_RD)
 
     def check_policy (self, postfix_params):
         '''You probably want to override this one to do something useful.'''

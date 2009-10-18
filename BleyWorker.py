@@ -52,6 +52,10 @@ class BleyWorker (PostfixPolicy, Thread):
     def run(self):
         self.parse_input()
 
+        del self.adns_handle
+        self.dbc.close()
+        self.db.close()
+
     def check_policy (self, postfix_params):
         check_results = {'DNSWL': 0, 'DNSBL': 0, 'HELO': 0, 'DYN': 0, 'DB': -1, 'SPF': 0, 'S_EQ_R': 0 }
         action = 'DUNNO'
