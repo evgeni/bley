@@ -34,6 +34,7 @@ import sys
 import signal
 
 from BleyWorker import BleyWorker
+from BleyCleaner import BleyCleaner
 import settings
 
 if settings.log_file == 'syslog':
@@ -90,6 +91,9 @@ def bley_start():
     db.commit()
     dbc.close()
     db.close()
+
+    cleaner = BleyCleaner(settings)
+    cleaner.start()
 
     serversocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     serversocket.bind((settings.listen_addr, settings.listen_port))
