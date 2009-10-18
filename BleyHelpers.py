@@ -57,14 +57,14 @@ def check_spf(params):
 	r = s.check()
 	score = 0
 	if r[0] in ['fail', 'softfail']:
-		score = -1
-	elif r[0] in ['pass']:
 		score = 1
+	elif r[0] in ['pass']:
+		score = -2
 	else:
 		r = s.best_guess()
 		if r[0] in ['fail', 'softfail']:
-			score = -1
-		elif r[0] in ['pass']:
 			score = 1
+		elif r[0] in ['pass']:
+			score = -1
 	return score
 
