@@ -26,6 +26,10 @@
 # SUCH DAMAGE.
 
 import spf
+import re
+
+__dyn_host = re.compile('(cable|dial|dip|dsl|dyn|gprs|umts|[0-9]{1,3}[.-][0-9]{1,3}[.-][0-9]{1,3}[.-][0-9]{1,3})', re.I)
+__static_host = re.compile('(colo|dedi|hosting|mail|mx|smtp|static)', re.I)
 
 def reverse_ip(ip):
     return spf.reverse_dots(ip)
@@ -39,8 +43,11 @@ def domain_from_host(host):
     return domain
 
 def is_dyn_host(host):
-    host = host.lower()
-    return host.find('dyn') != -1 or host.find('dial') != -1
+    if __static_host.search(host):
+        return 0
+    if __dyn_host.search(host):
+        return 1
+    return 0
 
 def check_helo(params):
     if params['client_name'] != 'unknown' and params['client_name'] == params['helo_name']:
