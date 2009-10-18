@@ -84,7 +84,7 @@ class BleyWorker (PostfixPolicy, Thread):
             params['new_status'] = new_status
             try:
                 self.dbc.execute(query, params)
-            except IntegrityError:
+            except:
                 # the other thread already commited while we checked, ignore
                 pass
             self.db.commit()
