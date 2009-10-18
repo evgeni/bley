@@ -28,7 +28,7 @@
 import spf
 import re
 
-__dyn_host = re.compile('(cable|dial|dip|dsl|dyn|gprs|ppp|umts|wimax|[0-9]{1,3}[.-][0-9]{1,3}[.-][0-9]{1,3}[.-][0-9]{1,3})', re.I)
+__dyn_host = re.compile('(\.bb\.|broadband|cable|dial|dip|dsl|dyn|gprs|ppp|umts|wimax|[0-9]{1,3}[.-][0-9]{1,3}[.-][0-9]{1,3}[.-][0-9]{1,3})', re.I)
 __static_host = re.compile('(colo|dedi|hosting|mail|mx[^$]|smtp|static)', re.I)
 
 def reverse_ip(ip):
