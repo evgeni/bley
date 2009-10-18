@@ -56,7 +56,10 @@ class PostfixPolicy:
                         print 'Could not parse "%s"' % line
 
             self.check_policy(postfix_params)
-        self.__csocket.shutdown(SHUT_RD)
+        try:
+            self.__csocket.shutdown(SHUT_RD)
+        except:
+            pass
 
     def check_policy (self, postfix_params):
         '''You probably want to override this one to do something useful.'''
