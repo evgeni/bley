@@ -29,7 +29,7 @@ import spf
 import re
 
 __dyn_host = re.compile('(cable|dial|dip|dsl|dyn|gprs|umts|[0-9]{1,3}[.-][0-9]{1,3}[.-][0-9]{1,3}[.-][0-9]{1,3})', re.I)
-__static_host = re.compile('(colo|dedi|hosting|mail|mx|smtp|static)', re.I)
+__static_host = re.compile('(colo|dedi|hosting|mail|mx[^$]|smtp|static)', re.I)
 
 def reverse_ip(ip):
     return spf.reverse_dots(ip)
