@@ -53,6 +53,7 @@ class BleyWorker (Thread):
 	
 	def run(self):
 		while True:
+			check_results = {'DNSWL': 0, 'DNSBL': 0, 'HELO': 0, 'DYN': 0, 'DB': -1, 'SPF': 0, 'S_EQ_R': 0 }
 			buff = self.csocket.recv(4096)
 			if not buff: break
 			lines = buff.splitlines()
@@ -76,13 +77,17 @@ class BleyWorker (Thread):
 			if self.postfix_params['recipient'].lower().startswith('postmaster'):
 				action = 'DUNNO'
 			elif status == -1: # not found in local db...
-				in_dnswl = self.check_dnswls(self.postfix_params['client_address'])
-				in_dnsbl = 0
-				if in_dnswl >= self.settings.dnswl_threshold:
+				check_results['DNSWL'] = self.check_dnswls(self.postfix_params['client_address'])
+				if check_results['DNSWL'] >= self.settings.dnswl_threshold:
 					new_status = 1
 				else:
-					in_dnsbl = self.check_dnsbls(self.postfix_params['client_address'])
-					if in_dnsbl >= self.settings.dnsbl_threshold or check_helo(self.postfix_params) >= self.settings.rfc_threshold:
+					check_results['DNSBL'] = self.check_dnsbls(self.postfix_params['client_address'])
+					check_results['HELO'] = check_helo(self.postfix_params)
+					check_results['DYN'] = is_dyn_host(self.postfix_params['client_name'])
+					check_results['SPF'] = check_spf(self.postfix_params)
+					if self.postfix_params['sender']==self.postfix_params['recipient']:
+						check_results['S_EQ_R'] = 1
+					if check_results['DNSBL'] >= self.settings.dnsbl_threshold or check_results['HELO']+int(dyn)+check_results['SPF']+check_results['S_EQ_R'] >= self.settings.rfc_threshold:
 						new_status = 2
 						action = 'DEFER_IF_PERMIT %s' % self.settings.reject_msg
 					else:
@@ -94,6 +99,7 @@ class BleyWorker (Thread):
 	                        self.db.commit()
 
 			elif status[0] >= 2: # found to be greyed
+				check_results['DB'] = status[0]
 				delta = datetime.datetime.now()-status[1]
 				if delta > self.settings.greylist_period+status[2]*self.settings.greylist_penalty or delta > self.settings.greylist_max:
 					action = 'DUNNO'
@@ -105,12 +111,15 @@ class BleyWorker (Thread):
 					query = "UPDATE bley_status SET fail_count=fail_count+1, last_action='now', last_from=%(sender)s, last_to=%(recipient)s WHERE ip=%(client_address)s"
 					self.dbc.execute(query, self.postfix_params)
 					self.db.commit()
+
 			else: # found to be clean
+				check_results['DB'] = status[0]
 				action = 'DUNNO'
 				query = "UPDATE bley_status SET last_action='now', last_from=%(sender)s, last_to=%(recipient)s WHERE ip=%(client_address)s"
 				self.dbc.execute(query, self.postfix_params)
 				self.db.commit()
 
+			self.settings.logger('decided action=%s, checks: %s, postfix: %s\n' % (action, check_results, self.postfix_params))
 			self.csocket.sendall('action=%s\n\n' % action)
 
 	def check_local_db(self, postfix_params):
