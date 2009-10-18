@@ -25,3 +25,5 @@ greylist_penalty= datetime.timedelta(0, 10*60, 0)
 
 purge_days = 40
 purge_bad_days = 10
+
+max_procs = 20
