@@ -59,13 +59,11 @@ class BleyWorker (Thread):
 			for line in lines:
 				line = line.strip()
 				if line == '':
-					print 'Got final line'
 					break
 				else:
 					try:
 						(pkey, pval) = line.split('=')
 						self.postfix_params[pkey] = pval
-						print 'Set %s=%s' % (pkey,pval)
 					except:
 						print 'Could not parse "%s"' % line
 
