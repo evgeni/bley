@@ -83,7 +83,7 @@ class BleyWorker (PostfixPolicy, Thread):
                     action = 'DEFER_IF_PERMIT %s' % self.settings.reject_msg
                 else:
                     new_status = 0
-                    query = "INSERT INTO bley_status (ip, status, last_action, last_from, last_to) VALUES(%(client_address)s, %(new_status)s, 'now', %(sender)s, %(recipient)s)"
+            query = "INSERT INTO bley_status (ip, status, last_action, last_from, last_to) VALUES(%(client_address)s, %(new_status)s, 'now', %(sender)s, %(recipient)s)"
             params = postfix_params.copy()
             params['new_status'] = new_status
             try:
