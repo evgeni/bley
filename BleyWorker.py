@@ -82,7 +82,11 @@ class BleyWorker (PostfixPolicy, Thread):
                         query = "INSERT INTO bley_status (ip, status, last_action, last_from, last_to) VALUES(%(client_address)s, %(new_status)s, 'now', %(sender)s, %(recipient)s)"
 			params = postfix_params.copy()
 			params['new_status'] = new_status
-                        self.dbc.execute(query, params)
+			try:
+                            self.dbc.execute(query, params)
+			except IntegrityError:
+                            # the other thread already commited while we checked, ignore
+                            pass
                         self.db.commit()
 
 		elif status[0] >= 2: # found to be greyed
