@@ -31,7 +31,7 @@ from threading import Thread
 import psycopg2
 import adns
 import datetime
-from BleyHelpers import *
+from bleyhelpers import *
 from PostfixPolicy import PostfixPolicy
 
 class BleyWorker (PostfixPolicy, Thread):
