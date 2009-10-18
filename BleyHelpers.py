@@ -50,16 +50,6 @@ def check_helo(params):
 	else:
 		score = 2
 		
-	if is_dyn_host(params['client_name']):
-		score += 1
-
-	spf_result = check_spf(params)
-	if spf_result == -1:
-		score += 1
-	elif spf_result == 1:
-		score -= 2
-
-	print "Checked EHLO to score=%s" % score
 	return score
 
 def check_spf(params):
