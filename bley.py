@@ -32,6 +32,8 @@ import daemon
 import os
 import sys
 import signal
+from threading import activeCount as activeThreadCount
+from time import sleep
 
 from BleyWorker import BleyWorker
 from BleyCleaner import BleyCleaner
@@ -100,9 +102,12 @@ def bley_start():
     serversocket.listen(5)
 
     while running:
-        (clientsocket, address) = serversocket.accept()
-        worker = BleyWorker(clientsocket, settings)
-        worker.start()
+        if activeThreadCount() < settings.max_procs+2:
+            (clientsocket, address) = serversocket.accept()
+            worker = BleyWorker(clientsocket, settings)
+            worker.start()
+        else:
+            sleep(1)
 
 def bley_stop(signum, frame):
     running = False
