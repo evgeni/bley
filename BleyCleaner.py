@@ -36,7 +36,7 @@ class BleyCleaner (Thread):
     settings = None
     db = None
     dbc = None
-    query = '''DELETE FROM bley_status WHERE last_action<%(old)s'''
+    query = '''DELETE FROM bley_status WHERE last_action<%(old)s OR (last_action<%(old_bad)s AND status>=2) '''
 
     def __init__ (self, settings):
         self.settings = settings
@@ -48,7 +48,8 @@ class BleyCleaner (Thread):
         while True:
             now = datetime.datetime.now()
             old = now - datetime.timedelta(self.settings.purge_days, 0, 0)
-            p = {'old': str(old)}
+            old_bad = now - datetime.timedelta(self.settings.purge_bad_days, 0, 0)
+            p = {'old': str(old), 'old_bad': str(old_bad)}
             self.dbc.execute(self.query, p)
             self.db.commit()
             sleep(30*60)
