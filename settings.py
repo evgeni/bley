@@ -9,7 +9,7 @@ dnswls = ['list.dnswl.org', 'exemptions.ahbl.org']
 
 dnswl_threshold = 1
 dnsbl_threshold = 1
-rfc_threshhold = 2
+rfc_threshold = 2
 
 reject_msg = 'greylisted, try again later'
 
