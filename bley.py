@@ -111,6 +111,7 @@ context = daemon.DaemonContext()
 
 if settings.log_file != 'syslog':
     context.stderr=open(settings.log_file, 'a')
+    context.stdout=context.stderr
 
 context.signal_map = {
     signal.SIGTERM: bley_stop,
