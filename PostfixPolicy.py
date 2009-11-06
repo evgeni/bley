@@ -62,9 +62,21 @@ class PostfixPolicy:
             pass
 
     def check_policy (self, postfix_params):
-        '''You probably want to override this one to do something useful.'''
+        '''Check the incoming mail based on our policy and tell Postfix
+        about our decision.
+
+        You probably want to override this one with a function that does
+        something useful.
+
+        Keyword arguments:
+        postfix_params -- a dict of parameters we got from Postfix
+        '''
         self.send_action('DUNNO')
 
     def send_action (self, action='DUNNO'):
-        '''Send action back to Postfix.'''
+        '''Send action back to Postfix.
+
+        Keyword arguments:
+        action -- the action to be sent to Postfix (default: 'DUNNO')
+        '''
         self.__csocket.sendall('action=%s\n\n' % action)
