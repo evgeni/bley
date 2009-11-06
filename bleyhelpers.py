@@ -32,9 +32,19 @@ __dyn_host = re.compile('(\.bb\.|broadband|cable|dial|dip|dsl|dyn|gprs|ppp|umts|
 __static_host = re.compile('(colo|dedi|hosting|mail|mx[^$]|smtp|static)', re.I)
 
 def reverse_ip(ip):
+    '''Returns the IP address in reversed notation (A.B.C.D -> D.C.B.A)
+
+    Keyword arguments:
+    ip -- the IP address to reverse
+    '''
     return spf.reverse_dots(ip)
 
 def domain_from_host(host):
+    '''Return the domain part of a host.
+
+    Keyword arguments:
+    host -- the host to extract the domain from
+    '''
     d = host.split('.')
     if len(d) > 1:
        domain = '%s.%s' % (d[-2], d[-1])
@@ -43,6 +53,12 @@ def domain_from_host(host):
     return domain
 
 def is_dyn_host(host):
+    '''Check the host for being a dynamic/dialup one.
+    Return 0 if it isn't, 1 if it is.
+
+    Keyword arguments:
+    host -- the host to check
+    '''
     if __static_host.search(host):
         return 0
     if __dyn_host.search(host):
@@ -50,6 +66,15 @@ def is_dyn_host(host):
     return 0
 
 def check_helo(params):
+    '''Check the HELO for being RFC 5321 complaint.
+    Returns 0 when the HELO match the reverse DNS.
+    Returns 1 when the domain in the HELO match the domain of the reverse DNS
+    or when the HELO is the IP address.
+    Returns 2 else.
+
+    Keyword arguments:
+    params -- the params from Postfix as a dict
+    '''
     if params['client_name'] != 'unknown' and params['client_name'] == params['helo_name']:
         score = 0
     elif domain_from_host(params['helo_name']) == domain_from_host(params['client_name']) or params['helo_name'] == '[%s]' % params['client_address']:
@@ -60,6 +85,14 @@ def check_helo(params):
     return score
 
 def check_spf(params):
+    '''Check the SPF record of the sending address.
+    Try Best Guess when the domain has no SPF record.
+    Returns 1 when the SPF result is in ['fail', 'softfail'],
+    returns 0 else.
+
+    Keyword arguments:
+    params -- the params from Postfix as a dict
+    '''
     score = 0
     try:
         s = spf.query(params['client_address'], params['sender'], params['helo_name'])
@@ -67,13 +100,13 @@ def check_spf(params):
         if r[0] in ['fail', 'softfail']:
             score = 1
         elif r[0] in ['pass']:
-            score = -2
+            score = 0
         else:
             r = s.best_guess()
             if r[0] in ['fail', 'softfail']:
                 score = 1
             elif r[0] in ['pass']:
-                score = -1
+                score = 0
     except:
         # DNS Errors, yay...
         print 'something went wrong in check_spf()'
