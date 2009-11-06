@@ -68,11 +68,11 @@ class BleyWorker (PostfixPolicy, Thread):
         if postfix_params['recipient'].lower().startswith('postmaster'):
             action = 'DUNNO'
         elif status == -1: # not found in local db...
-            check_results['DNSWL'] = self.check_dnswls(postfix_params['client_address'], settings.dnswl_threshold)
+            check_results['DNSWL'] = self.check_dnswls(postfix_params['client_address'], self.settings.dnswl_threshold)
             if check_results['DNSWL'] >= self.settings.dnswl_threshold:
                 new_status = 1
             else:
-                check_results['DNSBL'] = self.check_dnsbls(postfix_params['client_address'], settings.dnsbl_threshold)
+                check_results['DNSBL'] = self.check_dnsbls(postfix_params['client_address'], self.settings.dnsbl_threshold)
                 check_results['HELO'] = check_helo(postfix_params)
                 check_results['DYN'] = is_dyn_host(postfix_params['client_name'])
                 check_results['SPF'] = check_spf(postfix_params)
