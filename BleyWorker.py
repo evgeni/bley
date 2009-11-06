@@ -35,6 +35,7 @@ from bleyhelpers import *
 from PostfixPolicy import PostfixPolicy
 
 class BleyWorker (PostfixPolicy, Thread):
+    '''Implementation of intelligent greylisting based on `PostfixPolicy`'''
 
     settings = None
     db = None
@@ -42,6 +43,7 @@ class BleyWorker (PostfixPolicy, Thread):
     adns_handle = None
 
     def __init__ (self, csocket, settings):
+        '''Initialize a database connection, PostfixPolicy and Thread.'''
         self.settings = settings
         self.db = self.settings.database.connect(self.settings.dsn)
         self.dbc = self.db.cursor()
@@ -50,6 +52,7 @@ class BleyWorker (PostfixPolicy, Thread):
         Thread.__init__(self)
 
     def run(self):
+        '''Run parse_input() in a Thread, cleanup afterwards.'''
         self.parse_input()
 
         del self.adns_handle
@@ -57,6 +60,26 @@ class BleyWorker (PostfixPolicy, Thread):
         self.db.close()
 
     def check_policy (self, postfix_params):
+        '''Check the incoming mail based on our policy and tell Postfix
+        about our decision.
+
+        The policy works as follows:
+          1. Accept if recipient=(postmaster|abuse)
+          2. Check local DB for an existing entry
+          3. When not found, check
+             1. DNSWLs (accept if found)
+             2. DNSBLs (reject if found)
+             3. HELO/dyn_host/sender_eq_recipient (reject if over threshold)
+             4. SPF (reject if over threshold)
+             5. Accept if not yet rejected
+          4. When found
+             1. Whitelisted: accept
+             2. Greylisted and waited: accept
+             3. Greylisted and not waited: reject
+
+        @type  postfix_params: dict
+        @param postfix_params: parameters we got from Postfix
+        '''
         check_results = {'DNSWL': 0, 'DNSBL': 0, 'HELO': 0, 'DYN': 0, 'DB': -1, 'SPF': 0, 'S_EQ_R': 0 }
         action = 'DUNNO'
 
@@ -115,6 +138,16 @@ class BleyWorker (PostfixPolicy, Thread):
         self.send_action(action)
 
     def check_local_db(self, postfix_params):
+        '''Check the sender for being in the local database.
+
+        Queries the local SQL database for the (ip,sender,recipient) tuple.
+
+        @type  postfix_params: dict
+        @param postfix_params: parameters we got from Postfix
+        @rtype: list
+        @return: the result from SQL if any
+        '''
+
         query = """SELECT status,last_action,fail_count,sender,recipient FROM bley_status
                     WHERE ip=%(client_address)s
                     AND sender=%(sender)s AND recipient=%(recipient)s
@@ -128,6 +161,15 @@ class BleyWorker (PostfixPolicy, Thread):
             return result
 
     def check_dnswls(self, ip, max):
+        '''Check the IP address in DNSWLs.
+
+        @type ip: string
+        @param ip: the IP to check
+        @type max: int
+        @param max: stop after max hits
+        @rtype: int
+        @return: in how many DNSWLs did we find ip?
+        '''
         result = 0
         for l in self.settings.dnswls:
             if self.check_dnsl(l, ip):
@@ -137,6 +179,15 @@ class BleyWorker (PostfixPolicy, Thread):
         return result
 
     def check_dnsbls(self, ip, max):
+        '''Check the IP address in DNSBLs.
+
+        @type ip: string
+        @param ip: the IP to check
+        @type max: int
+        @param max: stop after max hits
+        @rtype: int
+        @return: in how many DNSBLs did we find ip?
+        '''
         result = 0
         for l in self.settings.dnsbls:
             if self.check_dnsl(l, ip):
@@ -146,6 +197,16 @@ class BleyWorker (PostfixPolicy, Thread):
         return result
 
     def check_dnsl(self, lst, ip):
+        '''Check the IP address in a DNS list.
+
+        @type ip: string
+        @param ip: the IP to check
+        @type lst: sting
+        @param lst: the DNS list to check in
+        @rtype: bool
+        @return: was ip found in the list?
+        '''
+
         rip = reverse_ip(ip)
         lookup = '%s.%s' % (rip, lst)
         try:
