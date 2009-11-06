@@ -83,11 +83,10 @@ class BleyWorker (PostfixPolicy, Thread):
                     action = 'DEFER_IF_PERMIT %s' % self.settings.reject_msg
                 else:
                     new_status = 0
-            query = "INSERT INTO bley_status (ip, status, last_action, last_from, last_to) VALUES(%(client_address)s, %(new_status)s, 'now', %(sender)s, %(recipient)s)"
-            params = postfix_params.copy()
-            params['new_status'] = new_status
+            query = "INSERT INTO bley_status (ip, status, last_action, sender, recipient) VALUES(%(client_address)s, %(new_status)s, 'now', %(sender)s, %(recipient)s)"
+            postfix_params['new_status'] = new_status
             try:
-                self.dbc.execute(query, params)
+                self.dbc.execute(query, postfix_params)
             except:
                 # the other thread already commited while we checked, ignore
                 pass
@@ -97,22 +96,18 @@ class BleyWorker (PostfixPolicy, Thread):
             check_results['DB'] = status[0]
             delta = datetime.datetime.now()-status[1]
             if delta > self.settings.greylist_period+status[2]*self.settings.greylist_penalty or delta > self.settings.greylist_max:
-                if status[3] == postfix_params['sender'] and status[4] == postfix_params['recipient']:
-                    action = 'DUNNO'
-                    query = "UPDATE bley_status SET status=0, last_action='now', last_from=%(sender)s, last_to=%(recipient)s WHERE ip=%(client_address)s"
-                else:
-                    action = 'DEFER_IF_PERMIT %s' % self.settings.reject_msg
-                    query = "UPDATE bley_status SET fail_count=fail_count+1 WHERE ip=%(client_address)s"
+                action = 'DUNNO'
+                query = "UPDATE bley_status SET status=0, last_action='now' WHERE ip=%(client_address)s AND sender=%(sender)s AND recipient=%(recipient)s"
             else:
                 action = 'DEFER_IF_PERMIT %s' % self.settings.reject_msg
-                query = "UPDATE bley_status SET fail_count=fail_count+1 WHERE ip=%(client_address)s"
+                query = "UPDATE bley_status SET fail_count=fail_count+1 WHERE ip=%(client_address)s AND sender=%(sender)s AND recipient=%(recipient)s"
             self.dbc.execute(query, postfix_params)
             self.db.commit()
 
         else: # found to be clean
             check_results['DB'] = status[0]
             action = 'DUNNO'
-            query = "UPDATE bley_status SET last_action='now', last_from=%(sender)s, last_to=%(recipient)s WHERE ip=%(client_address)s"
+            query = "UPDATE bley_status SET last_action='now' WHERE ip=%(client_address)s AND sender=%(sender)s AND recipient=%(recipient)s"
             self.dbc.execute(query, postfix_params)
             self.db.commit()
 
@@ -120,7 +115,11 @@ class BleyWorker (PostfixPolicy, Thread):
         self.send_action(action)
 
     def check_local_db(self, postfix_params):
-        query = "SELECT status,last_action,fail_count,last_from,last_to FROM bley_status WHERE ip=%(client_address)s LIMIT 1"
+        query = """SELECT status,last_action,fail_count,sender,recipient FROM bley_status
+                    WHERE ip=%(client_address)s
+                    AND sender=%(sender)s AND recipient=%(recipient)s
+                    ORDER BY status ASC
+                    LIMIT 1"""
         self.dbc.execute(query, postfix_params)
         result = self.dbc.fetchone()
         if not result:

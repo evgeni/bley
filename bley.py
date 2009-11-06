@@ -51,12 +51,10 @@ __CREATE_DB_QUERY = '''
   (
     ip VARCHAR(39) NOT NULL,
     status SMALLINT NOT NULL DEFAULT 1,
-    penalty INT NOT NULL DEFAULT 0,
     last_action TIMESTAMP NOT NULL,
-    last_from VARCHAR(254),
-    last_to VARCHAR(254),
-    fail_count INT DEFAULT 0,
-    PRIMARY KEY ( `ip` )
+    sender VARCHAR(254),
+    recipient VARCHAR(254),
+    fail_count INT DEFAULT 0
   );
 '''
 __CREATE_DB_QUERY_PG = '''
@@ -64,12 +62,10 @@ __CREATE_DB_QUERY_PG = '''
   (
     ip VARCHAR(39) NOT NULL,
     status SMALLINT NOT NULL DEFAULT 1,
-    penalty INT NOT NULL DEFAULT 0,
     last_action TIMESTAMP NOT NULL,
-    last_from VARCHAR(254),
-    last_to VARCHAR(254),
-    fail_count INT DEFAULT 0,
-    PRIMARY KEY ( ip )
+    sender VARCHAR(254),
+    recipient VARCHAR(254),
+    fail_count INT DEFAULT 0
   );
 '''
 __CHECK_DB_QUERY_PG = '''
