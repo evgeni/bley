@@ -32,6 +32,9 @@ import datetime
 from time import sleep
 
 class BleyCleaner (Thread):
+    '''Clean the bley database.
+
+       Purge inactive hosts after 40 days, purge failed hosts after 10 days.'''
 
     settings = None
     db = None
