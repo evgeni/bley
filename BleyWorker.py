@@ -97,15 +97,17 @@ class BleyWorker (PostfixPolicy, Thread):
             check_results['DB'] = status[0]
             delta = datetime.datetime.now()-status[1]
             if delta > self.settings.greylist_period+status[2]*self.settings.greylist_penalty or delta > self.settings.greylist_max:
-                action = 'DUNNO'
-                query = "UPDATE bley_status SET status=0, last_action='now', last_from=%(sender)s, last_to=%(recipient)s WHERE ip=%(client_address)s"
-                self.dbc.execute(query, postfix_params)
-                self.db.commit()
+                if status[3] == postfix_params['sender'] and status[4] == postfix_params['recipient']:
+                    action = 'DUNNO'
+                    query = "UPDATE bley_status SET status=0, last_action='now', last_from=%(sender)s, last_to=%(recipient)s WHERE ip=%(client_address)s"
+                else:
+                    action = 'DEFER_IF_PERMIT %s' % self.settings.reject_msg
+                    query = "UPDATE bley_status SET fail_count=fail_count+1 WHERE ip=%(client_address)s"
             else:
                 action = 'DEFER_IF_PERMIT %s' % self.settings.reject_msg
-                query = "UPDATE bley_status SET fail_count=fail_count+1, last_action='now', last_from=%(sender)s, last_to=%(recipient)s WHERE ip=%(client_address)s"
-                self.dbc.execute(query, postfix_params)
-                self.db.commit()
+                query = "UPDATE bley_status SET fail_count=fail_count+1 WHERE ip=%(client_address)s"
+            self.dbc.execute(query, postfix_params)
+            self.db.commit()
 
         else: # found to be clean
             check_results['DB'] = status[0]
@@ -118,7 +120,7 @@ class BleyWorker (PostfixPolicy, Thread):
         self.send_action(action)
 
     def check_local_db(self, postfix_params):
-        query = "SELECT status,last_action,fail_count FROM bley_status WHERE ip=%(client_address)s LIMIT 1"
+        query = "SELECT status,last_action,fail_count,last_from,last_to FROM bley_status WHERE ip=%(client_address)s LIMIT 1"
         self.dbc.execute(query, postfix_params)
         result = self.dbc.fetchone()
         if not result:
