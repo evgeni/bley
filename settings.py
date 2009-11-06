@@ -28,7 +28,7 @@ pid_file = '/home/bley/bley/bley.pid'
 log_file = '/home/bley/bley/bley.log'
 
 # Wait greylist_period before accepting greyed sender.
-greylist_period = datetime.timedelta(0, 30*60, 0)
+greylist_period = datetime.timedelta(0, 29*60, 0)
 # Max wait greylist_max before accepting greyed sender.
 # (Accept all senders after 24h.)
 greylist_max    = datetime.timedelta(0, 24*60*60, 0)
