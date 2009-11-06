@@ -1,0 +1,8 @@
+DEPENDENCIES:
+ pyspf from http://pypi.python.org/pypi/pyspf
+ python-daemon from http://pypi.python.org/pypi/python-daemon
+ python-adns from http://code.google.com/p/adns-python/
+ psycopg2 from http://initd.org/
+
+INSTALLATION:
+ Unpack the tarball, adjust settings.py and run bley.py.
