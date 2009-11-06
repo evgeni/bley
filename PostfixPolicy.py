@@ -68,15 +68,15 @@ class PostfixPolicy:
         You probably want to override this one with a function that does
         something useful.
 
-        Keyword arguments:
-        postfix_params -- a dict of parameters we got from Postfix
+        @type  postfix_params: dict
+        @param postfix_params: parameters we got from Postfix
         '''
         self.send_action('DUNNO')
 
     def send_action (self, action='DUNNO'):
         '''Send action back to Postfix.
 
-        Keyword arguments:
-        action -- the action to be sent to Postfix (default: 'DUNNO')
+        @type  action: string
+        @param action: the action to be sent to Postfix (default: 'DUNNO')
         '''
         self.__csocket.sendall('action=%s\n\n' % action)
