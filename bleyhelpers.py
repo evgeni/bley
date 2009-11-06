@@ -32,18 +32,22 @@ __dyn_host = re.compile('(\.bb\.|broadband|cable|dial|dip|dsl|dyn|gprs|ppp|umts|
 __static_host = re.compile('(colo|dedi|hosting|mail|mx[^$]|smtp|static)', re.I)
 
 def reverse_ip(ip):
-    '''Returns the IP address in reversed notation (A.B.C.D -> D.C.B.A)
+    '''Returns the IP address in reversed notation (A.B.C.D -> D.C.B.A).
 
-    Keyword arguments:
-    ip -- the IP address to reverse
+    @type  ip: string
+    @param ip: the IP address to reverse
+    @rtype:    string
+    @return:   the reversed IP address
     '''
     return spf.reverse_dots(ip)
 
 def domain_from_host(host):
     '''Return the domain part of a host.
 
-    Keyword arguments:
-    host -- the host to extract the domain from
+    @type  host: string
+    @param host: the host to extract the domain from
+    @rtype:      string
+    @return:     the extracted domain
     '''
     d = host.split('.')
     if len(d) > 1:
@@ -54,10 +58,11 @@ def domain_from_host(host):
 
 def is_dyn_host(host):
     '''Check the host for being a dynamic/dialup one.
-    Return 0 if it isn't, 1 if it is.
 
-    Keyword arguments:
-    host -- the host to check
+    @type  host: string
+    @param host: the host to check
+    @rtype:      int
+    @return:     0 if host is not dynamic, 1 if it is
     '''
     if __static_host.search(host):
         return 0
@@ -72,8 +77,10 @@ def check_helo(params):
     or when the HELO is the IP address.
     Returns 2 else.
 
-    Keyword arguments:
-    params -- the params from Postfix as a dict
+    @type  params: dict
+    @param params: the params from Postfix
+    @rtype:        int
+    @return:       the score of the HELO
     '''
     if params['client_name'] != 'unknown' and params['client_name'] == params['helo_name']:
         score = 0
@@ -90,8 +97,10 @@ def check_spf(params):
     Returns 1 when the SPF result is in ['fail', 'softfail'],
     returns 0 else.
 
-    Keyword arguments:
-    params -- the params from Postfix as a dict
+    @type  params: dict
+    @param params: the params from Postfix          
+    @rtype:        int
+    @return:       1 if bad SPF, 0 else
     '''
     score = 0
     try:
