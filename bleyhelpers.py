@@ -56,7 +56,7 @@ def domain_from_host(host):
        domain = host
     return domain
 
-def is_dyn_host(host):
+def check_dyn_host(host):
     '''Check the host for being a dynamic/dialup one.
 
     @type  host: string
