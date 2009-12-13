@@ -91,6 +91,7 @@ def bley_start():
     db.close()
 
     cleaner = BleyCleaner(settings)
+    cleaner.setDaemon(1)
     cleaner.start()
 
     serversocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
