@@ -27,15 +27,17 @@
 # OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 
-import socket
-import daemon
 import os
 import sys
-import signal
-from threading import activeCount as activeThreadCount
-from time import sleep
 
-from BleyWorker import BleyWorker
+from twisted.internet import reactor
+
+try:
+    from twisted.scripts import _twistd_unix as twistd
+except:
+    from twisted.scripts import twistd
+
+from BleyWorker import BleyPolicyFactory
 from BleyCleaner import BleyCleaner
 import settings
 
@@ -43,8 +45,10 @@ if settings.log_file == 'syslog':
     import syslog
     syslog.openlog('bley', syslog.LOG_PID, syslog.LOG_MAIL)
     settings.logger = syslog.syslog
-else:
+elif settings.log_file in ['-', '']:
     settings.logger = sys.stdout.write
+else:
+    settings.logger = open(settings.log_file, 'a').write
 
 __CREATE_DB_QUERY = '''
   CREATE TABLE IF NOT EXISTS bley_status
@@ -73,10 +77,6 @@ __CHECK_DB_QUERY_PG = '''
 '''
 
 def bley_start():
-    if settings.pid_file:
-        f = open(settings.pid_file, 'w')
-        f.write(str(os.getpid()))
-        f.close()
 
     db = settings.database.connect(settings.dsn)
     dbc = db.cursor()
@@ -90,42 +90,33 @@ def bley_start():
     dbc.close()
     db.close()
 
-    cleaner = BleyCleaner(settings)
-    cleaner.setDaemon(1)
-    cleaner.start()
+#    cleaner = BleyCleaner(settings)
+#    cleaner.setDaemon(1)
+#    cleaner.start()
 
-    serversocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    serversocket.bind((settings.listen_addr, settings.listen_port))
-    serversocket.listen(5)
-
-    while running:
-        if activeThreadCount() < settings.max_procs+2:
-            (clientsocket, address) = serversocket.accept()
-            worker = BleyWorker(clientsocket, settings)
-            worker.start()
-        else:
-            sleep(1)
-
-def bley_stop(signum, frame):
-    running = False
+    reactor.listenTCP(settings.listen_port, BleyPolicyFactory(settings), interface=settings.listen_addr)
+    reactor.addSystemEventTrigger('before', 'shutdown', bley_stop)
+    twistd.checkPID(settings.pid_file)
+    #twistd.daemonize()
     if settings.pid_file:
-        os.unlink(settings.pid_file)
+        writePID(settings.pid_file)
+    reactor.run()
+
+def bley_stop():
+    if settings.pid_file:
+        delPID(settings.pid_file)
     if settings.log_file == 'syslog':
         syslog.closelog()
 
-context = daemon.DaemonContext()
+def writePID(pidfile):
+    # Create a PID file
+    pid = str(os.getpid())
+    pf = open(pidfile, "w")
+    pf.write("%s\n" % pid)
+    pf.close()
 
-if settings.log_file != 'syslog':
-    context.stderr=open(settings.log_file, 'a')
-    context.stdout=context.stderr
+def delPID(pidfile):
+    if os.path.exists(pidfile):
+        os.remove(pidfile)
 
-context.signal_map = {
-    signal.SIGTERM: bley_stop,
-    signal.SIGHUP: 'terminate',
-    }
-
-
-running = True
-
-context.open()
 bley_start()

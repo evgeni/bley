@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-#
 # Copyright (c) 2009 Evgeni Golov <evgeni.golov@uni-duesseldorf.de>
 # All rights reserved.
 #
@@ -27,39 +25,21 @@
 # OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 
-from threading import Thread
+from twisted.internet.protocol import Factory
 import psycopg2
 import adns
 import datetime
 from bleyhelpers import *
-from PostfixPolicy import PostfixPolicy
+from postfix import PostfixPolicy
 
-class BleyWorker (PostfixPolicy, Thread):
+class BleyPolicy(PostfixPolicy):
     '''Implementation of intelligent greylisting based on `PostfixPolicy`'''
 
-    settings = None
     db = None
     dbc = None
     adns_handle = None
 
-    def __init__ (self, csocket, settings):
-        '''Initialize a database connection, PostfixPolicy and Thread.'''
-        self.settings = settings
-        self.db = self.settings.database.connect(self.settings.dsn)
-        self.dbc = self.db.cursor()
-        self.adns_handle = adns.init()
-        PostfixPolicy.__init__(self, csocket)
-        Thread.__init__(self)
-
-    def run(self):
-        '''Run parse_input() in a Thread, cleanup afterwards.'''
-        self.parse_input()
-
-        del self.adns_handle
-        self.dbc.close()
-        self.db.close()
-
-    def check_policy (self, postfix_params):
+    def check_policy (self):
         '''Check the incoming mail based on our policy and tell Postfix
         about our decision.
 
@@ -80,8 +60,16 @@ class BleyWorker (PostfixPolicy, Thread):
         @type  postfix_params: dict
         @param postfix_params: parameters we got from Postfix
         '''
+
+        if not self.db:
+            self.db = self.factory.settings.database.connect(self.factory.settings.dsn)
+            self.dbc = self.db.cursor()
+        if not self.adns_handle:
+            self.adns_handle = adns.init()
+
         check_results = {'DNSWL': 0, 'DNSBL': 0, 'HELO': 0, 'DYN': 0, 'DB': -1, 'SPF': 0, 'S_EQ_R': 0 }
         action = 'DUNNO'
+        postfix_params = self.params
 
         status = self.check_local_db(postfix_params)
         # -1 : not found
@@ -91,23 +79,23 @@ class BleyWorker (PostfixPolicy, Thread):
         if postfix_params['recipient'].lower().startswith('postmaster'):
             action = 'DUNNO'
         elif status == -1: # not found in local db...
-            check_results['DNSWL'] = self.check_dnswls(postfix_params['client_address'], self.settings.dnswl_threshold)
-            if check_results['DNSWL'] >= self.settings.dnswl_threshold:
+            check_results['DNSWL'] = self.check_dnswls(postfix_params['client_address'], self.factory.settings.dnswl_threshold)
+            if check_results['DNSWL'] >= self.factory.settings.dnswl_threshold:
                 new_status = 1
             else:
-                check_results['DNSBL'] = self.check_dnsbls(postfix_params['client_address'], self.settings.dnsbl_threshold)
+                check_results['DNSBL'] = self.check_dnsbls(postfix_params['client_address'], self.factory.settings.dnsbl_threshold)
                 check_results['HELO'] = check_helo(postfix_params)
                 check_results['DYN'] = check_dyn_host(postfix_params['client_name'])
                 # check_sender_eq_recipient:
                 if postfix_params['sender']==postfix_params['recipient']:
                     check_results['S_EQ_R'] = 1
-		if check_results['DNSBL'] < self.settings.dnsbl_threshold and check_results['HELO']+check_results['DYN']+check_results['S_EQ_R'] < self.settings.rfc_threshold:
+		if check_results['DNSBL'] < self.factory.settings.dnsbl_threshold and check_results['HELO']+check_results['DYN']+check_results['S_EQ_R'] < self.factory.settings.rfc_threshold:
 	            check_results['SPF'] = check_spf(postfix_params)
 		else:
                     check_results['SPF'] = 0
-                if check_results['DNSBL'] >= self.settings.dnsbl_threshold or check_results['HELO']+check_results['DYN']+check_results['SPF']+check_results['S_EQ_R'] >= self.settings.rfc_threshold:
+                if check_results['DNSBL'] >= self.factory.settings.dnsbl_threshold or check_results['HELO']+check_results['DYN']+check_results['SPF']+check_results['S_EQ_R'] >= self.factory.settings.rfc_threshold:
                     new_status = 2
-                    action = 'DEFER_IF_PERMIT %s' % self.settings.reject_msg
+                    action = 'DEFER_IF_PERMIT %s' % self.factory.settings.reject_msg
                 else:
                     new_status = 0
             query = "INSERT INTO bley_status (ip, status, last_action, sender, recipient) VALUES(%(client_address)s, %(new_status)s, 'now', %(sender)s, %(recipient)s)"
@@ -122,11 +110,11 @@ class BleyWorker (PostfixPolicy, Thread):
         elif status[0] >= 2: # found to be greyed
             check_results['DB'] = status[0]
             delta = datetime.datetime.now()-status[1]
-            if delta > self.settings.greylist_period+status[2]*self.settings.greylist_penalty or delta > self.settings.greylist_max:
+            if delta > self.factory.settings.greylist_period+status[2]*self.factory.settings.greylist_penalty or delta > self.factory.settings.greylist_max:
                 action = 'DUNNO'
                 query = "UPDATE bley_status SET status=0, last_action='now' WHERE ip=%(client_address)s AND sender=%(sender)s AND recipient=%(recipient)s"
             else:
-                action = 'DEFER_IF_PERMIT %s' % self.settings.reject_msg
+                action = 'DEFER_IF_PERMIT %s' % self.factory.settings.reject_msg
                 query = "UPDATE bley_status SET fail_count=fail_count+1 WHERE ip=%(client_address)s AND sender=%(sender)s AND recipient=%(recipient)s"
             self.dbc.execute(query, postfix_params)
             self.db.commit()
@@ -138,7 +126,7 @@ class BleyWorker (PostfixPolicy, Thread):
             self.dbc.execute(query, postfix_params)
             self.db.commit()
 
-        self.settings.logger('decided action=%s, checks: %s, postfix: %s\n' % (action, check_results, postfix_params))
+        self.factory.settings.logger('decided action=%s, checks: %s, postfix: %s\n' % (action, check_results, postfix_params))
         self.send_action(action)
 
     def check_local_db(self, postfix_params):
@@ -175,7 +163,7 @@ class BleyWorker (PostfixPolicy, Thread):
         @return: in how many DNSWLs did we find ip?
         '''
         result = 0
-        for l in self.settings.dnswls:
+        for l in self.factory.settings.dnswls:
             if self.check_dnsl(l, ip):
                 result += 1
             if result >= max:
@@ -193,7 +181,7 @@ class BleyWorker (PostfixPolicy, Thread):
         @return: in how many DNSBLs did we find ip?
         '''
         result = 0
-        for l in self.settings.dnsbls:
+        for l in self.factory.settings.dnsbls:
             if self.check_dnsl(l, ip):
                 result += 1
             if result >= max:
@@ -220,3 +208,9 @@ class BleyWorker (PostfixPolicy, Thread):
             # DNS Errors
             print 'something went wrong in check_dns()'
             return False
+
+class BleyPolicyFactory(Factory):
+    protocol = BleyPolicy
+
+    def __init__(self, settings):
+        self.settings = settings
