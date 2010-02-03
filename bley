@@ -29,6 +29,7 @@
 
 import os
 import sys
+import datetime
 
 from twisted.internet import reactor
 
@@ -76,6 +77,10 @@ __CHECK_DB_QUERY_PG = '''
   SELECT tablename FROM pg_catalog.pg_tables WHERE tablename = 'bley_status'
 '''
 
+__CLEAN_DB_QUERY = '''
+   DELETE FROM bley_status WHERE last_action<%(old)s OR (last_action<%(old_bad)s AND status>=2)
+'''
+
 def bley_start():
 
     db = settings.database.connect(settings.dsn)
@@ -90,12 +95,9 @@ def bley_start():
     dbc.close()
     db.close()
 
-#    cleaner = BleyCleaner(settings)
-#    cleaner.setDaemon(1)
-#    cleaner.start()
-
     reactor.listenTCP(settings.listen_port, BleyPolicyFactory(settings), interface=settings.listen_addr)
     reactor.addSystemEventTrigger('before', 'shutdown', bley_stop)
+    reactor.callWhenRunning(clean_db)
     twistd.checkPID(settings.pid_file)
     #twistd.daemonize()
     if settings.pid_file:
@@ -118,5 +120,19 @@ def writePID(pidfile):
 def delPID(pidfile):
     if os.path.exists(pidfile):
         os.remove(pidfile)
+
+def clean_db():
+    print "cleaning database"
+    db = settings.database.connect(settings.dsn)
+    dbc = db.cursor()
+    now = datetime.datetime.now()
+    old = now - datetime.timedelta(settings.purge_days, 0, 0)
+    old_bad = now - datetime.timedelta(settings.purge_bad_days, 0, 0)
+    p = {'old': str(old), 'old_bad': str(old_bad)}
+    dbc.execute(__CLEAN_DB_QUERY, p)
+    db.commit()
+    dbc.close()
+    db.close()
+    reactor.callLater(30*60, clean_db)
 
 bley_start()
