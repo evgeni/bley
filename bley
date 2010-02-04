@@ -39,7 +39,6 @@ except:
     from twisted.scripts import twistd
 
 from bley import BleyPolicyFactory
-from BleyCleaner import BleyCleaner
 import settings
 
 if settings.log_file == 'syslog':
