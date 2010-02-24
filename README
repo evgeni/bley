@@ -1,7 +1,7 @@
 DEPENDENCIES:
  twisted-core from http://twistedmatrix.com/
+ twisted-names from http://twistedmatrix.com/
  pyspf from http://pypi.python.org/pypi/pyspf
- python-adns from http://code.google.com/p/adns-python/
  psycopg2 from http://initd.org/
 
 INSTALLATION:
