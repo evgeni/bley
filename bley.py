@@ -73,7 +73,7 @@ class BleyPolicy(PostfixPolicy):
         if postfix_params['client_address'] in self.factory.bad_cache.keys():
             delta = datetime.datetime.now()-self.factory.bad_cache[postfix_params['client_address']]
             if delta < datetime.timedelta(0,60,0):
-                 action = 'DEFER_IF_PERMIT %s' % self.factory.settings.reject_msg
+                 action = 'DEFER_IF_PERMIT %s (cached result)' % self.factory.settings.reject_msg
                  self.factory.settings.logger('decided CACHED action=%s, checks: %s, postfix: %s\n' % (action, check_results, postfix_params))
                  self.send_action(action)
                  return
