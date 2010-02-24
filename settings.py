@@ -7,7 +7,7 @@ listen_port = 1337
 
 # Which DNSBLs and DNSWLs to use?
 dnsbls = ['ix.dnsbl.manitu.net', 'dnsbl.njabl.org', 'dnsbl.ahbl.org', 'dnsbl.sorbs.net']
-dnswls = ['list.dnswl.org', 'exemptions.ahbl.org']
+dnswls = ['list.dnswl.org']
 
 # Whitelist after dnswl_threshold hits.
 dnswl_threshold = 1
