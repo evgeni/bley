@@ -26,8 +26,10 @@
 # SUCH DAMAGE.
 
 from twisted.internet.protocol import Factory
+from twisted.names import client
+from twisted.internet import defer
+
 import psycopg2
-import adns
 import datetime
 from bleyhelpers import *
 from postfix import PostfixPolicy
@@ -37,7 +39,6 @@ class BleyPolicy(PostfixPolicy):
 
     db = None
     dbc = None
-    adns_handle = None
 
     def check_policy (self):
         '''Check the incoming mail based on our policy and tell Postfix
@@ -64,8 +65,6 @@ class BleyPolicy(PostfixPolicy):
         if not self.db:
             self.db = self.factory.settings.db
             self.dbc = self.db.cursor()
-        if not self.adns_handle:
-            self.adns_handle = adns.init()
 
         check_results = {'DNSWL': 0, 'DNSBL': 0, 'HELO': 0, 'DYN': 0, 'DB': -1, 'SPF': 0, 'S_EQ_R': 0 }
         action = 'DUNNO'
@@ -177,6 +176,7 @@ class BleyPolicy(PostfixPolicy):
         else:
             return result
 
+    @defer.inlineCallbacks
     def check_dnswls(self, ip, max):
         '''Check the IP address in DNSWLs.
 
@@ -189,12 +189,16 @@ class BleyPolicy(PostfixPolicy):
         '''
         result = 0
         for l in self.factory.settings.dnswls:
-            if self.check_dnsl(l, ip):
+            try:
+                d = yield self.check_dnsl(l, ip)
                 result += 1
+            except Exception:
+                pass
             if result >= max:
                 break
-        return result
+        defer.returnValue(result)
 
+    @defer.inlineCallbacks
     def check_dnsbls(self, ip, max):
         '''Check the IP address in DNSBLs.
 
@@ -207,11 +211,14 @@ class BleyPolicy(PostfixPolicy):
         '''
         result = 0
         for l in self.factory.settings.dnsbls:
-            if self.check_dnsl(l, ip):
+            try:
+                d = yield self.check_dnsl(l, ip)
                 result += 1
+            except Exception:
+                pass
             if result >= max:
                 break
-        return result
+        defer.returnValue(result)
 
     def check_dnsl(self, lst, ip):
         '''Check the IP address in a DNS list.
@@ -220,19 +227,14 @@ class BleyPolicy(PostfixPolicy):
         @param ip: the IP to check
         @type lst: sting
         @param lst: the DNS list to check in
-        @rtype: bool
-        @return: was ip found in the list?
+        @rtype: C{Deferred}
+        @return: twisted.names.client resolver
         '''
 
         rip = reverse_ip(ip)
         lookup = '%s.%s' % (rip, lst)
-        try:
-            res = self.adns_handle.synchronous(lookup, adns.rr.A)
-            return res[3] != ()
-        except:
-            # DNS Errors
-            print 'something went wrong in check_dns()'
-            return False
+        d = client.lookupAddress(lookup)
+        return d
 
 class BleyPolicyFactory(Factory):
     protocol = BleyPolicy
