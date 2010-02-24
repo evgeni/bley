@@ -45,7 +45,7 @@ if settings.log_file == 'syslog':
     import syslog
     syslog.openlog('bley', syslog.LOG_PID, syslog.LOG_MAIL)
     settings.logger = syslog.syslog
-elif settings.log_file in ['-', '']:
+elif settings.log_file in ['-', '', None]:
     settings.logger = sys.stdout.write
 else:
     settings.logger = open(settings.log_file, 'a').write
@@ -93,6 +93,8 @@ def bley_start():
     db.commit()
     dbc.close()
     db.close()
+
+    settings.db = settings.database.connect(settings.dsn)
 
     reactor.listenTCP(settings.listen_port, BleyPolicyFactory(settings), interface=settings.listen_addr)
     reactor.addSystemEventTrigger('before', 'shutdown', bley_stop)

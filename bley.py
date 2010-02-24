@@ -62,7 +62,7 @@ class BleyPolicy(PostfixPolicy):
         '''
 
         if not self.db:
-            self.db = self.factory.settings.database.connect(self.factory.settings.dsn)
+            self.db = self.factory.settings.db
             self.dbc = self.db.cursor()
         if not self.adns_handle:
             self.adns_handle = adns.init()
