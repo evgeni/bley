@@ -71,6 +71,14 @@ class BleyPolicy(PostfixPolicy):
         action = 'DUNNO'
         postfix_params = self.params
 
+        if postfix_params['client_address'] in self.factory.bad_cache.keys():
+            delta = datetime.datetime.now()-self.factory.bad_cache[postfix_params['client_address']]
+            if delta < datetime.timedelta(0,60,0):
+                 action = 'DEFER_IF_PERMIT %s' % self.factory.settings.reject_msg
+                 self.factory.settings.logger('decided CACHED action=%s, checks: %s, postfix: %s\n' % (action, check_results, postfix_params))
+                 self.send_action(action)
+                 return
+
         status = self.check_local_db(postfix_params)
         # -1 : not found
         #  0 : regular host, not in black, not in white, let it go
@@ -96,6 +104,7 @@ class BleyPolicy(PostfixPolicy):
                 if check_results['DNSBL'] >= self.factory.settings.dnsbl_threshold or check_results['HELO']+check_results['DYN']+check_results['SPF']+check_results['S_EQ_R'] >= self.factory.settings.rfc_threshold:
                     new_status = 2
                     action = 'DEFER_IF_PERMIT %s' % self.factory.settings.reject_msg
+                    self.factory.bad_cache[postfix_params['client_address']] = datetime.datetime.now()
                 else:
                     new_status = 0
             query = "INSERT INTO bley_status (ip, status, last_action, sender, recipient) VALUES(%(client_address)s, %(new_status)s, 'now', %(sender)s, %(recipient)s)"
@@ -214,3 +223,5 @@ class BleyPolicyFactory(Factory):
 
     def __init__(self, settings):
         self.settings = settings
+        self.good_cache = {}
+        self.bad_cache = {}
