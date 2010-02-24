@@ -81,6 +81,16 @@ class BleyPolicy(PostfixPolicy):
             else:
                  del self.factory.bad_cache[postfix_params['client_address']]
 
+        if postfix_params['client_address'] in self.factory.good_cache.keys():
+            delta = datetime.datetime.now()-self.factory.good_cache[postfix_params['client_address']]
+            if delta < datetime.timedelta(0,60,0):
+                 action = 'DUNNO'
+                 self.factory.settings.logger('decided CACHED action=%s, checks: %s, postfix: %s\n' % (action, check_results, postfix_params))
+                 self.send_action(action)
+                 return
+            else:
+                 del self.factory.good_cache[postfix_params['client_address']]
+
         status = self.check_local_db(postfix_params)
         # -1 : not found
         #  0 : regular host, not in black, not in white, let it go
@@ -109,6 +119,7 @@ class BleyPolicy(PostfixPolicy):
                     self.factory.bad_cache[postfix_params['client_address']] = datetime.datetime.now()
                 else:
                     new_status = 0
+                    self.factory.good_cache[postfix_params['client_address']] = datetime.datetime.now()
             query = "INSERT INTO bley_status (ip, status, last_action, sender, recipient) VALUES(%(client_address)s, %(new_status)s, 'now', %(sender)s, %(recipient)s)"
             postfix_params['new_status'] = new_status
             try:
@@ -124,9 +135,11 @@ class BleyPolicy(PostfixPolicy):
             if delta > self.factory.settings.greylist_period+status[2]*self.factory.settings.greylist_penalty or delta > self.factory.settings.greylist_max:
                 action = 'DUNNO'
                 query = "UPDATE bley_status SET status=0, last_action='now' WHERE ip=%(client_address)s AND sender=%(sender)s AND recipient=%(recipient)s"
+                self.factory.good_cache[postfix_params['client_address']] = datetime.datetime.now()
             else:
                 action = 'DEFER_IF_PERMIT %s' % self.factory.settings.reject_msg
                 query = "UPDATE bley_status SET fail_count=fail_count+1 WHERE ip=%(client_address)s AND sender=%(sender)s AND recipient=%(recipient)s"
+                self.factory.bad_cache[postfix_params['client_address']] = datetime.datetime.now()
             self.dbc.execute(query, postfix_params)
             self.db.commit()
 
@@ -136,6 +149,7 @@ class BleyPolicy(PostfixPolicy):
             query = "UPDATE bley_status SET last_action='now' WHERE ip=%(client_address)s AND sender=%(sender)s AND recipient=%(recipient)s"
             self.dbc.execute(query, postfix_params)
             self.db.commit()
+            self.factory.good_cache[postfix_params['client_address']] = datetime.datetime.now()
 
         self.factory.settings.logger('decided action=%s, checks: %s, postfix: %s\n' % (action, check_results, postfix_params))
         self.send_action(action)
