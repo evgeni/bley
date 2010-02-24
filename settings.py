@@ -1,44 +1,33 @@
-import psycopg2
-import datetime
+import ConfigParser
+from datetime import timedelta
 
-# On which IP and port should the daemon listen?
-listen_addr = '192.168.0.1'
-listen_port = 1337
+defaults = {
+    'listen_addr': '127.0.0.1',
+    'log_file': None,
+    'pid_file': None,
+}
+config = ConfigParser.SafeConfigParser(defaults)
+config.read('bley.conf')
 
-# Which DNSBLs and DNSWLs to use?
-dnsbls = ['ix.dnsbl.manitu.net', 'dnsbl.njabl.org', 'dnsbl.ahbl.org', 'dnsbl.sorbs.net']
-dnswls = ['list.dnswl.org']
+# [bley]
+listen_addr = config.get('bley', 'listen_addr')
+listen_port = config.getint('bley', 'listen_port')
+pid_file    = config.get('bley', 'pid_file')
+log_file    = config.get('bley', 'log_file')
+exec("import %s as database" % config.get('bley', 'database'))
+dsn         = config.get('bley', 'dsn')
+reject_msg  = config.get('bley', 'reject_msg')
 
-# Whitelist after dnswl_threshold hits.
-dnswl_threshold = 1
-# Greylist after dnsbl_threshold hits.
-dnsbl_threshold = 1
-# Greylist after rfc_threshold hits in the RFC checks.
-rfc_threshold = 2
+# [lists]
+dnswls      = [d.strip() for d in config.get('bley', 'dnswls').split(',')]
+dnsbls      = [d.strip() for d in config.get('bley', 'dnsbls').split(',')]
 
-reject_msg = 'greylisted, try again later'
-
-# Which database to use?
-database = psycopg2
-dsn = "dbname=bley"
-
-# Where to save the PID file?
-pid_file = '/home/bley/bley/bley.pid'
-# Where to save the log file?
-log_file = '/home/bley/bley/bley.log'
-
-# Wait greylist_period before accepting greyed sender.
-greylist_period = datetime.timedelta(0, 29*60, 0)
-# Max wait greylist_max before accepting greyed sender.
-# (Accept all senders after 12h.)
-greylist_max    = datetime.timedelta(0, 12*60*60, 0)
-# Add greylist_penalty for every connection before greylist_period.
-greylist_penalty= datetime.timedelta(0, 10*60, 0)
-
-# Purge good entries from the database after purge_days inactivities.
-purge_days = 40
-# Purge bad entries from the database after purge_bad_days inactivities.
-purge_bad_days = 10
-
-# Start maximum max_procs BleyWorker threads.
-max_procs = 20
+# [thresholds]
+dnswl_threshold  = config.getint('bley', 'dnswl_threshold')
+dnsbl_threshold  = config.getint('bley', 'dnsbl_threshold')
+rfc_threshold    = config.getint('bley', 'rfc_threshold')
+greylist_period  = timedelta(0, config.getint('bley', 'greylist_period')*60, 0)
+greylist_max     = timedelta(0, config.getint('bley', 'greylist_max')*60, 0)
+greylist_penalty = timedelta(0, config.getint('bley', 'greylist_penalty')*60, 0)
+purge_days       = config.getint('bley', 'purge_days')
+purge_bad_days   = config.getint('bley', 'purge_bad_days')
