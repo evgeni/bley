@@ -78,6 +78,8 @@ class BleyPolicy(PostfixPolicy):
                  self.factory.settings.logger('decided CACHED action=%s, checks: %s, postfix: %s\n' % (action, check_results, postfix_params))
                  self.send_action(action)
                  return
+            else:
+                 del self.factory.bad_cache[postfix_params['client_address']]
 
         status = self.check_local_db(postfix_params)
         # -1 : not found
