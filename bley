@@ -31,6 +31,9 @@ import os
 import sys
 import datetime
 
+from optparse import OptionParser
+from ConfigParser import SafeConfigParser
+
 from twisted.internet import reactor
 
 try:
@@ -39,16 +42,6 @@ except:
     from twisted.scripts import twistd
 
 from bley import BleyPolicyFactory
-import settings
-
-if settings.log_file == 'syslog':
-    import syslog
-    syslog.openlog('bley', syslog.LOG_PID, syslog.LOG_MAIL)
-    settings.logger = syslog.syslog
-elif settings.log_file in ['-', '', None]:
-    settings.logger = sys.stdout.write
-else:
-    settings.logger = open(settings.log_file, 'a').write
 
 __CREATE_DB_QUERY = '''
   CREATE TABLE IF NOT EXISTS bley_status
@@ -82,6 +75,66 @@ __CLEAN_DB_QUERY = '''
 
 def bley_start():
 
+    parser = OptionParser(version='0.1')
+    parser.add_option("-p", "--pidfile", dest="pid_file",
+                      help="use PID_FILE for storing the PID")
+    parser.add_option("-c", "--config", dest="conffile",
+                      help="load configuration from CONFFILE")
+    parser.add_option("-v", "--verbose",
+                      action="store_true", dest="verbose",
+                      help="use verbose output")
+    parser.add_option("-d", "--debug",
+                      action="store_true", dest="debug",
+                      help="don't daemonize the process and log to stdout")
+    (settings, args) = parser.parse_args()
+
+    if not settings.conffile:
+        settings.conffile = 'bley.conf'
+
+    defaults = {
+        'listen_addr': '127.0.0.1',
+        'log_file': None,
+        'pid_file': None,
+    }
+    config = SafeConfigParser(defaults)
+    config.read(settings.conffile)
+
+    # [bley]
+    settings.listen_addr = config.get('bley', 'listen_addr')
+    settings.listen_port = config.getint('bley', 'listen_port')
+    settings.pid_file    = settings.pid_file or config.get('bley', 'pid_file')
+    settings.log_file    = config.get('bley', 'log_file')
+    exec("import %s as database" % config.get('bley', 'database'))
+    settings.database = database
+    settings.dsn         = config.get('bley', 'dsn')
+    settings.reject_msg  = config.get('bley', 'reject_msg')
+
+    # [lists]
+    settings.dnswls      = [d.strip() for d in config.get('bley', 'dnswls').split(',')]
+    settings.dnsbls      = [d.strip() for d in config.get('bley', 'dnsbls').split(',')]
+
+    # [thresholds]
+    settings.dnswl_threshold  = config.getint('bley', 'dnswl_threshold')
+    settings.dnsbl_threshold  = config.getint('bley', 'dnsbl_threshold')
+    settings.rfc_threshold    = config.getint('bley', 'rfc_threshold')
+    settings.greylist_period  = datetime.timedelta(0, config.getint('bley', 'greylist_period')*60, 0)
+    settings.greylist_max     = datetime.timedelta(0, config.getint('bley', 'greylist_max')*60, 0)
+    settings.greylist_penalty = datetime.timedelta(0, config.getint('bley', 'greylist_penalty')*60, 0)
+    settings.purge_days       = config.getint('bley', 'purge_days')
+    settings.purge_bad_days   = config.getint('bley', 'purge_bad_days')
+
+    if settings.debug:
+        settings.log_file = None
+
+    if settings.log_file == 'syslog':
+        import syslog
+        syslog.openlog('bley', syslog.LOG_PID, syslog.LOG_MAIL)
+        settings.logger = syslog.syslog
+    elif settings.log_file in ['-', '', None]:
+        settings.logger = sys.stdout.write
+    else:
+        settings.logger = open(settings.log_file, 'a').write
+
     db = settings.database.connect(settings.dsn)
     dbc = db.cursor()
     if settings.database.__name__ == 'psycopg2':
@@ -97,16 +150,17 @@ def bley_start():
     settings.db = settings.database.connect(settings.dsn)
 
     reactor.listenTCP(settings.listen_port, BleyPolicyFactory(settings), interface=settings.listen_addr)
-    reactor.addSystemEventTrigger('before', 'shutdown', bley_stop)
-    reactor.callWhenRunning(clean_db)
-    twistd.checkPID(settings.pid_file)
-    #twistd.daemonize()
-    if settings.pid_file:
-        writePID(settings.pid_file)
+    reactor.addSystemEventTrigger('before', 'shutdown', bley_stop, settings)
+    reactor.callWhenRunning(clean_db, settings)
+    if not settings.debug:
+        twistd.checkPID(settings.pid_file)
+        twistd.daemonize()
+        if settings.pid_file:
+            writePID(settings.pid_file)
     reactor.run()
 
-def bley_stop():
-    if settings.pid_file:
+def bley_stop(settings):
+    if settings.pid_file and not settings.debug:
         delPID(settings.pid_file)
     if settings.log_file == 'syslog':
         syslog.closelog()
@@ -122,7 +176,7 @@ def delPID(pidfile):
     if os.path.exists(pidfile):
         os.remove(pidfile)
 
-def clean_db():
+def clean_db(settings):
     print "cleaning database"
     db = settings.database.connect(settings.dsn)
     dbc = db.cursor()
@@ -134,6 +188,6 @@ def clean_db():
     db.commit()
     dbc.close()
     db.close()
-    reactor.callLater(30*60, clean_db)
+    reactor.callLater(30*60, clean_db, settings)
 
 bley_start()
