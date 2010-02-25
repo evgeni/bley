@@ -11,5 +11,5 @@ setup(
     py_modules = ['bley', 'bleyhelpers', 'postfix'],
     scripts = ['bley'],
     zip_safe = False,
-    # install_requires = [ needs to be filled! ],
+    install_requires=['Twisted-Core>=8.1.0', 'pyspf', 'psycopg2'],
 )
