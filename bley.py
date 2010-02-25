@@ -40,6 +40,7 @@ class BleyPolicy(PostfixPolicy):
     db = None
     dbc = None
 
+    @defer.inlineCallbacks
     def check_policy (self):
         '''Check the incoming mail based on our policy and tell Postfix
         about our decision.
@@ -98,11 +99,11 @@ class BleyPolicy(PostfixPolicy):
         if postfix_params['recipient'].lower().startswith('postmaster'):
             action = 'DUNNO'
         elif status == -1: # not found in local db...
-            check_results['DNSWL'] = self.check_dnswls(postfix_params['client_address'], self.factory.settings.dnswl_threshold)
+            check_results['DNSWL'] = yield self.check_dnswls(postfix_params['client_address'], self.factory.settings.dnswl_threshold)
             if check_results['DNSWL'] >= self.factory.settings.dnswl_threshold:
                 new_status = 1
             else:
-                check_results['DNSBL'] = self.check_dnsbls(postfix_params['client_address'], self.factory.settings.dnsbl_threshold)
+                check_results['DNSBL'] = yield self.check_dnsbls(postfix_params['client_address'], self.factory.settings.dnsbl_threshold)
                 check_results['HELO'] = check_helo(postfix_params)
                 check_results['DYN'] = check_dyn_host(postfix_params['client_name'])
                 # check_sender_eq_recipient:
