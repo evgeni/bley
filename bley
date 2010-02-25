@@ -99,7 +99,6 @@ def bley_start():
     config = SafeConfigParser(defaults)
     config.read(settings.conffile)
 
-    # [bley]
     settings.listen_addr = config.get('bley', 'listen_addr')
     settings.listen_port = config.getint('bley', 'listen_port')
     settings.pid_file    = settings.pid_file or config.get('bley', 'pid_file')
@@ -109,11 +108,9 @@ def bley_start():
     settings.dsn         = config.get('bley', 'dsn')
     settings.reject_msg  = config.get('bley', 'reject_msg')
 
-    # [lists]
     settings.dnswls      = [d.strip() for d in config.get('bley', 'dnswls').split(',')]
     settings.dnsbls      = [d.strip() for d in config.get('bley', 'dnsbls').split(',')]
 
-    # [thresholds]
     settings.dnswl_threshold  = config.getint('bley', 'dnswl_threshold')
     settings.dnsbl_threshold  = config.getint('bley', 'dnsbl_threshold')
     settings.rfc_threshold    = config.getint('bley', 'rfc_threshold')
@@ -177,7 +174,8 @@ def delPID(pidfile):
         os.remove(pidfile)
 
 def clean_db(settings):
-    print "cleaning database"
+    if settings.verbose:
+        settings.logger("cleaning database")
     db = settings.database.connect(settings.dsn)
     dbc = db.cursor()
     now = datetime.datetime.now()
