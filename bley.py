@@ -74,28 +74,28 @@ class BleyPolicy(PostfixPolicy):
         if postfix_params['client_address'] in self.factory.bad_cache.keys():
             delta = datetime.datetime.now()-self.factory.bad_cache[postfix_params['client_address']]
             if delta < datetime.timedelta(0,60,0):
-                 action = 'DEFER_IF_PERMIT %s (cached result)' % self.factory.settings.reject_msg
-                 if settings.verbose:
+                action = 'DEFER_IF_PERMIT %s (cached result)' % self.factory.settings.reject_msg
+                if settings.verbose:
                     self.factory.settings.logger('decided CACHED action=%s, checks: %s, postfix: %s\n' % (action, check_results, postfix_params))
-                 else:
+                else:
                     self.factory.settings.logger('decided CACHED action=%s, from=%s, to=%s\n' % action, postfix_params['sender'], postfix_params['recipient'])
-                 self.send_action(action)
-                 return
+                self.send_action(action)
+                return
             else:
-                 del self.factory.bad_cache[postfix_params['client_address']]
+                del self.factory.bad_cache[postfix_params['client_address']]
 
         if postfix_params['client_address'] in self.factory.good_cache.keys():
             delta = datetime.datetime.now()-self.factory.good_cache[postfix_params['client_address']]
             if delta < datetime.timedelta(0,60,0):
-                 action = 'DUNNO'
-                 if settings.verbose:
+                action = 'DUNNO'
+                if settings.verbose:
                     self.factory.settings.logger('decided CACHED action=%s, checks: %s, postfix: %s\n' % (action, check_results, postfix_params))
-                 else:
+                else:
                     self.factory.settings.logger('decided CACHED action=%s, from=%s, to=%s\n' % action, postfix_params['sender'], postfix_params['recipient'])
-                 self.send_action(action)
-                 return
+                self.send_action(action)
+                return
             else:
-                 del self.factory.good_cache[postfix_params['client_address']]
+                del self.factory.good_cache[postfix_params['client_address']]
 
         status = self.check_local_db(postfix_params)
         # -1 : not found
