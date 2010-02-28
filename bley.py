@@ -75,7 +75,7 @@ class BleyPolicy(PostfixPolicy):
             delta = datetime.datetime.now()-self.factory.bad_cache[postfix_params['client_address']]
             if delta < datetime.timedelta(0,60,0):
                 action = 'DEFER_IF_PERMIT %s (cached result)' % self.factory.settings.reject_msg
-                if settings.verbose:
+                if self.factory.settings.verbose:
                     self.factory.settings.logger('decided CACHED action=%s, checks: %s, postfix: %s\n' % (action, check_results, postfix_params))
                 else:
                     self.factory.settings.logger('decided CACHED action=%s, from=%s, to=%s\n' % action, postfix_params['sender'], postfix_params['recipient'])
@@ -88,7 +88,7 @@ class BleyPolicy(PostfixPolicy):
             delta = datetime.datetime.now()-self.factory.good_cache[postfix_params['client_address']]
             if delta < datetime.timedelta(0,60,0):
                 action = 'DUNNO'
-                if settings.verbose:
+                if self.factory.settings.verbose:
                     self.factory.settings.logger('decided CACHED action=%s, checks: %s, postfix: %s\n' % (action, check_results, postfix_params))
                 else:
                     self.factory.settings.logger('decided CACHED action=%s, from=%s, to=%s\n' % action, postfix_params['sender'], postfix_params['recipient'])
@@ -157,7 +157,7 @@ class BleyPolicy(PostfixPolicy):
             self.db.commit()
             self.factory.good_cache[postfix_params['client_address']] = datetime.datetime.now()
 
-        if settings.verbose:
+        if self.factory.settings.verbose:
             self.factory.settings.logger('decided action=%s, checks: %s, postfix: %s\n' % (action, check_results, postfix_params))
         else:
             self.factory.settings.logger('decided action=%s, from=%s, to=%s\n' % action, postfix_params['sender'], postfix_params['recipient'])
