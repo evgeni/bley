@@ -71,6 +71,12 @@ class BleyPolicy(PostfixPolicy):
         action = 'DUNNO'
         postfix_params = self.params
 
+        # Strip everything after a + in the localpart, usefull for mailinglists etc
+        if postfix_params['sender'].find('+') != -1:
+            postfix_params['sender'] = postfix_params['sender'][:postfix_params['sender'].find('+')]+postfix_params['sender'][postfix_params['sender'].find('@'):]
+        if postfix_params['recipient'].find('+') != -1:
+            postfix_params['recipient'] = postfix_params['recipient'][:postfix_params['recipient'].find('+')]+postfix_params['recipient'][postfix_params['recipient'].find('@'):]
+
         if postfix_params['client_address'] in self.factory.bad_cache.keys():
             delta = datetime.datetime.now()-self.factory.bad_cache[postfix_params['client_address']]
             if delta < datetime.timedelta(0,60,0):
