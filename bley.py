@@ -78,7 +78,7 @@ class BleyPolicy(PostfixPolicy):
                 if self.factory.settings.verbose:
                     self.factory.settings.logger('decided CACHED action=%s, checks: %s, postfix: %s\n' % (action, check_results, postfix_params))
                 else:
-                    self.factory.settings.logger('decided CACHED action=%s, from=%s, to=%s\n' % action, postfix_params['sender'], postfix_params['recipient'])
+                    self.factory.settings.logger('decided CACHED action=%s, from=%s, to=%s\n' % (action, postfix_params['sender'], postfix_params['recipient']))
                 self.send_action(action)
                 return
             else:
@@ -91,7 +91,7 @@ class BleyPolicy(PostfixPolicy):
                 if self.factory.settings.verbose:
                     self.factory.settings.logger('decided CACHED action=%s, checks: %s, postfix: %s\n' % (action, check_results, postfix_params))
                 else:
-                    self.factory.settings.logger('decided CACHED action=%s, from=%s, to=%s\n' % action, postfix_params['sender'], postfix_params['recipient'])
+                    self.factory.settings.logger('decided CACHED action=%s, from=%s, to=%s\n' % (action, postfix_params['sender'], postfix_params['recipient']))
                 self.send_action(action)
                 return
             else:
@@ -160,7 +160,7 @@ class BleyPolicy(PostfixPolicy):
         if self.factory.settings.verbose:
             self.factory.settings.logger('decided action=%s, checks: %s, postfix: %s\n' % (action, check_results, postfix_params))
         else:
-            self.factory.settings.logger('decided action=%s, from=%s, to=%s\n' % action, postfix_params['sender'], postfix_params['recipient'])
+            self.factory.settings.logger('decided action=%s, from=%s, to=%s\n' % (action, postfix_params['sender'], postfix_params['recipient']))
         self.send_action(action)
 
     def check_local_db(self, postfix_params):
