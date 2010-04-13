@@ -5,4 +5,25 @@ DEPENDENCIES:
  psycopg2 from http://initd.org/
 
 INSTALLATION:
- Unpack the tarball, adjust bley.conf and run bley (NOT bley.py!).
+ Quick and dirty:
+  Unpack the tarball, adjust bley.conf and run bley (NOT bley.py!).
+
+ Still quick, but not dirty:
+  Unpack the tarball, python setup.py build, python setup.py install,
+  adjust /etc/bley.conf, run /usr/bin/bley
+
+CONFIGURATION:
+ Basically you just have to set 'database' and 'dsn' so bley can talk to
+ the database. 'database' is a DB-API 2.0 [1] compliant Python module,
+ like 'psycopg2' or 'MySQLdb' (psycopg2 is the only one we tested though).
+ 
+ After that you can point your Postfix to bley as a policy server by
+ adding 'check_policy_service inet:127.0.0.1:1337' to your
+ 'smtpd_recipient_restrictions' in main.cf.
+ 
+ bley will be working now, but you probably would like to tune it more
+ for your needs (esp. the used DNWLs and DNSBLs, the greylisting times
+ and the hit thresholds)
+
+[1] http://www.python.org/dev/peps/pep-0249/
+[2] http://www.postfix.org/SMTPD_POLICY_README.html
