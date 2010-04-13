@@ -26,8 +26,8 @@
 # SUCH DAMAGE.
 
 from twisted.internet.protocol import Factory
-from twisted.names import client
 from twisted.internet import defer
+from twisted.internet import reactor
 
 import psycopg2
 import datetime
@@ -249,7 +249,7 @@ class BleyPolicy(PostfixPolicy):
 
         rip = reverse_ip(ip)
         lookup = '%s.%s' % (rip, lst)
-        d = client.lookupAddress(lookup)
+        d = reactor.resolve(lookup)
         return d
 
 class BleyPolicyFactory(Factory):
