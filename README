@@ -15,7 +15,7 @@ INSTALLATION:
 
  Still quick, but not dirty:
   Unpack the tarball, python setup.py build, python setup.py install,
-  adjust /etc/bley.conf  (see CONFIGURATION below), run /usr/bin/bley
+  adjust /etc/bley/bley.conf  (see CONFIGURATION below), run /usr/bin/bley
 
 CONFIGURATION:
  Basically you just have to set 'database' and 'dsn' so bley can talk to
