@@ -1,6 +1,5 @@
 DEPENDENCIES:
  twisted-core from http://twistedmatrix.com/
- twisted-names from http://twistedmatrix.com/
  pyspf from http://pypi.python.org/pypi/pyspf
  psycopg2 from http://initd.org/
 
