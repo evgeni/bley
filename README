@@ -1,7 +1,7 @@
 DEPENDENCIES:
  twisted-core from http://twistedmatrix.com/
  pyspf from http://pypi.python.org/pypi/pyspf
- psycopg2 from http://initd.org/
+ psycopg2 from http://initd.org/psycopg/
 
 INSTALLATION:
  Quick and dirty:
@@ -9,12 +9,14 @@ INSTALLATION:
 
  Still quick, but not dirty:
   Unpack the tarball, python setup.py build, python setup.py install,
-  adjust /etc/bley.conf, run /usr/bin/bley
+  adjust /etc/bley.conf  (see CONFIGURATION below), run /usr/bin/bley
 
 CONFIGURATION:
  Basically you just have to set 'database' and 'dsn' so bley can talk to
  the database. 'database' is a DB-API 2.0 [1] compliant Python module,
  like 'psycopg2' or 'MySQLdb' (psycopg2 is the only one we tested though).
+ 'dsn' is a DSN string that module accepts, something like
+ 'dbname=bley user=bley password=bleyrocks'.
  
  After that you can point your Postfix to bley as a policy server by
  adding 'check_policy_service inet:127.0.0.1:1337' to your
