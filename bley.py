@@ -185,8 +185,12 @@ class BleyPolicy(PostfixPolicy):
                     AND sender=%(sender)s AND recipient=%(recipient)s
                     ORDER BY status ASC
                     LIMIT 1"""
-        self.dbc.execute(query, postfix_params)
-        result = self.dbc.fetchone()
+        try:
+            self.dbc.execute(query, postfix_params)
+            result = self.dbc.fetchone()
+        except:
+            result = None
+            self.factory.settings.logger('check_local_db failed. sending unknown.\n')
         if not result:
             return -1
         else:
