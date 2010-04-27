@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name = "bley",
-    version = "0.1",
+    version = "0.1.1",
     description = "intelligent greylisting daemon for postfix",
     author = "Evgeni Golov",
     author_email = "sargentd@die-welt.net",
