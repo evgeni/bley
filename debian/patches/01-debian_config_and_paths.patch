@@ -1,0 +1,31 @@
+Description: Use Debian paths and a Debian specific config
+ Needed for dbconfig-common usage.
+Author: Evgeni Golov <evgeni@debian.org>
+Forwarded: not-needed
+Last-Update: 2010-04-26
+
+--- bley-0.1.1.orig/bley
++++ bley-0.1.1/bley
+@@ -103,7 +103,7 @@ def bley_start():
+     (settings, args) = parser.parse_args()
+ 
+     if not settings.conffile:
+-        settings.conffile = '/etc/bley/bley.conf'
++        settings.conffile = ['/etc/bley/bley.conf', '/etc/bley/dbconfig-common.conf']
+ 
+     defaults = {
+         'listen_addr': '127.0.0.1',
+--- bley-0.1.1.orig/bley.conf
++++ bley-0.1.1/bley.conf
+@@ -4,9 +4,9 @@ listen_addr = 127.0.0.1
+ listen_port = 1337
+ 
+ # Where to save the PID file?
+-pid_file = bley.pid
++pid_file = /var/run/bley/bley.pid
+ # Where to save the log file?
+-log_file = bley.log
++log_file = syslog
+ 
+ reject_msg = greylisted, try again later
+ 

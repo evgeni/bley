@@ -1,0 +1,12 @@
+Format-Specification: http://svn.debian.org/wsvn/dep/web/deps/dep5.mdwn?op=file&rev=135
+Name: bley
+Maintainer: Evgeni Golov <evgeni@debian.org>
+Source: http://bley.mx
+
+Files: *
+Copyright: 2009-2010 Evgeni Golov <evgeni@debian.org>
+License: 3-BSD
+
+On Debian systems, the complete text of the BSD License can be
+found in "/usr/share/common-licenses/BSD".
+

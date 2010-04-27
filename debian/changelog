@@ -1,0 +1,5 @@
+bley (0.1.1-1) unstable; urgency=low
+
+  * Initial release (Closes: #578491)
+
+ -- Evgeni Golov <evgeni@debian.org>  Tue, 27 Apr 2010 18:47:41 +0200
