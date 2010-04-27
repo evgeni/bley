@@ -117,9 +117,21 @@ def bley_start():
     settings.listen_port = config.getint('bley', 'listen_port')
     settings.pid_file    = settings.pid_file or config.get('bley', 'pid_file')
     settings.log_file    = config.get('bley', 'log_file')
-    exec("import %s as database" % config.get('bley', 'database'))
+    settings.dbtype      = config.get('bley', 'dbtype')
+    if settings.dbtype == 'pgsql':
+        database = 'psycopg2'
+        settings.dbsettings = {'host': config.get('bley', 'dbhost'), 'database': config.get('bley', 'dbname'),
+                               'user': config.get('bley', 'dbuser'), 'password': config.get('bley', 'dbpass')}
+    elif settings.dbtype == 'mysql':
+        database = 'MySQLdb'
+        settings.dbsettings = {'host': config.get('bley', 'dbhost'), 'db': config.get('bley', 'dbname'),
+                               'user': config.get('bley', 'dbuser'), 'passwd': config.get('bley', 'dbpass')}
+    else:
+        print "No supported database configured."
+        sys.exit(1)
+
+    exec("import %s as database" % database)
     settings.database = database
-    settings.dsn         = config.get('bley', 'dsn')
     settings.reject_msg  = config.get('bley', 'reject_msg')
 
     settings.dnswls      = [d.strip() for d in config.get('bley', 'dnswls').split(',')]
@@ -146,9 +158,9 @@ def bley_start():
     else:
         settings.logger = open(settings.log_file, 'a').write
 
-    db = settings.database.connect(settings.dsn)
+    db = settings.database.connect(**settings.dbsettings)
     dbc = db.cursor()
-    if settings.database.__name__ == 'psycopg2':
+    if settings.dbtype == 'pgsql':
         dbc.execute(__CHECK_DB_QUERY_PG)
         if not dbc.fetchall():
             dbc.execute(__CREATE_DB_QUERY_PG)
@@ -158,7 +170,7 @@ def bley_start():
     dbc.close()
     db.close()
 
-    settings.db = settings.database.connect(settings.dsn)
+    settings.db = settings.database.connect(**settings.dbsettings)
 
     reactor.listenTCP(settings.listen_port, BleyPolicyFactory(settings), interface=settings.listen_addr)
     reactor.addSystemEventTrigger('before', 'shutdown', bley_stop, settings)
@@ -190,7 +202,7 @@ def delPID(pidfile):
 def clean_db(settings):
     if settings.verbose:
         settings.logger("cleaning database")
-    db = settings.database.connect(settings.dsn)
+    db = settings.database.connect(**settings.dbsettings)
     dbc = db.cursor()
     now = datetime.datetime.now()
     old = now - datetime.timedelta(settings.purge_days, 0, 0)
