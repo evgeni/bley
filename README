@@ -18,11 +18,13 @@ INSTALLATION:
   adjust /etc/bley/bley.conf  (see CONFIGURATION below), run /usr/bin/bley
 
 CONFIGURATION:
- Basically you just have to set 'database' and 'dsn' so bley can talk to
- the database. 'database' is a DB-API 2.0 [1] compliant Python module,
- like 'psycopg2' or 'MySQLdb' (psycopg2 is the only one we tested though).
- 'dsn' is a DSN string that module accepts, something like
- 'dbname=bley user=bley password=bleyrocks'.
+ Basically you just have to set 'dbtype' and the various 'db*' settings
+ so bley can talk to the database. 'database' is either 'pgsql' for
+ PostgreSQL, or 'mysql' for MySQL. The other db settings are:
+ 'dbhost' - the host where the database runs on (usually localhost)
+ 'dbname' - the name of the database (usually bley)
+ 'dbuser' - the name of the database user
+ 'dbpass' - the password of the database user
  
  After that you can point your Postfix to bley as a policy server by
  adding 'check_policy_service inet:127.0.0.1:1337' to your
