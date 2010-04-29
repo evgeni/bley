@@ -12,5 +12,5 @@ setup(
     scripts = ['bley'],
     zip_safe = False,
     install_requires=['Twisted-Core>=8.1.0', 'pyspf', 'psycopg2'],
-    data_files = [('/etc/bley', ['bley.conf'])]
+    data_files = [('/etc/bley', ['bley.conf']), ('/usr/share/man/man1', ['bley.1'])]
 )
