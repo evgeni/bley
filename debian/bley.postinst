@@ -17,11 +17,6 @@ case "$1" in
             --group bley
     fi
 
-    if [ ! -d /var/run/bley ]; then
-        mkdir /var/run/bley
-        chown bley:bley /var/run/bley
-    fi
-
     if ! dpkg-statoverride --list /etc/bley >/dev/null; then
         chown root:bley /etc/bley
         chmod 750 /etc/bley
