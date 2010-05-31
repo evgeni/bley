@@ -87,6 +87,49 @@ __CLEAN_DB_QUERY = '''
    DELETE FROM bley_status WHERE last_action<%(old)s OR (last_action<%(old_bad)s AND status>=2)
 '''
 
+__CREATE_LOGDB_QUERY = '''
+  CREATE TABLE IF NOT EXISTS bley_log
+  (
+    logtime TIMESTAMP NOT NULL,
+    ip VARCHAR(39) NOT NULL,
+    sender VARCHAR(254),
+    recipient VARCHAR(254),
+    action VARCHAR(254),
+    check_dnswl INT DEFAULT 0,
+    check_dnsbl INT DEFAULT 0,
+    check_helo INT DEFAULT 0,
+    check_dyn INT DEFAULT 0,
+    check_db INT DEFAULT 0,
+    check_spf INT DEFAULT 0,
+    check_s_eq_r INT DEFAULT 0,
+    check_postmaster INT DEFAULT 0,
+    check_cache INT DEFAULT 0
+  );
+'''
+__CREATE_LOGDB_QUERY_PG = '''
+  CREATE TABLE bley_log
+  (
+    logtime TIMESTAMP NOT NULL,
+    ip VARCHAR(39) NOT NULL,
+    sender VARCHAR(254),
+    recipient VARCHAR(254),
+    action VARCHAR(254),
+    check_dnswl INT DEFAULT 0,
+    check_dnsbl INT DEFAULT 0,
+    check_helo INT DEFAULT 0,
+    check_dyn INT DEFAULT 0,
+    check_db INT DEFAULT 0,
+    check_spf INT DEFAULT 0,
+    check_s_eq_r INT DEFAULT 0,
+    check_postmaster INT DEFAULT 0,
+    check_cache INT DEFAULT 0
+  );
+'''
+__CHECK_LOGDB_QUERY_PG = '''
+  SELECT tablename FROM pg_catalog.pg_tables WHERE tablename = 'bley_log'
+'''
+
+
 def bley_start():
 
     parser = OptionParser(version='0.1')
@@ -164,8 +207,12 @@ def bley_start():
         dbc.execute(__CHECK_DB_QUERY_PG)
         if not dbc.fetchall():
             dbc.execute(__CREATE_DB_QUERY_PG)
+        dbc.execute(__CHECK_LOGDB_QUERY_PG)
+        if not dbc.fetchall():
+            dbc.execute(__CREATE_LOGDB_QUERY_PG)
     else:
         dbc.execute(__CREATE_DB_QUERY)
+        dbc.execute(__CREATE_LOGDB_QUERY)
     db.commit()
     dbc.close()
     db.close()

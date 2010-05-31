@@ -67,7 +67,7 @@ class BleyPolicy(PostfixPolicy):
             self.db = self.factory.settings.db
             self.dbc = self.db.cursor()
 
-        check_results = {'DNSWL': 0, 'DNSBL': 0, 'HELO': 0, 'DYN': 0, 'DB': -1, 'SPF': 0, 'S_EQ_R': 0 }
+        check_results = {'DNSWL': 0, 'DNSBL': 0, 'HELO': 0, 'DYN': 0, 'DB': -1, 'SPF': 0, 'S_EQ_R': 0, 'POSTMASTER': 0, 'CACHE': 0}
         action = 'DUNNO'
         postfix_params = self.params
 
@@ -81,11 +81,13 @@ class BleyPolicy(PostfixPolicy):
             delta = datetime.datetime.now()-self.factory.bad_cache[postfix_params['client_address']]
             if delta < datetime.timedelta(0,60,0):
                 action = 'DEFER_IF_PERMIT %s (cached result)' % self.factory.settings.reject_msg
+                check_results['CACHE'] = 1
                 if self.factory.settings.verbose:
                     self.factory.settings.logger('decided CACHED action=%s, checks: %s, postfix: %s\n' % (action, check_results, postfix_params))
                 else:
                     self.factory.settings.logger('decided CACHED action=%s, from=%s, to=%s\n' % (action, postfix_params['sender'], postfix_params['recipient']))
                 self.send_action(action)
+                self.factory.log_action(postfix_params, action, check_results)
                 return
             else:
                 del self.factory.bad_cache[postfix_params['client_address']]
@@ -94,11 +96,13 @@ class BleyPolicy(PostfixPolicy):
             delta = datetime.datetime.now()-self.factory.good_cache[postfix_params['client_address']]
             if delta < datetime.timedelta(0,60,0):
                 action = 'DUNNO'
+                check_results['CACHE'] = 1
                 if self.factory.settings.verbose:
                     self.factory.settings.logger('decided CACHED action=%s, checks: %s, postfix: %s\n' % (action, check_results, postfix_params))
                 else:
                     self.factory.settings.logger('decided CACHED action=%s, from=%s, to=%s\n' % (action, postfix_params['sender'], postfix_params['recipient']))
                 self.send_action(action)
+                self.factory.log_action(postfix_params, action, check_results)
                 return
             else:
                 del self.factory.good_cache[postfix_params['client_address']]
@@ -110,6 +114,7 @@ class BleyPolicy(PostfixPolicy):
         #  2 : regular host, but in black, lets grey for now
         if postfix_params['recipient'].lower().startswith('postmaster'):
             action = 'DUNNO'
+            check_results['POSTMASTER'] = 1
         elif status == -1: # not found in local db...
             check_results['DNSWL'] = yield self.check_dnswls(postfix_params['client_address'], self.factory.settings.dnswl_threshold)
             if check_results['DNSWL'] >= self.factory.settings.dnswl_threshold:
@@ -121,9 +126,9 @@ class BleyPolicy(PostfixPolicy):
                 # check_sender_eq_recipient:
                 if postfix_params['sender']==postfix_params['recipient']:
                     check_results['S_EQ_R'] = 1
-		if check_results['DNSBL'] < self.factory.settings.dnsbl_threshold and check_results['HELO']+check_results['DYN']+check_results['S_EQ_R'] < self.factory.settings.rfc_threshold:
-	            check_results['SPF'] = check_spf(postfix_params)
-		else:
+                if check_results['DNSBL'] < self.factory.settings.dnsbl_threshold and check_results['HELO']+check_results['DYN']+check_results['S_EQ_R'] < self.factory.settings.rfc_threshold:
+                    check_results['SPF'] = check_spf(postfix_params)
+                else:
                     check_results['SPF'] = 0
                 if check_results['DNSBL'] >= self.factory.settings.dnsbl_threshold or check_results['HELO']+check_results['DYN']+check_results['SPF']+check_results['S_EQ_R'] >= self.factory.settings.rfc_threshold:
                     new_status = 2
@@ -167,6 +172,7 @@ class BleyPolicy(PostfixPolicy):
             self.factory.settings.logger('decided action=%s, checks: %s, postfix: %s\n' % (action, check_results, postfix_params))
         else:
             self.factory.settings.logger('decided action=%s, from=%s, to=%s\n' % (action, postfix_params['sender'], postfix_params['recipient']))
+        self.factory.log_action(postfix_params, action, check_results)
         self.send_action(action)
 
     def check_local_db(self, postfix_params):
@@ -263,3 +269,34 @@ class BleyPolicyFactory(Factory):
         self.settings = settings
         self.good_cache = {}
         self.bad_cache = {}
+        self.actionlog = []
+        reactor.callLater(30*60, self.dump_log)
+
+    def log_action(self, postfix_params, action, check_results):
+        now = datetime.datetime.now()
+        action = action.split(' ')[0]
+        logline = {'time': str(now), 'ip': postfix_params['client_address'],
+                   'from': postfix_params['sender'], 'to': postfix_params['recipient'],
+                   'action': action}
+        logline.update(check_results)
+        self.actionlog.append(logline)
+
+    def dump_log(self):
+        query = '''INSERT INTO bley_log (logtime, ip, sender, recipient, action,
+                check_dnswl, check_dnsbl, check_helo, check_dyn, check_db,
+                check_spf, check_s_eq_r, check_postmaster, check_cache)
+                VALUES(%(time)s, %(ip)s, %(from)s, %(to)s, %(action)s,
+                %(DNSWL)s, %(DNSBL)s, %(HELO)s, %(DYN)s, %(DB)s,
+                %(SPF)s, %(S_EQ_R)s, %(POSTMASTER)s, %(CACHE)s)'''
+
+        db = self.settings.database.connect(**self.settings.dbsettings)
+        dbc = db.cursor()
+        i = len(self.actionlog)
+        while i:
+            logline = self.actionlog.pop(0)
+            dbc.execute(query, logline)
+            i -= 1
+        db.commit()
+        dbc.close()
+        db.close()
+        reactor.callLater(30*60, self.dump_log)
