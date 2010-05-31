@@ -188,6 +188,7 @@ def bley_start():
     settings.greylist_penalty = datetime.timedelta(0, config.getint('bley', 'greylist_penalty')*60, 0)
     settings.purge_days       = config.getint('bley', 'purge_days')
     settings.purge_bad_days   = config.getint('bley', 'purge_bad_days')
+    settings.use_spf          = config.getint('bley', 'use_spf')
 
     if settings.debug:
         settings.log_file = None
