@@ -35,6 +35,8 @@ import datetime
 from bleyhelpers import *
 from postfix import PostfixPolicy
 
+from time import sleep
+
 class BleyPolicy(PostfixPolicy):
     '''Implementation of intelligent greylisting based on `PostfixPolicy`'''
 
@@ -141,7 +143,7 @@ class BleyPolicy(PostfixPolicy):
             query = "INSERT INTO bley_status (ip, status, last_action, sender, recipient) VALUES(%(client_address)s, %(new_status)s, NOW(), %(sender)s, %(recipient)s)"
             postfix_params['new_status'] = new_status
             try:
-                self.dbc.execute(query, postfix_params)
+                self.safe_execute(query, postfix_params)
             except:
                 # the other thread already commited while we checked, ignore
                 pass
@@ -158,14 +160,14 @@ class BleyPolicy(PostfixPolicy):
                 action = 'DEFER_IF_PERMIT %s' % self.factory.settings.reject_msg
                 query = "UPDATE bley_status SET fail_count=fail_count+1 WHERE ip=%(client_address)s AND sender=%(sender)s AND recipient=%(recipient)s"
                 self.factory.bad_cache[postfix_params['client_address']] = datetime.datetime.now()
-            self.dbc.execute(query, postfix_params)
+            self.safe_execute(query, postfix_params)
             self.db.commit()
 
         else: # found to be clean
             check_results['DB'] = status[0]
             action = 'DUNNO'
             query = "UPDATE bley_status SET last_action=NOW() WHERE ip=%(client_address)s AND sender=%(sender)s AND recipient=%(recipient)s"
-            self.dbc.execute(query, postfix_params)
+            self.safe_execute(query, postfix_params)
             self.db.commit()
             self.factory.good_cache[postfix_params['client_address']] = datetime.datetime.now()
 
@@ -193,7 +195,7 @@ class BleyPolicy(PostfixPolicy):
                     ORDER BY status ASC
                     LIMIT 1"""
         try:
-            self.dbc.execute(query, postfix_params)
+            self.safe_execute(query, postfix_params)
             result = self.dbc.fetchone()
         except:
             result = None
@@ -262,6 +264,24 @@ class BleyPolicy(PostfixPolicy):
         lookup = '%s.%s' % (rip, lst)
         d = client.lookupAddress(lookup)
         return d
+
+    def safe_execute(self, query, params=None):
+        try:
+            self.dbc.execute(query, params)
+        except self.factory.settings.database.OperationalError:
+            try:
+                self.db.close()
+            except:
+                pass
+            self.db = None
+            while not self.db:
+                try:
+                    self.db = self.factory.settings.database.connect(**self.factory.settings.dbsettings)
+                    self.dbc = self.db.cursor()
+                except self.factory.settings.database.OperationalError:
+                    self.db = None
+                    sleep(1)
+            self.dbc.execute(query, params)
 
 class BleyPolicyFactory(Factory):
     protocol = BleyPolicy
