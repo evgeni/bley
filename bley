@@ -67,6 +67,10 @@ __CREATE_DB_QUERY = '''
     recipient VARCHAR(254),
     fail_count INT DEFAULT 0
   );
+  CREATE INDEX bley_status_index
+   USING btree ON bley_status (ip, sender, recipient);
+  CREATE INDEX bley_status_action_index
+   USING btree ON bley_status (last_action);
 '''
 __CREATE_DB_QUERY_PG = '''
   CREATE TABLE bley_status
@@ -78,6 +82,10 @@ __CREATE_DB_QUERY_PG = '''
     recipient VARCHAR(254),
     fail_count INT DEFAULT 0
   );
+  CREATE INDEX bley_status_index
+   ON bley_status USING btree (ip ASC NULLS LAST, sender ASC NULLS LAST, recipient ASC NULLS LAST);
+  CREATE INDEX bley_status_action_index
+   ON bley_status USING btree (last_action ASC NULLS LAST);
 '''
 __CHECK_DB_QUERY_PG = '''
   SELECT tablename FROM pg_catalog.pg_tables WHERE tablename = 'bley_status'
@@ -105,6 +113,8 @@ __CREATE_LOGDB_QUERY = '''
     check_postmaster INT DEFAULT 0,
     check_cache INT DEFAULT 0
   );
+  CREATE INDEX bley_log_index
+   USING btree ON bley_log (logtime, action);
 '''
 __CREATE_LOGDB_QUERY_PG = '''
   CREATE TABLE bley_log
@@ -124,6 +134,8 @@ __CREATE_LOGDB_QUERY_PG = '''
     check_postmaster INT DEFAULT 0,
     check_cache INT DEFAULT 0
   );
+  CREATE INDEX bley_log_index
+   ON bley_log USING btree (logtime DESC NULLS FIRST, action ASC NULLS LAST);
 '''
 __CHECK_LOGDB_QUERY_PG = '''
   SELECT tablename FROM pg_catalog.pg_tables WHERE tablename = 'bley_log'
