@@ -85,11 +85,27 @@ years    = mdates.YearLocator()   # every year
 months   = mdates.MonthLocator()  # every month
 hours    = mdates.HourLocator()
 twohours = mdates.HourLocator(interval=2)
+fourhours = mdates.HourLocator(interval=4)
+halfday  = mdates.HourLocator(interval=12)
+oneday   = mdates.DayLocator()
+twoday   = mdates.DayLocator(interval=2)
+fourday  = mdates.DayLocator(interval=4)
+teday    = mdates.DayLocator(interval=28)
 hoursFmt = mdates.DateFormatter('%Y/%m/%d %H:%M')
 daysFmt  = mdates.DateFormatter('%Y/%m/%d')
 
-__TIMESLOTS = {'12h': 60, '24h': 2*60, '7d': 12*60, '28d': 2*24*60, '365d': 28*24*60}
-__SLOTORDER = ['12h', '24h', '7d', '28d', '365d']
+__TIMESLOTS = [
+    {'title':  '12h', 'slot':       60, 'major_locator': twohours,
+     'minor_locator':    hours, 'formatter': hoursFmt, 'slotname':  '1h'},
+    {'title':  '24h', 'slot':     2*60, 'major_locator': fourhours,
+     'minor_locator': twohours, 'formatter': hoursFmt, 'slotname':  '2h'},
+    {'title':   '7d', 'slot':    12*60, 'major_locator': oneday,
+     'minor_locator':  halfday, 'formatter':  daysFmt, 'slotname': '12h'},
+    {'title':  '28d', 'slot':  2*24*60, 'major_locator': fourday,
+     'minor_locator':   twoday, 'formatter':  daysFmt, 'slotname':  '2d'},
+    {'title': '365d', 'slot': 28*24*60, 'major_locator': teday,
+     'minor_locator':    teday, 'formatter':  daysFmt, 'slotname': '28d'},
+                ]
 __QUERY_BASE = "SELECT COUNT(action) FROM bley_log WHERE action=%s AND logtime<'%s' AND logtime>='%s'"
 
 __badcheck_queries = {
@@ -119,8 +135,8 @@ __HTML_TEMPLATE = '''<html>
 __ar_files = []
 __ch_files = []
 
-for s in __SLOTORDER:
-    d = datetime.timedelta(0, __TIMESLOTS[s]*60, 0)
+for s in __TIMESLOTS:
+    d = datetime.timedelta(0, s['slot']*60, 0)
     n = now-datetime.timedelta(0,30*60,0)
     i = 12
     a = {'dates': [], 'mails': []}
@@ -131,7 +147,7 @@ for s in __SLOTORDER:
     for check in __goodcheck_queries:
         checks[check] = {'dates': [], 'mails': [], 'color': __goodcheck_queries[check]['color']}
 
-    if not settings.quiet: print "plotting %s:" % (s)
+    if not settings.quiet: print "plotting %s:" % (s['title'])
     fig = plt.figure()
     ax = fig.add_subplot(111)
     fig2 = plt.figure()
@@ -175,30 +191,25 @@ for s in __SLOTORDER:
                         (max(a['mails']), round(float(sum(a['mails']))/len(a['mails']),2), min(a['mails']),
                          max(r['mails']), round(float(sum(r['mails']))/len(r['mails']),2), min(r['mails'])))
 
-    if s.endswith('h'):
-        ax.xaxis.set_major_formatter(hoursFmt)
-        ax.xaxis.set_major_locator(twohours)
-        ax.xaxis.set_minor_locator(hours)
-        ax2.xaxis.set_major_formatter(hoursFmt)
-        ax2.xaxis.set_major_locator(twohours)
-        ax2.xaxis.set_minor_locator(hours)
-        slot = '%sh' % round(__TIMESLOTS[s]/60.0,1)
-    elif s.endswith('d'):
-        ax.xaxis.set_major_formatter(daysFmt)
-        ax2.xaxis.set_major_formatter(daysFmt)
-        slot = '%sd' % round(__TIMESLOTS[s]/(24*60.0),1)
-    fig.suptitle('bley ACCEPT/REJECT stats for the last %s (slot=%s)' % (s, slot))
-    fig2.suptitle('bley check stats for the last %s (slot=%s)' % (s, slot))
+    ax.xaxis.set_major_formatter(s['formatter'])
+    ax.xaxis.set_major_locator(s['major_locator'])
+    ax.xaxis.set_minor_locator(s['minor_locator'])
+    ax2.xaxis.set_major_formatter(s['formatter'])
+    ax2.xaxis.set_major_locator(s['major_locator'])
+    ax2.xaxis.set_minor_locator(s['minor_locator'])
+
+    fig.suptitle('bley ACCEPT/REJECT stats for the last %s (slot=%s)' % (s['title'], s['slotname']))
+    fig2.suptitle('bley check stats for the last %s (slot=%s)' % (s['title'], s['slotname']))
 
     fig.autofmt_xdate()
     fig2.autofmt_xdate()
     if not settings.quiet:
-        print " - %s" % (os.path.join(settings.destdir, 'ar-%s.png' % s))
-        print " - %s" % (os.path.join(settings.destdir, 'ch-%s.png' % s))
-    fig.savefig(os.path.join(settings.destdir, 'ar-%s.png' % s))
-    fig2.savefig(os.path.join(settings.destdir, 'ch-%s.png' % s))
-    __ar_files.append('<img src="ar-%s.png" alt="bley ACCEPT/REJECT stats for the last %s" />' % (s, s))
-    __ch_files.append('<img src="ch-%s.png" alt="bley check stats for the last %s" />' % (s, s))
+        print " - %s" % (os.path.join(settings.destdir, 'ar-%s.png' % s['title']))
+        print " - %s" % (os.path.join(settings.destdir, 'ch-%s.png' % s['title']))
+    fig.savefig(os.path.join(settings.destdir, 'ar-%s.png' % s['title']))
+    fig2.savefig(os.path.join(settings.destdir, 'ch-%s.png' % s['title']))
+    __ar_files.append('<img src="ar-%s.png" alt="bley ACCEPT/REJECT stats for the last %s" />' % (s['title'], s['title']))
+    __ch_files.append('<img src="ch-%s.png" alt="bley check stats for the last %s" />' % (s['title'], s['title']))
 
 html = {
     'ar': '<br />'.join(__ar_files),
