@@ -3,7 +3,7 @@ Section: mail
 Priority: optional
 Maintainer: Evgeni Golov <evgeni@debian.org>
 Build-Depends: debhelper (>= 7.0.50~), python-support, python-setuptools
-Standards-Version: 3.8.4
+Standards-Version: 3.9.1
 XS-Python-Version: 2.5, 2.6
 Homepage: http://bley.mx
 
@@ -16,5 +16,5 @@ Recommends: postgresql-client | mysql-client, postfix
 XB-Python-Version: ${python:Versions}
 Description: intelligent greylisting daemon for Postfix
  bley uses various test (incl. RBL and SPF) to decide whether a sender
- should be grylisted or not, thus mostly eliminating the usual
+ should be greylisted or not, thus mostly eliminating the usual
  greylisting delay while still filtering most of the spam.
