@@ -89,7 +89,7 @@ __CLEAN_DB_QUERY = '''
 
 def bley_start():
 
-    parser = OptionParser(version='0.1.3')
+    parser = OptionParser(version='0.1.4')
     parser.add_option("-p", "--pidfile", dest="pid_file",
                       help="use PID_FILE for storing the PID")
     parser.add_option("-c", "--config", dest="conffile",
