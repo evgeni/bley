@@ -89,8 +89,27 @@ __CHECK_DB_QUERY_PG = '''
   SELECT tablename FROM pg_catalog.pg_tables WHERE tablename = 'bley_status'
 '''
 
+__CREATE_DB_QUERY_SL = '''
+  CREATE TABLE IF NOT EXISTS bley_status
+  (
+    ip VARCHAR(39) NOT NULL,
+    status SMALLINT NOT NULL DEFAULT 1,
+    last_action TIMESTAMP NOT NULL,
+    sender VARCHAR(254),
+    recipient VARCHAR(254),
+    fail_count INT DEFAULT 0
+  );
+  CREATE INDEX IF NOT EXISTS bley_status_index
+   ON bley_status (ip ASC, sender ASC, recipient ASC);
+  CREATE INDEX IF NOT EXISTS bley_status_action_index
+   ON bley_status (last_action);
+'''
+
 __CLEAN_DB_QUERY = '''
    DELETE FROM bley_status WHERE last_action<%(old)s OR (last_action<%(old_bad)s AND status>=2)
+'''
+__CLEAN_DB_QUERY_SL = '''
+   DELETE FROM bley_status WHERE last_action<:old OR (last_action<:old_bad AND status>=2)
 '''
 
 __CREATE_LOGDB_QUERY = '''
@@ -138,6 +157,28 @@ __CHECK_LOGDB_QUERY_PG = '''
   SELECT tablename FROM pg_catalog.pg_tables WHERE tablename = 'bley_log'
 '''
 
+__CREATE_LOGDB_QUERY_SL = '''
+  CREATE TABLE IF NOT EXISTS bley_log
+  (
+    logtime TIMESTAMP NOT NULL,
+    ip VARCHAR(39) NOT NULL,
+    sender VARCHAR(254),
+    recipient VARCHAR(254),
+    action VARCHAR(254),
+    check_dnswl INT DEFAULT 0,
+    check_dnsbl INT DEFAULT 0,
+    check_helo INT DEFAULT 0,
+    check_dyn INT DEFAULT 0,
+    check_db INT DEFAULT 0,
+    check_spf INT DEFAULT 0,
+    check_s_eq_r INT DEFAULT 0,
+    check_postmaster INT DEFAULT 0,
+    check_cache INT DEFAULT 0
+  );
+  CREATE INDEX IF NOT EXISTS bley_log_index
+   ON bley_log (logtime DESC, action ASC);
+'''
+
 
 def bley_start():
 
@@ -178,6 +219,10 @@ def bley_start():
         database = 'MySQLdb'
         settings.dbsettings = {'host': config.get('bley', 'dbhost'), 'db': config.get('bley', 'dbname'),
                                'user': config.get('bley', 'dbuser'), 'passwd': config.get('bley', 'dbpass')}
+    elif settings.dbtype == 'sqlite3':
+        database = 'sqlite3'
+        settings.dbsettings = {'database': config.get('bley', 'dbname')}
+        __CLEAN_DB_QUERY = __CLEAN_DB_QUERY_SL
     else:
         print "No supported database configured."
         sys.exit(1)
@@ -220,6 +265,9 @@ def bley_start():
         dbc.execute(__CHECK_LOGDB_QUERY_PG)
         if not dbc.fetchall():
             dbc.execute(__CREATE_LOGDB_QUERY_PG)
+    elif settings.dbtype == 'sqlite3':
+        dbc.executescript(__CREATE_DB_QUERY_SL)
+        dbc.executescript(__CREATE_LOGDB_QUERY_SL)
     else:
         dbc.execute(__CREATE_DB_QUERY)
         dbc.execute(__CREATE_LOGDB_QUERY)
@@ -265,7 +313,10 @@ def clean_db(settings):
     old = now - datetime.timedelta(settings.purge_days, 0, 0)
     old_bad = now - datetime.timedelta(settings.purge_bad_days, 0, 0)
     p = {'old': str(old), 'old_bad': str(old_bad)}
-    dbc.execute(__CLEAN_DB_QUERY, p)
+    if settings.dbtype == 'sqlite3':
+        dbc.execute(__CLEAN_DB_QUERY_SL, p)
+    else:
+        dbc.execute(__CLEAN_DB_QUERY, p)
     db.commit()
     dbc.close()
     db.close()
