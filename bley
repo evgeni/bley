@@ -228,7 +228,7 @@ def bley_start():
     elif settings.dbtype == 'sqlite3':
         global __CLEAN_DB_QUERY
         database = 'sqlite3'
-        settings.dbsettings = {'database': config.get('bley', 'dbname')}
+        settings.dbsettings = {'database': config.get('bley', 'dbname'), 'detect_types': 1}
         __CLEAN_DB_QUERY = __CLEAN_DB_QUERY_SL
     else:
         print "No supported database configured."
