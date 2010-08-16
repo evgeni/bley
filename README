@@ -5,9 +5,10 @@ ABOUT:
  delay while still filtering most of the spam.
 
 DEPENDENCIES:
- twisted-core from http://twistedmatrix.com/
+ twisted-core and twisted-names from http://twistedmatrix.com/
  pyspf from http://pypi.python.org/pypi/pyspf
- psycopg2 from http://initd.org/psycopg/
+ psycopg2 (for PostgreSQL) from http://initd.org/psycopg/
+ MySQLdb (for MySQL) from http://mysql-python.sourceforge.net/
 
 INSTALLATION:
  Quick and dirty:
