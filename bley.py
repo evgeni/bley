@@ -30,7 +30,6 @@ from twisted.names import client
 from twisted.internet import defer
 from twisted.internet import reactor
 
-import psycopg2
 import datetime
 from bleyhelpers import *
 from postfix import PostfixPolicy
