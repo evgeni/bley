@@ -146,7 +146,6 @@ class BleyPolicy(PostfixPolicy):
             except:
                 # the other thread already commited while we checked, ignore
                 pass
-            self.db.commit()
 
         elif status[0] >= 2: # found to be greyed
             check_results['DB'] = status[0]
@@ -160,14 +159,12 @@ class BleyPolicy(PostfixPolicy):
                 query = "UPDATE bley_status SET fail_count=fail_count+1 WHERE ip=%(client_address)s AND sender=%(sender)s AND recipient=%(recipient)s"
                 self.factory.bad_cache[postfix_params['client_address']] = datetime.datetime.now()
             self.safe_execute(query, postfix_params)
-            self.db.commit()
 
         else: # found to be clean
             check_results['DB'] = status[0]
             action = 'DUNNO'
             query = "UPDATE bley_status SET last_action=NOW() WHERE ip=%(client_address)s AND sender=%(sender)s AND recipient=%(recipient)s"
             self.safe_execute(query, postfix_params)
-            self.db.commit()
             self.factory.good_cache[postfix_params['client_address']] = datetime.datetime.now()
 
         if self.factory.settings.verbose:
@@ -267,6 +264,7 @@ class BleyPolicy(PostfixPolicy):
     def safe_execute(self, query, params=None):
         try:
             self.dbc.execute(query, params)
+            self.db.commit()
         except self.factory.settings.database.OperationalError:
             try:
                 self.db.close()
@@ -284,6 +282,7 @@ class BleyPolicy(PostfixPolicy):
                     sleep(1)
             if self.db:
                 self.dbc.execute(query, params)
+                self.db.commit()
             else:
                 self.factory.settings.logger('Could not reconnect to the database, exiting.\n')
                 reactor.stop()
