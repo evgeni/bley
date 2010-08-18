@@ -296,6 +296,7 @@ class BleyPolicyFactory(Factory):
         self.bad_cache = {}
         self.actionlog = []
         reactor.callLater(30*60, self.dump_log)
+        reactor.addSystemEventTrigger('before', 'shutdown', self.dump_log)
 
     def log_action(self, postfix_params, action, check_results):
         now = datetime.datetime.now()
