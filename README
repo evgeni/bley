@@ -21,9 +21,10 @@ INSTALLATION:
 CONFIGURATION:
  Basically you just have to set 'dbtype' and the various 'db*' settings
  so bley can talk to the database. 'database' is either 'pgsql' for
- PostgreSQL, or 'mysql' for MySQL. The other db settings are:
+ PostgreSQL, 'mysql' for MySQL or 'sqlite3' for SQLite3.
+ The other db settings are:
  'dbhost' - the host where the database runs on (usually localhost)
- 'dbname' - the name of the database (usually bley)
+ 'dbname' - the name (or path in case of SQLite) of the database (usually bley)
  'dbuser' - the name of the database user
  'dbpass' - the password of the database user
  
