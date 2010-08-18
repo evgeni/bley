@@ -67,7 +67,10 @@ class BleyPolicy(PostfixPolicy):
 
         if not self.db:
             self.db = self.factory.settings.db
-            self.dbc = self.db.cursor()
+            try:
+                self.dbc = self.db.cursor()
+            except:
+                self.safe_reconnect()
 
         check_results = {'DNSWL': 0, 'DNSBL': 0, 'HELO': 0, 'DYN': 0, 'DB': -1, 'SPF': 0, 'S_EQ_R': 0, 'POSTMASTER': 0, 'CACHE': 0}
         action = 'DUNNO'
