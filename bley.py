@@ -260,26 +260,31 @@ class BleyPolicy(PostfixPolicy):
             self.dbc.execute(query, params)
             self.db.commit()
         except self.factory.settings.database.OperationalError:
-            try:
-                self.db.close()
-            except:
-                pass
-            self.db = None
-            retries = 0
-            while not self.db and retries < 30:
-                try:
-                    self.db = self.factory.settings.database.connect(**self.factory.settings.dbsettings)
-                    self.dbc = self.db.cursor()
-                except self.factory.settings.database.OperationalError:
-                    self.db = None
-                    retries += 1
-                    sleep(1)
+            self.safe_reconnect()
             if self.db:
                 self.dbc.execute(query, params)
                 self.db.commit()
             else:
                 self.factory.settings.logger('Could not reconnect to the database, exiting.\n')
                 reactor.stop()
+
+    def safe_reconnect(self):
+        self.factory.settings.logger('Reconnecting to the database after an error.\n')
+        try:
+            self.db.close()
+        except:
+            pass
+        self.db = None
+        retries = 0
+        while not self.db and retries < 30:
+            try:
+                self.db = self.factory.settings.database.connect(**self.factory.settings.dbsettings)
+                self.dbc = self.db.cursor()
+            except self.factory.settings.database.OperationalError:
+                self.db = None
+                retries += 1
+                sleep(1)
+        
 
 class BleyPolicyFactory(Factory):
     protocol = BleyPolicy
