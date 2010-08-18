@@ -284,7 +284,7 @@ class BleyPolicy(PostfixPolicy):
         retries = 0
         while not self.db and retries < 30:
             try:
-                self.db = self.factory.settings.database.connect(**self.factory.settings.dbsettings)
+                self.factory.settings.db = self.db = self.factory.settings.database.connect(**self.factory.settings.dbsettings)
                 self.dbc = self.db.cursor()
             except self.factory.settings.database.OperationalError:
                 self.db = None
