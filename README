@@ -1,7 +1,7 @@
 ABOUT:
  bley is an intelligent greylisting daemon for Postfix.
  It uses various test (incl. RBL and SPF) to decide whether a sender
- should be grylisted or not, thus mostly eliminating the usual greylisting
+ should be greylisted or not, thus mostly eliminating the usual greylisting
  delay while still filtering most of the spam.
 
 DEPENDENCIES:
