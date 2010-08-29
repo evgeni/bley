@@ -66,6 +66,9 @@ elif dbtype == 'mysql':
     database = 'MySQLdb'
     dbsettings = {'host': config.get('bley', 'dbhost'), 'db': config.get('bley', 'dbname'),
                   'user': config.get('bley', 'dbuser'), 'passwd': config.get('bley', 'dbpass')}
+elif dbtype == 'sqlite3':
+    database = 'sqlite3'
+    dbsettings = {'database': config.get('bley', 'dbname'), 'detect_types': 1}
 else:
     print "No supported database configured."
     sys.exit(1)
