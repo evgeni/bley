@@ -37,7 +37,7 @@ import matplotlib.dates as mdates
 from optparse import OptionParser
 from ConfigParser import SafeConfigParser
 
-import os.path
+from os import mkdir, path
 
 parser = OptionParser(version='0.2-git')
 parser.add_option("-d", "--destdir", dest="destdir",
@@ -56,6 +56,9 @@ config = SafeConfigParser()
 config.read(settings.conffile)
 
 settings.destdir = settings.destdir or config.get('bleygraph', 'destdir')
+if not path.exists(settings.destdir):
+    print 'creating destination dir: %s' % settings.destdir
+    mkdir(settings.destdir)
 
 dbtype = config.get('bley', 'dbtype')
 if dbtype == 'pgsql':
@@ -207,10 +210,10 @@ for s in __TIMESLOTS:
     fig.autofmt_xdate()
     fig2.autofmt_xdate()
     if not settings.quiet:
-        print " - %s" % (os.path.join(settings.destdir, 'ar-%s.png' % s['title']))
-        print " - %s" % (os.path.join(settings.destdir, 'ch-%s.png' % s['title']))
-    fig.savefig(os.path.join(settings.destdir, 'ar-%s.png' % s['title']))
-    fig2.savefig(os.path.join(settings.destdir, 'ch-%s.png' % s['title']))
+        print " - %s" % (path.join(settings.destdir, 'ar-%s.png' % s['title']))
+        print " - %s" % (path.join(settings.destdir, 'ch-%s.png' % s['title']))
+    fig.savefig(path.join(settings.destdir, 'ar-%s.png' % s['title']))
+    fig2.savefig(path.join(settings.destdir, 'ch-%s.png' % s['title']))
     __ar_files.append('<img src="ar-%s.png" alt="bley ACCEPT/REJECT stats for the last %s" />' % (s['title'], s['title']))
     __ch_files.append('<img src="ch-%s.png" alt="bley check stats for the last %s" />' % (s['title'], s['title']))
 
@@ -219,6 +222,6 @@ html = {
     'ch': '<br />'.join(__ch_files),
 }
 
-f = open(os.path.join(settings.destdir, 'index.html'), 'w')
+f = open(path.join(settings.destdir, 'index.html'), 'w')
 f.write(__HTML_TEMPLATE % html)
 f.close()
