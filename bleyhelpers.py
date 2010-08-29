@@ -88,7 +88,7 @@ def check_helo(params):
         score = 1
     else:
         score = 2
-        
+
     return score
 
 def check_spf(params):
@@ -98,7 +98,7 @@ def check_spf(params):
     returns 0 else.
 
     @type  params: dict
-    @param params: the params from Postfix          
+    @param params: the params from Postfix
     @rtype:        int
     @return:       1 if bad SPF, 0 else
     '''
@@ -120,4 +120,9 @@ def check_spf(params):
         # DNS Errors, yay...
         print 'something went wrong in check_spf()'
     return score
+
+def adapt_query_for_sqlite3(query):
+    # WARNING: This is a hack to convert the usual pyformat strings
+    # to named ones used by sqlite3
+    return query.replace('%(', ':').replace(')s', '')
 

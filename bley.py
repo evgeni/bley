@@ -265,10 +265,8 @@ class BleyPolicy(PostfixPolicy):
         return d
 
     def safe_execute(self, query, params=None):
-        # WARNING: This is a hack to convert the usual pyformat strings
-        # to named ones used by sqlite3
         if self.factory.settings.dbtype == 'sqlite3':
-            query = query.replace('%(', ':').replace(')s', '')
+            query = adapt_query_for_sqlite3(query)
         try:
             self.dbc.execute(query, params)
             self.db.commit()
@@ -297,7 +295,7 @@ class BleyPolicy(PostfixPolicy):
                 self.db = None
                 retries += 1
                 sleep(1)
-        
+
 
 class BleyPolicyFactory(Factory):
     protocol = BleyPolicy
