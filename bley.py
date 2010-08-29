@@ -334,7 +334,7 @@ class BleyPolicyFactory(Factory):
             i = len(self.actionlog)
             while i:
                 logline = self.actionlog.pop(0)
-                self.safe_execute(query, logline)
+                dbc.execute(query, logline)
                 i -= 1
             db.commit()
             dbc.close()
