@@ -328,14 +328,17 @@ class BleyPolicyFactory(Factory):
         if self.factory.settings.dbtype == 'sqlite3':
             query = adapt_query_for_sqlite3(query)
 
-        db = self.settings.database.connect(**self.settings.dbsettings)
-        dbc = db.cursor()
-        i = len(self.actionlog)
-        while i:
-            logline = self.actionlog.pop(0)
-            self.safe_execute(query, logline)
-            i -= 1
-        db.commit()
-        dbc.close()
-        db.close()
+        try:
+            db = self.settings.database.connect(**self.settings.dbsettings)
+            dbc = db.cursor()
+            i = len(self.actionlog)
+            while i:
+                logline = self.actionlog.pop(0)
+                self.safe_execute(query, logline)
+                i -= 1
+            db.commit()
+            dbc.close()
+            db.close()
+        except self.settings.database.DatabaseError, e:
+            self.settings.logger('SQL error: %s\n' % e)
         reactor.callLater(30*60, self.dump_log)
