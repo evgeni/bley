@@ -11,6 +11,6 @@ setup(
     py_modules = ['bley', 'bleyhelpers', 'postfix'],
     scripts = ['bley', 'bleygraph'],
     zip_safe = False,
-    install_requires=['Twisted-Core>=8.1.0', 'pyspf', 'psycopg2'],
+    install_requires=['Twisted-Core>=8.1.0', 'pyspf'],
     data_files = [('/etc/bley', ['bley.conf']), ('/usr/share/man/man1', ['bley.1'])]
 )
