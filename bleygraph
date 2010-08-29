@@ -226,6 +226,9 @@ for s in __TIMESLOTS:
     __ar_files.append('<img src="ar-%s.png" alt="bley ACCEPT/REJECT stats for the last %s" />' % (s['title'], s['title']))
     __ch_files.append('<img src="ch-%s.png" alt="bley check stats for the last %s" />' % (s['title'], s['title']))
 
+dbc.close()
+db.close()
+
 html = {
     'ar': '<br />'.join(__ar_files),
     'ch': '<br />'.join(__ch_files),
