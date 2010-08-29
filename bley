@@ -262,6 +262,7 @@ def bley_start():
         settings.logger = sys.stdout.write
     else:
         settings.logger = open(settings.log_file, 'a').write
+    settings.logger("Starting up\n")
 
     db = settings.database.connect(**settings.dbsettings)
     dbc = db.cursor()
@@ -295,6 +296,7 @@ def bley_start():
     reactor.run()
 
 def bley_stop(settings):
+    settings.logger("Shutting down\n")
     if settings.pid_file and not settings.debug:
         delPID(settings.pid_file)
     if settings.log_file == 'syslog':
