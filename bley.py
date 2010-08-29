@@ -325,7 +325,7 @@ class BleyPolicyFactory(Factory):
                 %(DNSWL)s, %(DNSBL)s, %(HELO)s, %(DYN)s, %(DB)s,
                 %(SPF)s, %(S_EQ_R)s, %(POSTMASTER)s, %(CACHE)s)'''
 
-        if self.factory.settings.dbtype == 'sqlite3':
+        if self.settings.dbtype == 'sqlite3':
             query = adapt_query_for_sqlite3(query)
 
         try:
