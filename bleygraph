@@ -161,6 +161,10 @@ for s in __TIMESLOTS:
     while i:
         q1 = __QUERY_BASE % ("'DUNNO'", str(n), str(n-d))
         q2 = __QUERY_BASE % ("'DEFER_IF_PERMIT'", str(n), str(n-d))
+        if dbtype == 'sqlite3':
+            q1 = q1.replace('%s', '?')
+            q2 = q2.replace('%s', '?')
+
         dbc.execute(q1)
         r1 = dbc.fetchone()
         dbc.execute(q2)
@@ -172,12 +176,16 @@ for s in __TIMESLOTS:
         r['mails'].append(r2[0])
         for check in __badcheck_queries:
             q = "%s AND %s" % (q2, __badcheck_queries[check]['query'])
+            if dbtype == 'sqlite3':
+                q = q.replace('%s', '?')
             dbc.execute(q)
             res = dbc.fetchone()
             checks[check]['dates'].append(numdate)
             checks[check]['mails'].append(res[0])
         for check in __goodcheck_queries:
             q = "%s AND %s" % (q1, __goodcheck_queries[check]['query'])
+            if dbtype == 'sqlite3':
+                q = q.replace('%s', '?')
             dbc.execute(q)
             res = dbc.fetchone()
             checks[check]['dates'].append(numdate)
