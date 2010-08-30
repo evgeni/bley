@@ -116,17 +116,20 @@ __TIMESLOTS = [
 __QUERY_BASE = "SELECT COUNT(action) FROM bley_log WHERE action=%s AND logtime<'%s' AND logtime>='%s'"
 
 __badcheck_queries = {
-    'in DNSBL': {'query': 'check_dnsbl>=%i' % (dnsbl_threshold), 'color': 'black'},
-    'bad HELO':  {'query': 'check_helo>=%i and check_dnsbl<%i' % (rfc_threshold, dnsbl_threshold), 'color': 'red'},
-    'bad grey': {'query': 'check_db=2 and check_dnsbl<%i' % (dnsbl_threshold), 'color': 'blue'},
-    'from DynIP': {'query': '(check_helo+check_dyn)>=%i and check_helo<%i and check_dnsbl<%i' % (rfc_threshold, rfc_threshold, dnsbl_threshold), 'color': 'orange'},
-    'bad SPF':  {'query': '(check_helo+check_dyn+check_spf)>=%i and (check_helo+check_dyn)<%i and check_dnsbl<%i' % (rfc_threshold, rfc_threshold, dnsbl_threshold), 'color': 'yellow'},
+    'in DNSBL': {'query': 'check_db=-1 and check_cache=0 and check_dnsbl>=%i' % (dnsbl_threshold), 'color': 'black'},
+    'bad HELO':  {'query': 'check_db=-1 and check_cache=0 and check_helo>=%i and check_dnsbl<%i' % (rfc_threshold, dnsbl_threshold), 'color': 'red'},
+    'bad grey': {'query': 'check_db=2 and check_cache=0 and check_dnsbl<%i' % (dnsbl_threshold), 'color': 'blue'},
+    'from DynIP': {'query': 'check_db=-1 and check_cache=0 and (check_helo+check_dyn)>=%i and check_helo<%i and check_dnsbl<%i' % (rfc_threshold, rfc_threshold, dnsbl_threshold), 'color': 'orange'},
+    'bad SPF':  {'query': 'check_db=-1 and check_cache=0 and (check_helo+check_dyn+check_spf)>=%i and (check_helo+check_dyn)<%i and check_dnsbl<%i' % (rfc_threshold, rfc_threshold, dnsbl_threshold), 'color': 'yellow'},
+    'sender==recipient':  {'query': 'check_db=-1 and check_cache=0 and (check_helo+check_dyn+check_spf+check_s_eq_r)>=%i and (check_helo+check_dyn+check_spf)<%i and check_dnsbl<%i' % (rfc_threshold, rfc_threshold, dnsbl_threshold), 'color': 'orange'},
+    'bad cache': {'query': 'check_db=-1 and check_cache=1 and check_dnsbl<%i' % (dnsbl_threshold), 'color': 'pink'},
 }
 __goodcheck_queries = {
-    'known good': {'query': '(check_db=0 or check_db=1)', 'color': 'green'},
-    'good grey': {'query': 'check_db=2', 'color': 'lightblue'},
-    'new good': {'query': 'check_db=-1 and check_dnswl<%i' % (dnswl_threshold), 'color': 'lightgreen'},
-    'in DNSWL': {'query': 'check_dnswl>=%i' % (dnswl_threshold), 'color': 'lightgrey'},
+    'known good': {'query': '(check_db=0 or check_db=1) and check_cache=0', 'color': 'green'},
+    'good grey': {'query': 'check_db=2 and check_cache=0', 'color': 'lightblue'},
+    'new good': {'query': 'check_db=-1 and check_cache=0 and check_dnswl<%i' % (dnswl_threshold), 'color': 'lightgreen'},
+    'in DNSWL': {'query': 'check_db=-1 and check_cache=0 and check_dnswl>=%i' % (dnswl_threshold), 'color': 'lightgrey'},
+    'good cache': {'query': 'check_db=-1 and check_cache=1', 'color': 'darkgreen'},
 }
 
 __HTML_TEMPLATE = '''<html>
