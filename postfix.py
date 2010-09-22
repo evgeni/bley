@@ -37,7 +37,7 @@ class PostfixPolicy(LineOnlyReceiver):
 
     def lineReceived(self, line):
         '''Parse stuff from Postfix and call check_policy() afterwards.'''
-        line = line.strip()
+        line = line.strip().lower()
         if line == '':
             if len(self.params) > 0:
                 self.check_policy()
