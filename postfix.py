@@ -75,7 +75,7 @@ class PostfixPolicy(LineOnlyReceiver):
         self.sendLine('action=%s\n' % action)
 
     def readConnectionLost(self):
-        pass
+        self.transport.loseWriteConnection()
 
     def writeConnectionLost(self):
         self.transport.loseConnection()
