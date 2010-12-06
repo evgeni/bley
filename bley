@@ -315,7 +315,7 @@ def delPID(pidfile):
 
 def clean_db(settings):
     if settings.verbose:
-        settings.logger("cleaning database")
+        settings.logger("cleaning database\n")
     db = settings.database.connect(**settings.dbsettings)
     dbc = db.cursor()
     now = datetime.datetime.now()
