@@ -73,9 +73,11 @@ class PostfixPolicy(LineOnlyReceiver):
         @param action: the action to be sent to Postfix (default: 'DUNNO')
         '''
         self.sendLine('action=%s\n' % action)
+        if self.factory.exim_workaround:
+            self.transport.loseConnection()
 
     def readConnectionLost(self):
-        self.transport.loseWriteConnection()
+        pass
 
     def writeConnectionLost(self):
         self.transport.loseConnection()
@@ -83,3 +85,4 @@ class PostfixPolicy(LineOnlyReceiver):
 
 class PostfixPolicyFactory(Factory):
     protocol = PostfixPolicy
+    exim_workaround = False

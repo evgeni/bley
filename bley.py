@@ -296,3 +296,4 @@ class BleyPolicyFactory(Factory):
         self.settings = settings
         self.good_cache = {}
         self.bad_cache = {}
+        self.exim_workaround = settings.exim_workaround

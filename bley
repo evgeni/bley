@@ -112,6 +112,7 @@ def bley_start():
         'listen_addr': '127.0.0.1',
         'log_file': None,
         'pid_file': None,
+        'exim_workaround': False
     }
     config = SafeConfigParser(defaults)
     config.read(settings.conffile)
@@ -148,6 +149,8 @@ def bley_start():
     settings.greylist_penalty = datetime.timedelta(0, config.getint('bley', 'greylist_penalty')*60, 0)
     settings.purge_days       = config.getint('bley', 'purge_days')
     settings.purge_bad_days   = config.getint('bley', 'purge_bad_days')
+
+    settings.exim_workaround  = config.get('bley', 'exim_workaround')
 
     if settings.debug:
         settings.log_file = None
