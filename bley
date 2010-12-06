@@ -68,7 +68,7 @@ __CREATE_DB_QUERY = '''
     fail_count INT DEFAULT 0,
     INDEX bley_status_index USING btree (ip, sender, recipient),
     INDEX bley_status_action_index USING btree (last_action)
-  )
+  ) CHARACTER SET 'ascii'
 '''
 __CREATE_DB_QUERY_PG = '''
   CREATE TABLE bley_status
@@ -130,7 +130,7 @@ __CREATE_LOGDB_QUERY = '''
     check_postmaster INT DEFAULT 0,
     check_cache INT DEFAULT 0,
     INDEX bley_log_index USING btree (logtime, action)
-  );
+  )  CHARACTER SET 'ascii';
 '''
 __CREATE_LOGDB_QUERY_PG = '''
   CREATE TABLE bley_log
