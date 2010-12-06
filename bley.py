@@ -305,6 +305,7 @@ class BleyPolicyFactory(Factory):
         self.good_cache = {}
         self.bad_cache = {}
         self.actionlog = []
+        self.exim_workaround = settings.exim_workaround
         reactor.callLater(30*60, self.dump_log)
         reactor.addSystemEventTrigger('before', 'shutdown', self.dump_log)
 
