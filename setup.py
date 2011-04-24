@@ -12,5 +12,9 @@ setup(
     scripts = ['bley', 'bleygraph'],
     zip_safe = False,
     install_requires=['Twisted-Core>=8.1.0', 'pyspf'],
+    extras_require={
+        'PostgreSQL backend': ['psycopg2'],
+        'MySQL backend': ['MySQL-python'],
+    },
     data_files = [('/etc/bley', ['bley.conf']), ('/usr/share/man/man1', ['bley.1'])]
 )
