@@ -118,7 +118,7 @@ __CLEAN_DB_QUERY_SL = '''
 __CREATE_LOGDB_QUERY = '''
   CREATE TABLE IF NOT EXISTS bley_log
   (
-    logtime TIMESTAMP NOT NULL,
+    logtime TIMESTAMP NOT NULL default CURRENT_TIMESTAMP,
     ip VARCHAR(39) NOT NULL,
     sender VARCHAR(254),
     recipient VARCHAR(254),
