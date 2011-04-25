@@ -62,7 +62,7 @@ __CREATE_DB_QUERY = '''
   (
     ip VARCHAR(39) NOT NULL,
     status SMALLINT NOT NULL DEFAULT 1,
-    last_action TIMESTAMP NOT NULL,
+    last_action TIMESTAMP NOT NULL default CURRENT_TIMESTAMP,
     sender VARCHAR(254),
     recipient VARCHAR(254),
     fail_count INT DEFAULT 0
