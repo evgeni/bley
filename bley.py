@@ -126,9 +126,9 @@ class BleyPolicy(PostfixPolicy):
                 # check_sender_eq_recipient:
                 if postfix_params['sender']==postfix_params['recipient']:
                     check_results['S_EQ_R'] = 1
-		if check_results['DNSBL'] < self.factory.settings.dnsbl_threshold and check_results['HELO']+check_results['DYN']+check_results['S_EQ_R'] < self.factory.settings.rfc_threshold:
-	            check_results['SPF'] = check_spf(postfix_params)
-		else:
+                if check_results['DNSBL'] < self.factory.settings.dnsbl_threshold and check_results['HELO']+check_results['DYN']+check_results['S_EQ_R'] < self.factory.settings.rfc_threshold:
+                    check_results['SPF'] = check_spf(postfix_params)
+                else:
                     check_results['SPF'] = 0
                 if check_results['DNSBL'] >= self.factory.settings.dnsbl_threshold or check_results['HELO']+check_results['DYN']+check_results['SPF']+check_results['S_EQ_R'] >= self.factory.settings.rfc_threshold:
                     new_status = 2
@@ -137,7 +137,7 @@ class BleyPolicy(PostfixPolicy):
                 else:
                     new_status = 0
                     self.factory.good_cache[postfix_params['client_address']] = datetime.datetime.now()
-            query = "INSERT INTO bley_status (ip, status, last_action, sender, recipient) VALUES(%(client_address)s, %(new_status)s, NOW(), %(sender)s, %(recipient)s)"
+                query = "INSERT INTO bley_status (ip, status, last_action, sender, recipient) VALUES(%(client_address)s, %(new_status)s, NOW(), %(sender)s, %(recipient)s)"
             postfix_params['new_status'] = new_status
             try:
                 self.safe_execute(query, postfix_params)
