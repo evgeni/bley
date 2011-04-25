@@ -70,6 +70,9 @@ __CREATE_DB_QUERY = '''
     INDEX bley_status_action_index USING btree (last_action)
   ) CHARACTER SET 'ascii'
 '''
+__UPDATE_DB_QUERY = '''
+  ALTER TABLE bley_status CHANGE last_action last_action TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+'''
 __CREATE_DB_QUERY_PG = '''
   CREATE TABLE bley_status
   (
@@ -279,6 +282,7 @@ def bley_start():
     else:
         dbc.execute(__CREATE_DB_QUERY)
         dbc.execute(__CREATE_LOGDB_QUERY)
+        dbc.execute(__UPDATE_DB_QUERY)
     db.commit()
     dbc.close()
     db.close()
