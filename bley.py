@@ -137,7 +137,7 @@ class BleyPolicy(PostfixPolicy):
                 else:
                     new_status = 0
                     self.factory.good_cache[postfix_params['client_address']] = datetime.datetime.now()
-                query = "INSERT INTO bley_status (ip, status, last_action, sender, recipient) VALUES(%(client_address)s, %(new_status)s, NOW(), %(sender)s, %(recipient)s)"
+            query = "INSERT INTO bley_status (ip, status, last_action, sender, recipient) VALUES(%(client_address)s, %(new_status)s, NOW(), %(sender)s, %(recipient)s)"
             postfix_params['new_status'] = new_status
             try:
                 self.safe_execute(query, postfix_params)
