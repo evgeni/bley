@@ -1,3 +1,17 @@
+bley (0.1.5-1) unstable; urgency=low
+
+  * New upstream release
+    + Includes fixes for MySQL problems.
+      Closes: #618252
+    + Does not import psycopg2 when running with mysql anymore.
+      Closes: #599729
+  * Switch to dh_python2.
+  * Set X-Python-Version >= 2.5, not only "2.5, 2.6".
+    Closes: #606363
+  * Standards-Version: 3.9.2
+
+ -- Evgeni Golov <evgeni@debian.org>  Sat, 04 Jun 2011 14:53:21 +0200
+
 bley (0.1.4-1) unstable; urgency=low
 
   * New upstream release
