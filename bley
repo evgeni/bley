@@ -211,6 +211,7 @@ def bley_start():
         'listen_addr': '127.0.0.1',
         'log_file': None,
         'pid_file': None,
+        'exim_workaround': False
     }
     config = SafeConfigParser(defaults)
     config.read(settings.conffile)
@@ -253,6 +254,8 @@ def bley_start():
     settings.purge_days       = config.getint('bley', 'purge_days')
     settings.purge_bad_days   = config.getint('bley', 'purge_bad_days')
     settings.use_spf          = config.getint('bley', 'use_spf')
+
+    settings.exim_workaround  = config.getboolean('bley', 'exim_workaround')
 
     if settings.debug:
         settings.log_file = None

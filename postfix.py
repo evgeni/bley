@@ -27,9 +27,13 @@
 
 from twisted.protocols.basic import LineOnlyReceiver
 from twisted.internet.protocol import Factory
+from twisted.internet.interfaces import IHalfCloseableProtocol
+from zope.interface import implements
 
 class PostfixPolicy(LineOnlyReceiver):
     '''Basic implementation of a Postfix policy service.'''
+
+    implements(IHalfCloseableProtocol)
 
     def __init__(self):
         self.params = {}
@@ -69,6 +73,16 @@ class PostfixPolicy(LineOnlyReceiver):
         @param action: the action to be sent to Postfix (default: 'DUNNO')
         '''
         self.sendLine('action=%s\n' % action)
+        if self.factory.exim_workaround:
+            self.transport.loseConnection()
+
+    def readConnectionLost(self):
+        pass
+
+    def writeConnectionLost(self):
+        self.transport.loseConnection()
+
 
 class PostfixPolicyFactory(Factory):
     protocol = PostfixPolicy
+    exim_workaround = False
