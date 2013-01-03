@@ -297,7 +297,7 @@ def bley_start():
     reactor.callWhenRunning(clean_db, settings)
     if not settings.debug:
         twistd.checkPID(settings.pid_file)
-        twistd.daemonize()
+        twistd.daemonize(reactor, os)
         if settings.pid_file:
             writePID(settings.pid_file)
     reactor.run()
