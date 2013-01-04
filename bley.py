@@ -132,7 +132,7 @@ class BleyPolicy(PostfixPolicy):
                 if postfix_params['sender']==postfix_params['recipient']:
                     check_results['S_EQ_R'] = 1
                 if self.factory.settings.use_spf and check_results['DNSBL'] < self.factory.settings.dnsbl_threshold and check_results['HELO']+check_results['DYN']+check_results['S_EQ_R'] < self.factory.settings.rfc_threshold:
-                    check_results['SPF'] = check_spf(postfix_params)
+                    check_results['SPF'] = check_spf(postfix_params, self.factory.settings.use_spf_guess)
                 else:
                     check_results['SPF'] = 0
                 if check_results['DNSBL'] >= self.factory.settings.dnsbl_threshold or check_results['HELO']+check_results['DYN']+check_results['SPF']+check_results['S_EQ_R'] >= self.factory.settings.rfc_threshold:

@@ -91,7 +91,7 @@ def check_helo(params):
 
     return score
 
-def check_spf(params):
+def check_spf(params, guess):
     '''Check the SPF record of the sending address.
     Try Best Guess when the domain has no SPF record.
     Returns 1 when the SPF result is in ['fail', 'softfail'],
@@ -99,6 +99,8 @@ def check_spf(params):
 
     @type  params: dict
     @param params: the params from Postfix
+    @type  guess:  int
+    @param guess:  1 if use 'best guess', 0 if not
     @rtype:        int
     @return:       1 if bad SPF, 0 else
     '''
@@ -110,7 +112,7 @@ def check_spf(params):
             score = 1
         elif r[0] in ['pass']:
             score = 0
-        else:
+        elif guess > 0 and r[0] in ['none']:
             r = s.best_guess()
             if r[0] in ['fail', 'softfail']:
                 score = 1
