@@ -1,3 +1,9 @@
+bley (0.1.5-2) unstable; urgency=low
+
+  * cherry-pick patch from upstream to disable njabl.org
+
+ -- Evgeni Golov <evgeni@debian.org>  Wed, 13 Mar 2013 11:15:58 +0100
+
 bley (0.1.5-1) unstable; urgency=low
 
   * New upstream release

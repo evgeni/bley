@@ -1,1 +1,2 @@
 01-debian_config_and_paths.patch
+02-drop-dnsbl.njabl.org-it-s-not-maintained-anymore.patch
