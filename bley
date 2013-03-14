@@ -246,8 +246,8 @@ def bley_start():
     settings.database = database
     settings.reject_msg  = config.get('bley', 'reject_msg')
 
-    settings.dnswls      = [d.strip() for d in config.get('bley', 'dnswls').split(',')]
-    settings.dnsbls      = [d.strip() for d in config.get('bley', 'dnsbls').split(',')]
+    settings.dnswls      = [d.strip() for d in config.get('bley', 'dnswls').split(',') if d.strip() != ""]
+    settings.dnsbls      = [d.strip() for d in config.get('bley', 'dnsbls').split(',') if d.strip() != ""]
 
     settings.dnswl_threshold  = config.getint('bley', 'dnswl_threshold')
     settings.dnsbl_threshold  = config.getint('bley', 'dnsbl_threshold')
