@@ -15,6 +15,7 @@ setup(
     extras_require={
         'PostgreSQL backend': ['psycopg2'],
         'MySQL backend': ['MySQL-python'],
+        'publicsuffix.org support': ['publicsuffix'],
     },
     data_files = [('/etc/bley', ['bley.conf']), ('/usr/share/man/man1', ['bley.1'])]
 )

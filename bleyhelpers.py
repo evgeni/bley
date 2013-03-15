@@ -27,6 +27,10 @@
 
 import spf
 import re
+try:
+    import publicsuffix
+except ImportError:
+    publicsuffix = None
 
 __dyn_host = re.compile('(\.bb\.|broadband|cable|dial|dip|dsl|dyn|gprs|pool|ppp|umts|wimax|wwan|[0-9]{1,3}[.-][0-9]{1,3}[.-][0-9]{1,3}[.-][0-9]{1,3})', re.I)
 __static_host = re.compile('(colo|dedi|hosting|mail|mx[^$]|smtp|static)', re.I)
@@ -41,6 +45,7 @@ def reverse_ip(ip):
     '''
     return spf.reverse_dots(ip)
 
+publicsuffixlist = None
 def domain_from_host(host):
     '''Return the domain part of a host.
 
@@ -49,11 +54,18 @@ def domain_from_host(host):
     @rtype:      string
     @return:     the extracted domain
     '''
-    d = host.split('.')
-    if len(d) > 1:
-       domain = '%s.%s' % (d[-2], d[-1])
+
+    if publicsuffix:
+        global publicsuffixlist
+        if publicsuffixlist is None:
+            publicsuffixlist = publicsuffix.PublicSuffixList()
+        domain = publicsuffixlist.get_public_suffix(host)
     else:
-       domain = host
+        d = host.split('.')
+        if len(d) > 1:
+           domain = '%s.%s' % (d[-2], d[-1])
+        else:
+           domain = host
     return domain
 
 def check_dyn_host(host):
