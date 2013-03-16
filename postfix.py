@@ -35,6 +35,8 @@ class PostfixPolicy(LineOnlyReceiver):
 
     implements(IHalfCloseableProtocol)
 
+    required_params = []
+
     def __init__(self):
         self.params = {}
         self.delimiter = '\n'
@@ -44,7 +46,15 @@ class PostfixPolicy(LineOnlyReceiver):
         line = line.strip().lower()
         if line == '':
             if len(self.params) > 0:
-                self.check_policy()
+                valid_request = True
+                for p in self.required_params:
+                    if not self.params.has_key(p):
+                        valid_request = False
+                        break
+                if valid_request:
+                    self.check_policy()
+                else:
+                    self.send_action('DUNNO')
             self.params = {}
         else:
             try:

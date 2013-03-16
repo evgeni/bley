@@ -41,6 +41,7 @@ class BleyPolicy(PostfixPolicy):
 
     db = None
     dbc = None
+    required_params = ['sender', 'recipient', 'client_address', 'client_name', 'helo_name']
 
     @defer.inlineCallbacks
     def check_policy (self):
