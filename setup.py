@@ -11,7 +11,7 @@ setup(
     py_modules = ['bley', 'bleyhelpers', 'postfix'],
     scripts = ['bley', 'bleygraph'],
     zip_safe = False,
-    install_requires=['Twisted-Core>=8.1.0', 'Twisted-Names>=8.1.0', 'pyspf'],
+    install_requires=['Twisted>=8.1.0', 'pyspf'],
     extras_require={
         'PostgreSQL backend': ['psycopg2'],
         'MySQL backend': ['MySQL-python'],
