@@ -2,8 +2,18 @@ language: python
 python:
   - "2.6"
   - "2.7"
+env:
+  - TWISTED_VERSION=8.1.0
+  - TWISTED_VERSION=10.0.0
+  - TWISTED_VERSION=10.1.0
+  - TWISTED_VERSION=11.0.0
+  - TWISTED_VERSION=11.1.0
+  - TWISTED_VERSION=12.0.0
+  - TWISTED_VERSION=12.2.0
+  - TWISTED_VERSION=12.3.0
 # command to install dependencies
 install:
-  - "pip install -r requirements.txt --use-mirrors"
+  - pip install Twisted==$TWISTED_VERSION --use-mirrors
+  - pip install -r requirements.txt --use-mirrors
 # command to run tests
 script: trial test
