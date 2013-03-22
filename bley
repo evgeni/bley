@@ -187,6 +187,7 @@ __CREATE_LOGDB_QUERY_SL = '''
 
 __old_twistd_daemonize = twisted.python.versions.Version("twisted", 12, 0, 0)
 
+
 def bley_start():
 
     parser = OptionParser(version='0.2-git')
@@ -310,12 +311,14 @@ def bley_start():
             writePID(settings.pid_file)
     reactor.run()
 
+
 def bley_stop(settings):
     settings.logger("Shutting down\n")
     if settings.pid_file and not settings.debug:
         delPID(settings.pid_file)
     if settings.log_file == 'syslog':
         syslog.closelog()
+
 
 def writePID(pidfile):
     # Create a PID file
@@ -324,9 +327,11 @@ def writePID(pidfile):
     pf.write("%s\n" % pid)
     pf.close()
 
+
 def delPID(pidfile):
     if os.path.exists(pidfile):
         os.remove(pidfile)
+
 
 def clean_db(settings):
     if settings.verbose:

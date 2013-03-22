@@ -30,6 +30,7 @@ from twisted.internet.protocol import Factory
 from twisted.internet.interfaces import IHalfCloseableProtocol
 from zope.interface import implements
 
+
 class PostfixPolicy(LineOnlyReceiver):
     '''Basic implementation of a Postfix policy service.'''
 
@@ -48,7 +49,7 @@ class PostfixPolicy(LineOnlyReceiver):
             if len(self.params) > 0:
                 valid_request = True
                 for p in self.required_params:
-                    if not self.params.has_key(p):
+                    if p not in self.params:
                         valid_request = False
                         break
                 if valid_request:
@@ -67,18 +68,18 @@ class PostfixPolicy(LineOnlyReceiver):
             except:
                 print 'Could not parse "%s"' % line
 
-    def check_policy (self):
+    def check_policy(self):
         '''Check the incoming mail based on our policy and tell Postfix
         about our decision.
- 
+
         You probably want to override this one with a function that does
         something useful.
         '''
         self.send_action('DUNNO')
 
-    def send_action (self, action='DUNNO'):
+    def send_action(self, action='DUNNO'):
         '''Send action back to Postfix.
- 
+
         @type action: string
         @param action: the action to be sent to Postfix (default: 'DUNNO')
         '''

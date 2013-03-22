@@ -36,6 +36,7 @@ from postfix import PostfixPolicy
 
 from time import sleep
 
+
 class BleyPolicy(PostfixPolicy):
     '''Implementation of intelligent greylisting based on `PostfixPolicy`'''
 
@@ -44,7 +45,7 @@ class BleyPolicy(PostfixPolicy):
     required_params = ['sender', 'recipient', 'client_address', 'client_name', 'helo_name']
 
     @defer.inlineCallbacks
-    def check_policy (self):
+    def check_policy(self):
         '''Check the incoming mail based on our policy and tell Postfix
         about our decision.
 
@@ -85,7 +86,7 @@ class BleyPolicy(PostfixPolicy):
 
         if postfix_params['client_address'] in self.factory.bad_cache.keys():
             delta = datetime.datetime.now()-self.factory.bad_cache[postfix_params['client_address']]
-            if delta < datetime.timedelta(0,60,0):
+            if delta < datetime.timedelta(0, 60, 0):
                 action = 'DEFER_IF_PERMIT %s (cached result)' % self.factory.settings.reject_msg
                 check_results['CACHE'] = 1
                 if self.factory.settings.verbose:
@@ -100,7 +101,7 @@ class BleyPolicy(PostfixPolicy):
 
         if postfix_params['client_address'] in self.factory.good_cache.keys():
             delta = datetime.datetime.now()-self.factory.good_cache[postfix_params['client_address']]
-            if delta < datetime.timedelta(0,60,0):
+            if delta < datetime.timedelta(0, 60, 0):
                 action = 'DUNNO'
                 check_results['CACHE'] = 1
                 if self.factory.settings.verbose:
@@ -121,7 +122,7 @@ class BleyPolicy(PostfixPolicy):
         if postfix_params['recipient'].lower().startswith('postmaster'):
             action = 'DUNNO'
             check_results['POSTMASTER'] = 1
-        elif status == -1: # not found in local db...
+        elif status == -1:  # not found in local db...
             check_results['DNSWL'] = yield self.check_dnswls(postfix_params['client_address'], self.factory.settings.dnswl_threshold)
             if check_results['DNSWL'] >= self.factory.settings.dnswl_threshold:
                 new_status = 1
@@ -130,7 +131,7 @@ class BleyPolicy(PostfixPolicy):
                 check_results['HELO'] = check_helo(postfix_params)
                 check_results['DYN'] = check_dyn_host(postfix_params['client_name'])
                 # check_sender_eq_recipient:
-                if postfix_params['sender']==postfix_params['recipient']:
+                if postfix_params['sender'] == postfix_params['recipient']:
                     check_results['S_EQ_R'] = 1
                 if self.factory.settings.use_spf and check_results['DNSBL'] < self.factory.settings.dnsbl_threshold and check_results['HELO']+check_results['DYN']+check_results['S_EQ_R'] < self.factory.settings.rfc_threshold:
                     check_results['SPF'] = check_spf(postfix_params, self.factory.settings.use_spf_guess)
@@ -151,7 +152,7 @@ class BleyPolicy(PostfixPolicy):
                 # the other thread already commited while we checked, ignore
                 pass
 
-        elif status[0] >= 2: # found to be greyed
+        elif status[0] >= 2:  # found to be greyed
             check_results['DB'] = status[0]
             delta = datetime.datetime.now()-status[1]
             if delta > self.factory.settings.greylist_period+status[2]*self.factory.settings.greylist_penalty or delta > self.factory.settings.greylist_max:
@@ -164,7 +165,7 @@ class BleyPolicy(PostfixPolicy):
                 self.factory.bad_cache[postfix_params['client_address']] = datetime.datetime.now()
             self.safe_execute(query, postfix_params)
 
-        else: # found to be clean
+        else:  # found to be clean
             check_results['DB'] = status[0]
             action = 'DUNNO'
             query = "UPDATE bley_status SET last_action=CURRENT_TIMESTAMP WHERE ip=%(client_address)s AND sender=%(sender)s AND recipient=%(recipient)s"

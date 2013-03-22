@@ -32,8 +32,11 @@ try:
 except ImportError:
     publicsuffix = None
 
+publicsuffixlist = None
+
 __dyn_host = re.compile('(\.bb\.|broadband|cable|dial|dip|dsl|dyn|gprs|pool|ppp|umts|wimax|wwan|[0-9]{1,3}[.-][0-9]{1,3}[.-][0-9]{1,3}[.-][0-9]{1,3})', re.I)
 __static_host = re.compile('(colo|dedi|hosting|mail|mx[^$]|smtp|static)', re.I)
+
 
 def reverse_ip(ip):
     '''Returns the IP address in reversed notation (A.B.C.D -> D.C.B.A).
@@ -45,7 +48,7 @@ def reverse_ip(ip):
     '''
     return spf.reverse_dots(ip)
 
-publicsuffixlist = None
+
 def domain_from_host(host):
     '''Return the domain part of a host.
 
@@ -63,10 +66,11 @@ def domain_from_host(host):
     else:
         d = host.split('.')
         if len(d) > 1:
-           domain = '%s.%s' % (d[-2], d[-1])
+            domain = '%s.%s' % (d[-2], d[-1])
         else:
-           domain = host
+            domain = host
     return domain
+
 
 def check_dyn_host(host):
     '''Check the host for being a dynamic/dialup one.
@@ -81,6 +85,7 @@ def check_dyn_host(host):
     if __dyn_host.search(host):
         return 1
     return 0
+
 
 def check_helo(params):
     '''Check the HELO for being RFC 5321 complaint.
@@ -102,6 +107,7 @@ def check_helo(params):
         score = 2
 
     return score
+
 
 def check_spf(params, guess):
     '''Check the SPF record of the sending address.
@@ -135,8 +141,8 @@ def check_spf(params, guess):
         print 'something went wrong in check_spf()'
     return score
 
+
 def adapt_query_for_sqlite3(query):
     # WARNING: This is a hack to convert the usual pyformat strings
     # to named ones used by sqlite3
     return query.replace('%(', ':').replace(')s', '')
-

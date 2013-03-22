@@ -1,6 +1,7 @@
 from twisted.trial import unittest
 import bleyhelpers
 
+
 class BleyHelpersTestCase(unittest.TestCase):
 
     ips = [
@@ -34,7 +35,7 @@ class BleyHelpersTestCase(unittest.TestCase):
     def test_reverse_ip(self):
         for ip in self.ips:
             self.assertEquals(bleyhelpers.reverse_ip(ip[0]), ip[1])
-        
+
     def test_domain_from_host(self):
         domains = [
             ("example.com", "example.com"),
@@ -45,12 +46,13 @@ class BleyHelpersTestCase(unittest.TestCase):
             ("A.really.BIG.example.museum", "example.museum"),
         ]
         for domain in domains:
-            self.assertEquals(bleyhelpers.domain_from_host(domain[0]), domain[1])
+            self.assertEquals(bleyhelpers.domain_from_host(domain[0]),
+                              domain[1])
 
     def test_check_dyn_host_dynamic(self):
         for host in self.dynamic_hosts:
             self.assertEquals(bleyhelpers.check_dyn_host(host), 1)
-    
+
     def test_check_dyn_host_static(self):
         for host in self.static_hosts:
             self.assertEquals(bleyhelpers.check_dyn_host(host), 0)
