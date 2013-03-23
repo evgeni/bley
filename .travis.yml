@@ -17,4 +17,4 @@ install:
   - pip install Twisted==$TWISTED_VERSION --use-mirrors
   - pip install -r requirements.txt --use-mirrors
 # command to run tests
-script: maje test
+script: make test
