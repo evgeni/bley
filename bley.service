@@ -1,0 +1,11 @@
+[Unit]
+Description=Bley greylisting daemon
+After=network.target remote-fs.target nss-lookup.target
+
+[Service]
+Type=simple
+User=bley
+ExecStart=/usr/bin/bley -c /etc/bley/bley.conf -d
+
+[Install]
+WantedBy=multi-user.target
