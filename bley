@@ -201,6 +201,9 @@ def bley_start():
     parser.add_option("-d", "--debug",
                       action="store_true", dest="debug",
                       help="don't daemonize the process and log to stdout")
+    parser.add_option("-f", "--foreground",
+                      action="store_true", dest="foreground",
+                      help="don't daemonize the process")
     (settings, args) = parser.parse_args()
 
     if not settings.conffile:
@@ -264,6 +267,7 @@ def bley_start():
     settings.exim_workaround  = config.getboolean('bley', 'exim_workaround')
 
     if settings.debug:
+        settings.foreground = True
         settings.log_file = None
 
     if settings.log_file == 'syslog':
@@ -301,7 +305,7 @@ def bley_start():
     reactor.listenTCP(settings.listen_port, BleyPolicyFactory(settings), interface=settings.listen_addr)
     reactor.addSystemEventTrigger('before', 'shutdown', bley_stop, settings)
     reactor.callWhenRunning(clean_db, settings)
-    if not settings.debug:
+    if not settings.foreground:
         twistd.checkPID(settings.pid_file)
         if twisted.version <= __old_twistd_daemonize:
             twistd.daemonize()
@@ -314,7 +318,7 @@ def bley_start():
 
 def bley_stop(settings):
     settings.logger("Shutting down\n")
-    if settings.pid_file and not settings.debug:
+    if settings.pid_file and not settings.foreground:
         delPID(settings.pid_file)
     if settings.log_file == 'syslog':
         syslog.closelog()

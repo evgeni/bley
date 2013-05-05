@@ -5,7 +5,7 @@ After=network.target remote-fs.target nss-lookup.target
 [Service]
 Type=simple
 User=bley
-ExecStart=/usr/bin/bley -c /etc/bley/bley.conf -d
+ExecStart=/usr/bin/bley -c /etc/bley/bley.conf -f
 
 [Install]
 WantedBy=multi-user.target
