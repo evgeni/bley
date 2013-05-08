@@ -3,9 +3,10 @@ Description=Bley greylisting daemon
 After=network.target remote-fs.target nss-lookup.target
 
 [Service]
-Type=simple
+Type=forking
 User=bley
-ExecStart=/usr/bin/bley -c /etc/bley/bley.conf -f
+ExecStart=/usr/bin/bley -c /etc/bley/bley.conf -p /run/bley/bley.pid
+PIDFile=/run/bley/bley.pid
 
 [Install]
 WantedBy=multi-user.target
