@@ -51,7 +51,13 @@ parser.add_option("-q", "--quiet",
 (settings, args) = parser.parse_args()
 
 if not settings.conffile:
-    settings.conffile = '/etc/bley/bley.conf'
+    if os.path.isfile('/etc/bley/bley.conf'):
+        settings.conffile = '/etc/bley/bley.conf'
+    elif os.path.isfile('bley.conf'):
+        settings.conffile = 'bley.conf'
+    else:
+        print "Could not find a configuration file, exiting."
+        sys.exit(1)
 
 config = SafeConfigParser()
 config.read(settings.conffile)
