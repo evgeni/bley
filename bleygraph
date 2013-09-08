@@ -30,11 +30,6 @@
 import datetime
 import sys
 
-import matplotlib
-matplotlib.use('Agg')
-import matplotlib.pyplot as plt
-import matplotlib.dates as mdates
-
 from optparse import OptionParser
 from ConfigParser import SafeConfigParser
 
@@ -84,6 +79,11 @@ else:
     sys.exit(1)
 
 exec("import %s as database" % database)
+
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
 
 dnswl_threshold  = config.getint('bley', 'dnswl_threshold')
 dnsbl_threshold  = config.getint('bley', 'dnsbl_threshold')
