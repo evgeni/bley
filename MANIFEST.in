@@ -1,3 +1,4 @@
 include *.conf
 include bley.1
 include bley.service
+include README.md
