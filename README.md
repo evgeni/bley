@@ -23,14 +23,15 @@ INSTALLATION
 
 Quick and dirty
 ---------------
-Unpack the tarball (or clone the git tree), adjust `bley.conf` and run
-`./bley`.
+Unpack the tarball (or clone the git tree), adjust `bley.conf.template`,
+rename it to `bley.conf` and run `./bley`.
 
 Still quick, but not dirty
 --------------------------
 Unpack the tarball (or clone the git tree), run `python setup.py build`
-followed by `python setup.py install`, adjust `/etc/bley/bley.conf`
-(see CONFIGURATION below) and run `/usr/bin/bley`.
+followed by `python setup.py install`, copy `/etc/bley/bley.conf.template`
+to `/etc/bley/bley.conf`, adjust it to your needs (see CONFIGURATION below)
+and run `/usr/bin/bley`.
 
 CONFIGURATION
 =============

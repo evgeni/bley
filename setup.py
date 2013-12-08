@@ -18,7 +18,7 @@ setup(
         'publicsuffix.org support': ['publicsuffix'],
     },
     data_files=[
-        ('/etc/bley', ['bley.conf']),
+        ('/etc/bley', ['bley.conf.template']),
         ('/usr/share/man/man1', ['bley.1'])
     ]
 )
