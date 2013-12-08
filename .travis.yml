@@ -13,6 +13,7 @@ env:
   - TWISTED_VERSION=12.3.0
   - TWISTED_VERSION=13.0.0
   - TWISTED_VERSION=13.1.0
+  - TWISTED_VERSION=13.2.0
 # command to install dependencies
 install:
   - pip install pep8
