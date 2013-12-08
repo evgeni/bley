@@ -55,9 +55,11 @@ from twisted.internet import reactor
 
 try:
     from twisted.scripts import _twistd_unix as twistd
+    from twisted.scripts._twistd_unix import UnixApplicationRunner
 except:
     from twisted.scripts import twistd
 
+from twisted.application import internet, service
 from bley import BleyPolicyFactory
 
 __CREATE_DB_QUERY = '''
@@ -246,8 +248,8 @@ def bley_start():
         print "No supported database configured."
         sys.exit(1)
 
-    exec("import %s as database" % database)
-    settings.database = database
+    exec "import %s as databasemodule" % database in globals(), locals()
+    settings.database = databasemodule
     settings.reject_msg  = config.get('bley', 'reject_msg')
 
     settings.dnswls      = [d.strip() for d in config.get('bley', 'dnswls').split(',') if d.strip() != ""]
@@ -302,18 +304,17 @@ def bley_start():
 
     settings.db = settings.database.connect(**settings.dbsettings)
 
-    reactor.listenTCP(settings.listen_port, BleyPolicyFactory(settings), interface=settings.listen_addr)
+    class BleyRunner(UnixApplicationRunner):
+        def createOrGetApplication(self):
+            bley_app = application = service.Application("bley")
+            bley_service = internet.TCPServer(settings.listen_port, BleyPolicyFactory(settings), interface=settings.listen_addr)
+            bley_service.setServiceParent(bley_app)
+            return bley_app
+    bley_config = { 'originalname': None, 'euid': None, 'profile': None, 'no_save': True, 'debug': settings.debug, 'uid': None, 'gid': None, 'chroot': None, 'rundir': '.', 'nodaemon': settings.foreground, 'umask': None, 'pidfile': settings.pid_file, }
+    runner = BleyRunner(bley_config)
     reactor.addSystemEventTrigger('before', 'shutdown', bley_stop, settings)
     reactor.callWhenRunning(clean_db, settings)
-    if not settings.foreground:
-        twistd.checkPID(settings.pid_file)
-        if twisted.version <= __old_twistd_daemonize:
-            twistd.daemonize()
-        else:
-            twistd.daemonize(reactor, os)
-        if settings.pid_file:
-            writePID(settings.pid_file)
-    reactor.run()
+    runner.run()
 
 
 def bley_stop(settings):
