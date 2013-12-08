@@ -293,8 +293,10 @@ def bley_start():
         dbc.executescript(__CREATE_DB_QUERY_SL)
         dbc.executescript(__CREATE_LOGDB_QUERY_SL)
     else:
+        dbc.execute("set sql_notes = 0")
         dbc.execute(__CREATE_DB_QUERY)
         dbc.execute(__CREATE_LOGDB_QUERY)
+        dbc.execute("set sql_notes = 1")
         dbc.execute(__UPDATE_DB_QUERY)
     db.commit()
     dbc.close()
