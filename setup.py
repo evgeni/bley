@@ -11,14 +11,14 @@ setup(
     py_modules=['bley', 'bleyhelpers', 'postfix'],
     scripts=['bley', 'bleygraph'],
     zip_safe=False,
-    install_requires=['Twisted>=8.1.0', 'pyspf'],
+    install_requires=['Twisted>=8.1.0,<13.2.0', 'pyspf'],
     extras_require={
         'PostgreSQL backend': ['psycopg2'],
         'MySQL backend': ['MySQL-python'],
         'publicsuffix.org support': ['publicsuffix'],
     },
     data_files=[
-        ('/etc/bley', ['bley.conf']),
+        ('/etc/bley', ['bley.conf.template']),
         ('/usr/share/man/man1', ['bley.1'])
     ]
 )
