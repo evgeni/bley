@@ -247,6 +247,8 @@ def bley_start():
     else:
         print "No supported database configured."
         sys.exit(1)
+    if config.has_option('bley', 'dbport'):
+        settings.dbsettings['port'] = config.get('bley', 'dbport')
 
     exec "import %s as databasemodule" % database in globals(), locals()
     settings.database = databasemodule
