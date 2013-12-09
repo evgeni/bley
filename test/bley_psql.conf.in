@@ -1,0 +1,54 @@
+[bley]
+# On which IP and port should the daemon listen?
+listen_addr = 127.0.0.1
+listen_port = 1337
+
+# Where to save the PID file?
+pid_file = bley.pid
+# Where to save the log file?
+log_file = bley.log
+
+reject_msg = greylisted, try again later
+
+# Which database to use? [pgsql|mysql|sqlite3]
+# note: for sqlite3, just set dbname to the path to the database
+dbtype = pgsql
+dbhost = DBHOST
+dbport = DBPORT
+dbuser = DBUSER
+dbpass = DBPASS
+dbname = bley_test
+
+# Which DNSBLs and DNSWLs to use?
+dnsbls = 
+dnswls = 
+
+# Whitelist after dnswl_threshold hits.
+dnswl_threshold = 1
+# Greylist after dnsbl_threshold hits.
+dnsbl_threshold = 1
+# Greylist after rfc_threshold hits in the RFC checks.
+rfc_threshold = 2
+
+# Wait greylist_period minutes before accepting greyed sender.
+greylist_period = 29
+# Max wait greylist_max minutes before accepting greyed sender.
+# (Accept all senders after 12h.)
+greylist_max    = 720
+# Add greylist_penalty minutes for every connection before greylist_period.
+greylist_penalty= 10
+
+# Purge good entries from the database after purge_days inactivities.
+purge_days = 40
+# Purge bad entries from the database after purge_bad_days inactivities.
+purge_bad_days = 10
+
+# Use SPF?
+use_spf = 0
+use_spf_guess = 0
+
+# Use Exim workaround (close the socket after an action has been sent)?
+exim_workaround = 0
+
+[bleygraph]
+destdir = stats
