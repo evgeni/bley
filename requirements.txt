@@ -4,3 +4,4 @@ Twisted>=8.1.0
 pydns
 pyspf
 publicsuffix
+psycopg2
