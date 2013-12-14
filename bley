@@ -35,7 +35,6 @@ from optparse import OptionParser
 from ConfigParser import SafeConfigParser
 
 import twisted
-import twisted.python.versions
 
 # Find the best reactor
 reactorchoices = ["epollreactor", "pollreactor", "selectreactor", "posixbase"]
@@ -186,8 +185,6 @@ __CREATE_LOGDB_QUERY_SL = '''
   CREATE INDEX IF NOT EXISTS bley_log_index
    ON bley_log (logtime DESC, action ASC);
 '''
-
-__old_twistd_daemonize = twisted.python.versions.Version("twisted", 12, 0, 0)
 
 
 def bley_start():
