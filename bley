@@ -311,7 +311,7 @@ def bley_start():
             bley_service = internet.TCPServer(settings.listen_port, BleyPolicyFactory(settings), interface=settings.listen_addr)
             bley_service.setServiceParent(bley_app)
             return bley_app
-    bley_config = {'originalname': None, 'euid': None, 'profile': None, 'no_save': True, 'debug': settings.debug, 'uid': None, 'gid': None, 'chroot': None, 'rundir': '.', 'nodaemon': settings.foreground, 'umask': None, 'pidfile': settings.pid_file, 'syslog': settings.log_file == 'syslog', 'prefix': 'bley'}
+    bley_config = {'originalname': None, 'euid': None, 'profile': None, 'no_save': True, 'debug': settings.debug, 'uid': None, 'gid': None, 'chroot': None, 'rundir': '.', 'nodaemon': settings.foreground, 'umask': None, 'pidfile': settings.pid_file, 'syslog': settings.log_file == 'syslog', 'prefix': 'bley', 'logfile': settings.log_file}
     runner = BleyRunner(bley_config)
     reactor.addSystemEventTrigger('before', 'shutdown', bley_stop, settings)
     reactor.callWhenRunning(clean_db, settings)
