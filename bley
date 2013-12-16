@@ -305,7 +305,27 @@ def bley_start():
 
     settings.db = settings.database.connect(**settings.dbsettings)
 
+    class NoLogObserver(object):
+        def emit(self, eventDict):
+            return
+
+    class NoAppLogger(object):
+
+        def __init__(self, options):
+            return
+
+        def start(self, application):
+            return
+
+        def _getLogObserver(self):
+            return NoLogObserver().emit
+
+        def stop(self):
+            return
+
     class BleyRunner(UnixApplicationRunner):
+        loggerFactory = NoAppLogger
+
         def createOrGetApplication(self):
             bley_app = application = service.Application("bley")
             bley_service = internet.TCPServer(settings.listen_port, BleyPolicyFactory(settings), interface=settings.listen_addr)
