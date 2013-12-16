@@ -4,6 +4,7 @@ test: test-psql test-mysql test-sqlite
 
 test-sqlite: test-setup-sqlite
 	trial test
+	make test-clean
 
 test-setup-sqlite: test-clean
 	sed "s#.*DBPORT##;s#DBTYPE#sqlite3#;s#DBNAME#./test/bley_sqlite.db#" ./test/bley_test.conf.in > ./test/bley_sqlite.conf
@@ -14,6 +15,7 @@ test-psql:
 
 test-psql-real: test-setup-psql
 	trial test
+	make test-clean
 
 test-setup-psql: test-clean
 	sed "s#DBHOST#$$PGHOST#;s#DBPORT#$$PGPORT#;s#DBUSER#$$PGUSER#;s#DBPASS#$$PGPASSWORD#;s#DBTYPE#pgsql#;s#DBNAME#bley_test#" ./test/bley_test.conf.in > ./test/bley_psql.conf
@@ -25,6 +27,7 @@ test-mysql:
 
 test-mysql-real: test-setup-mysql
 	trial test
+	make test-clean
 
 test-setup-mysql: test-clean
 	sed "s#DBHOST#$$MYSQL_HOST#;s#DBPORT#$$MYSQL_TCP_PORT#;s#DBUSER#$$MYSQL_USER#;s#DBPASS#$$MYSQL_PWD#;s#DBTYPE#mysql#;s#DBNAME#bley_test#" ./test/bley_test.conf.in > ./test/bley_mysql.conf
