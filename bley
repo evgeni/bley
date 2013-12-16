@@ -340,8 +340,6 @@ def bley_start():
 
 def bley_stop(settings):
     settings.logger("Shutting down\n")
-    if settings.pid_file and not settings.foreground:
-        delPID(settings.pid_file)
     if settings.log_file == 'syslog':
         syslog.closelog()
 
