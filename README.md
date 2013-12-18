@@ -38,6 +38,8 @@ Basically you just have to configure the database:
 
     dbtype = pgsql for PostgreSQL, mysql for MySQL or sqlite3 for SQLite
     dbhost = the host where the database runs on (usually localhost)
+    dbport = the port where the database runs on (can be left unset for
+             the default 5432 for PostgreSQL and 3306 for MySQL)
     dbuser = the name of the database user
     dbpass = the password of the database user
     dbname = the name (or path in case of SQLite) of the database
