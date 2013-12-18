@@ -30,6 +30,7 @@
 import os
 import sys
 import datetime
+import logging
 
 from optparse import OptionParser
 from ConfigParser import SafeConfigParser
@@ -60,6 +61,8 @@ except:
 
 from twisted.application import internet, service
 from bley import BleyPolicyFactory
+
+logger = logging.getLogger('bley')
 
 __CREATE_DB_QUERY = '''
   CREATE TABLE IF NOT EXISTS bley_status
@@ -271,15 +274,35 @@ def bley_start():
         settings.foreground = True
         settings.log_file = None
 
+    logger.setLevel(logging.INFO)
     if settings.log_file == 'syslog':
-        import syslog
-        syslog.openlog('bley', syslog.LOG_PID, syslog.LOG_MAIL)
-        settings.logger = syslog.syslog
+        from logging.handlers import SysLogHandler
+        import platform
+        system = platform.system()
+        addr = None
+        if system == 'Linux':
+            addr = '/dev/log'
+        elif system == 'Darwin':
+            addr = '/var/run/syslog'
+        elif 'BSD' in system:
+            addr = '/var/run/log'
+        lh = SysLogHandler(address=addr, facility=SysLogHandler.LOG_MAIL)
+        formatter = logging.Formatter('%(name)s: %(message)s')
+        lh.setFormatter(formatter)
+        logger.addHandler(lh)
     elif settings.log_file in ['-', '', None]:
-        settings.logger = sys.stdout.write
+        from logging import StreamHandler
+        lh = StreamHandler(sys.stdout)
+        formatter = logging.Formatter('%(asctime)s %(name)s: %(message)s')
+        lh.setFormatter(formatter)
+        logger.addHandler(lh)
     else:
-        settings.logger = open(settings.log_file, 'a').write
-    settings.logger("Starting up\n")
+        from logging.handlers import WatchedFileHandler
+        lh = WatchedFileHandler(settings.log_file)
+        formatter = logging.Formatter('%(asctime)s %(name)s: %(message)s')
+        lh.setFormatter(formatter)
+        logger.addHandler(lh)
+    logger.info("Starting up")
 
     db = settings.database.connect(**settings.dbsettings)
     dbc = db.cursor()
@@ -339,9 +362,7 @@ def bley_start():
 
 
 def bley_stop(settings):
-    settings.logger("Shutting down\n")
-    if settings.log_file == 'syslog':
-        syslog.closelog()
+    logger.info("Shutting down")
 
 
 def writePID(pidfile):
@@ -359,7 +380,7 @@ def delPID(pidfile):
 
 def clean_db(settings):
     if settings.verbose:
-        settings.logger("cleaning database\n")
+        logger.info("cleaning database")
     db = settings.database.connect(**settings.dbsettings)
     dbc = db.cursor()
     now = datetime.datetime.now()

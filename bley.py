@@ -31,10 +31,13 @@ from twisted.internet import defer
 from twisted.internet import reactor
 
 import datetime
+import logging
 from bleyhelpers import *
 from postfix import PostfixPolicy
 
 from time import sleep
+
+logger = logging.getLogger('bley')
 
 
 class BleyPolicy(PostfixPolicy):
@@ -90,9 +93,9 @@ class BleyPolicy(PostfixPolicy):
                 action = 'DEFER_IF_PERMIT %s (cached result)' % self.factory.settings.reject_msg
                 check_results['CACHE'] = 1
                 if self.factory.settings.verbose:
-                    self.factory.settings.logger('decided CACHED action=%s, checks: %s, postfix: %s\n' % (action, check_results, postfix_params))
+                    logger.info('decided CACHED action=%s, checks: %s, postfix: %s' % (action, check_results, postfix_params))
                 else:
-                    self.factory.settings.logger('decided CACHED action=%s, from=%s, to=%s\n' % (action, postfix_params['sender'], postfix_params['recipient']))
+                    logger.info('decided CACHED action=%s, from=%s, to=%s' % (action, postfix_params['sender'], postfix_params['recipient']))
                 self.send_action(action)
                 self.factory.log_action(postfix_params, action, check_results)
                 return
@@ -105,9 +108,9 @@ class BleyPolicy(PostfixPolicy):
                 action = 'DUNNO'
                 check_results['CACHE'] = 1
                 if self.factory.settings.verbose:
-                    self.factory.settings.logger('decided CACHED action=%s, checks: %s, postfix: %s\n' % (action, check_results, postfix_params))
+                    logger.info('decided CACHED action=%s, checks: %s, postfix: %s' % (action, check_results, postfix_params))
                 else:
-                    self.factory.settings.logger('decided CACHED action=%s, from=%s, to=%s\n' % (action, postfix_params['sender'], postfix_params['recipient']))
+                    logger.info('decided CACHED action=%s, from=%s, to=%s' % (action, postfix_params['sender'], postfix_params['recipient']))
                 self.send_action(action)
                 self.factory.log_action(postfix_params, action, check_results)
                 return
@@ -173,9 +176,9 @@ class BleyPolicy(PostfixPolicy):
             self.factory.good_cache[postfix_params['client_address']] = datetime.datetime.now()
 
         if self.factory.settings.verbose:
-            self.factory.settings.logger('decided action=%s, checks: %s, postfix: %s\n' % (action, check_results, postfix_params))
+            logger.info('decided action=%s, checks: %s, postfix: %s' % (action, check_results, postfix_params))
         else:
-            self.factory.settings.logger('decided action=%s, from=%s, to=%s\n' % (action, postfix_params['sender'], postfix_params['recipient']))
+            logger.info('decided action=%s, from=%s, to=%s' % (action, postfix_params['sender'], postfix_params['recipient']))
         self.factory.log_action(postfix_params, action, check_results)
         self.send_action(action)
 
@@ -200,7 +203,7 @@ class BleyPolicy(PostfixPolicy):
             result = self.dbc.fetchone()
         except:
             result = None
-            self.factory.settings.logger('check_local_db failed. sending unknown.\n')
+            logger.info('check_local_db failed. sending unknown.')
         if not result:
             return -1
         else:
@@ -278,11 +281,11 @@ class BleyPolicy(PostfixPolicy):
                 self.dbc.execute(query, params)
                 self.db.commit()
             else:
-                self.factory.settings.logger('Could not reconnect to the database, exiting.\n')
+                logger.info('Could not reconnect to the database, exiting.')
                 reactor.stop()
 
     def safe_reconnect(self):
-        self.factory.settings.logger('Reconnecting to the database after an error.\n')
+        logger.info('Reconnecting to the database after an error.')
         try:
             self.db.close()
         except:
