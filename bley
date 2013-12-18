@@ -365,19 +365,6 @@ def bley_stop(settings):
     logger.info("Shutting down")
 
 
-def writePID(pidfile):
-    # Create a PID file
-    pid = str(os.getpid())
-    pf = open(pidfile, "w")
-    pf.write("%s\n" % pid)
-    pf.close()
-
-
-def delPID(pidfile):
-    if os.path.exists(pidfile):
-        os.remove(pidfile)
-
-
 def clean_db(settings):
     if settings.verbose:
         logger.info("cleaning database")
