@@ -3,3 +3,6 @@ include *.conf.example
 include *.1
 include bley.service
 include README.md
+include Makefile
+include test/*.py
+include test/*.conf.in
