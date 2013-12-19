@@ -1,3 +1,6 @@
+sdist:
+	python setup.py sdist
+
 test: test-psql test-mysql test-sqlite
 	pep8 --ignore=E501,E221,E226 ./bley .
 	make test-clean
@@ -38,4 +41,4 @@ test-clean:
 	[ ! -f ./test/bley_test.pid ] || kill $$(cat ./test/bley_test.pid)
 	rm -f ./test/bley_sqlite.db ./test/bley_sqlite.conf ./test/bley_psql.conf ./test/bley_mysql.conf
 
-.PHONY: test
+.PHONY: sdist test
