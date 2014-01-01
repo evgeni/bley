@@ -221,7 +221,12 @@ def bley_start():
         'listen_addr': '127.0.0.1',
         'log_file': None,
         'pid_file': None,
-        'exim_workaround': False
+        'exim_workaround': False,
+        'dbhost': None,
+        'dbname': None,
+        'dbuser': None,
+        'dbpass': None,
+        'dbport': '0',
     }
     config = SafeConfigParser(defaults)
     config.read(settings.conffile)
@@ -247,7 +252,7 @@ def bley_start():
     else:
         print "No supported database configured."
         sys.exit(1)
-    if config.has_option('bley', 'dbport'):
+    if config.has_option('bley', 'dbport') and config.getint('bley', 'dbport') != 0:
         settings.dbsettings['port'] = config.getint('bley', 'dbport')
 
     exec "import %s as databasemodule" % database in globals(), locals()
