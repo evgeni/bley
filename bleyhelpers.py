@@ -27,6 +27,7 @@
 
 import spf
 import re
+import ipaddr
 try:
     import publicsuffix
 except ImportError:
@@ -46,7 +47,15 @@ def reverse_ip(ip):
     @rtype:    string
     @return:   the reversed IP address
     '''
-    return spf.reverse_dots(ip)
+    ip = ipaddr.IPAddress(ip)
+    if ip.version == 4:
+        a = str(ip.exploded).split('.')
+        a.reverse()
+        return '.'.join(a)
+    else:
+        a = list(str(ip.exploded).replace(':', ''))
+        a.reverse()
+        return '.'.join(a)
 
 
 def domain_from_host(host):
