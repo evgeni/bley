@@ -54,6 +54,71 @@ adding `check_policy_service inet:127.0.0.1:1337` to your
 for your needs (esp. the used DNWLs and DNSBLs, the greylisting times
 and the hit thresholds).
 
+Additional Configuration
+------------------------
+
+Sometimes, you want to bind `bley` to something else than `127.0.0.1:1337`,
+this can be achieved with the following two parameters.
+
+    listen_addr = 127.0.0.1
+    listen_port = 1337
+
+As `bley` is designed to be a deamon, it will write a pid file and a log file.
+The locations of the two can be configured with the following parameters.
+
+    pid_file = bley.pid
+    log_file = bley.log
+
+Setting `log_file` to the special word `syslog` will make `bley` log to
+`syslog` instead of a file, using the `mail` facility.
+
+If you want to inform the sender about the greylisting, you can adjust
+the message sent via
+
+    reject_msg = greylisted, try again later
+
+The DNSWLs and DNSBLs `bley` uses for its tests can be set via
+
+    dnsbls = ix.dnsbl.manitu.net, dnsbl.ahbl.org, dnsbl.sorbs.net
+    dnswls = list.dnswl.org
+
+Thresholds define how many sub-checks have to hit, to trigger a feature
+(whitelisting in case of dnswl, greylisting in case of dnsbl and rfc).
+
+    dnswl_threshold = 1
+    dnsbl_threshold = 1
+    rfc_threshold = 2
+
+How long should a sender be greylisted, when should we allow him in at
+the very last and how long should he have to wait more, if he retries to
+early (all in minutes)?
+
+    greylist_period = 29
+    greylist_max    = 720
+    greylist_penalty= 10
+
+After how many days should old entries be deleted from the database?
+Entries of senders who have not verified to be "good" should be purged
+earlier.
+
+    purge_days = 40
+    purge_bad_days = 10
+
+SPF ([Sender Policy Framework](http://www.openspf.org)) checks can be turned
+off. [SPF Best Guess](http://www.openspf.net/Best_Practices/No_Best_Guess)
+should always be turned off.
+
+    use_spf = 1
+    use_spf_guess = 0
+
+If you use Exim instead of Postfix, set this to 1. It will automatically
+close connections after the decision is sent. While Postfix supports
+checking multiple senders over the same connections, Exim does not. In fact
+it even closes the sending part of the socket as soon all details have been
+transmitted.
+
+    exim_workaround = 0
+
 BUILD STATUS
 ============
 [![Build Status](https://travis-ci.org/evgeni/bley.png?branch=master)](https://travis-ci.org/evgeni/bley)
