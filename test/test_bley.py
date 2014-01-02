@@ -50,6 +50,8 @@ class BleyTestCase(unittest.TestCase):
 
     ipv4net = ipaddr.IPNetwork('192.0.2.0/24')
     ipv4generator = ipv4net.iterhosts()
+    ipv6net = ipaddr.IPNetwork('2001:DB8::/32')
+    ipv6generator = ipv6net.iterhosts()
 
     def _get_next_ipv4(self):
         try:
@@ -58,9 +60,14 @@ class BleyTestCase(unittest.TestCase):
             self.ipv4generator = self.ipv4net.iterhosts()
             return self.ipv4generator.next()
 
-    def test_incomplete_request(self):
-        ip = self._get_next_ipv4()
+    def _get_next_ipv6(self):
+        try:
+            return self.ipv6generator.next()
+        except StopIteration:
+            self.ipv6generator = self.ipv6net.iterhosts()
+            return self.ipv6generator.next()
 
+    def test_incomplete_request(self):
         data = {
             'sender': 'root@example.com',
             'recipient': 'user@example.com',
@@ -74,9 +81,7 @@ class BleyTestCase(unittest.TestCase):
 
         return d
 
-    def test_good_client(self):
-        ip = self._get_next_ipv4()
-
+    def _test_good_client(self, ip):
         data = {
             'sender': 'root@example.com',
             'recipient': 'user@example.com',
@@ -93,9 +98,15 @@ class BleyTestCase(unittest.TestCase):
 
         return d
 
-    def test_ip_help_and_dyn_host(self):
+    def test_good_client_v4(self):
         ip = self._get_next_ipv4()
+        return self._test_good_client(ip)
 
+    def test_good_client_v6(self):
+        ip = self._get_next_ipv6()
+        return self._test_good_client(ip)
+
+    def _test_ip_help_and_dyn_host(self, ip):
         data = {
             'sender': 'nothinguseful@example.com',
             'recipient': 'nothinguseful@example.com',
@@ -112,9 +123,15 @@ class BleyTestCase(unittest.TestCase):
 
         return d
 
-    def test_same_sender_recipient_and_dyn_host(self):
+    def test_ip_help_and_dyn_host_v4(self):
         ip = self._get_next_ipv4()
+        return self._test_ip_help_and_dyn_host(ip)
 
+    def test_ip_help_and_dyn_host_v6(self):
+        ip = self._get_next_ipv6()
+        return self._test_ip_help_and_dyn_host(ip)
+
+    def _test_same_sender_recipient_and_dyn_host(self, ip):
         data = {
             'sender': 'nothinguseful@example.com',
             'recipient': 'nothinguseful@example.com',
@@ -131,9 +148,15 @@ class BleyTestCase(unittest.TestCase):
 
         return d
 
-    def test_same_sender_recipient_and_ip_helo(self):
+    def test_same_sender_recipient_and_dyn_host_v4(self):
         ip = self._get_next_ipv4()
+        return self._test_same_sender_recipient_and_dyn_host(ip)
 
+    def test_same_sender_recipient_and_dyn_host_v6(self):
+        ip = self._get_next_ipv6()
+        return self._test_same_sender_recipient_and_dyn_host(ip)
+
+    def _test_same_sender_recipient_and_ip_helo(self, ip):
         data = {
             'sender': 'nothinguseful@example.com',
             'recipient': 'nothinguseful@example.com',
@@ -150,9 +173,15 @@ class BleyTestCase(unittest.TestCase):
 
         return d
 
-    def test_bad_helo(self):
+    def test_same_sender_recipient_and_ip_helo_v4(self):
         ip = self._get_next_ipv4()
+        return self._test_same_sender_recipient_and_ip_helo(ip)
 
+    def test_same_sender_recipient_and_ip_helo_v6(self):
+        ip = self._get_next_ipv6()
+        return self._test_same_sender_recipient_and_ip_helo(ip)
+
+    def _test_bad_helo(self, ip):
         data = {
             'sender': 'root@example.com',
             'recipient': 'user@example.com',
@@ -169,9 +198,15 @@ class BleyTestCase(unittest.TestCase):
 
         return d
 
-    def test_postmaster(self):
+    def test_bad_helo_v4(self):
         ip = self._get_next_ipv4()
+        return self._test_bad_helo(ip)
 
+    def test_bad_helo_v6(self):
+        ip = self._get_next_ipv6()
+        return self._test_bad_helo(ip)
+
+    def _test_postmaster(self, ip):
         data = {
             'sender': 'angryuser@different.example.com',
             'recipient': 'postmaster@example.com',
@@ -187,6 +222,14 @@ class BleyTestCase(unittest.TestCase):
         d.addCallback(got_action)
 
         return d
+
+    def test_postmaster_v4(self):
+        ip = self._get_next_ipv4()
+        return self._test_postmaster(ip)
+
+    def test_postmaster_v6(self):
+        ip = self._get_next_ipv6()
+        return self._test_postmaster(ip)
 
 
 def get_action(host, port, data):
