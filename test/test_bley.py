@@ -2,6 +2,7 @@ from postfix import PostfixPolicy, PostfixPolicyFactory
 from twisted.trial import unittest
 from twisted.internet.protocol import ClientFactory
 from twisted.internet.defer import Deferred
+import ipaddr
 
 
 class PostfixPolicyClient(PostfixPolicy):
@@ -47,13 +48,15 @@ class PostfixPolicyClientFactory(ClientFactory):
 
 class BleyTestCase(unittest.TestCase):
 
-    ipv4 = [192, 0, 2, 0]
+    ipv4net = ipaddr.IPNetwork('192.0.2.0/24')
+    ipv4generator = ipv4net.iterhosts()
 
     def _get_next_ipv4(self):
-        if self.ipv4[-1] == 255:
-            self.ipv4[-1] = 0
-        self.ipv4[-1] += 1
-        return str(".").join([str(x) for x in self.ipv4])
+        try:
+            return self.ipv4generator.next()
+        except StopIteration:
+            self.ipv4generator = self.ipv4net.iterhosts()
+            return self.ipv4generator.next()
 
     def test_incomplete_request(self):
         ip = self._get_next_ipv4()
