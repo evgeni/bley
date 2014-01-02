@@ -119,6 +119,49 @@ transmitted.
 
     exim_workaround = 0
 
+CHECKS
+======
+
+Known sender
+------------
+
+The first check is, of course, whether our database already knows about the
+`(ip, sender, recipient)` tuple. If it does, act accordignly, otherways
+continue with the other checks.
+
+DNSWL / DNSBL
+-------------
+
+Check whether the sender IP address is listed in the configured DNSWLs and
+DNSBLs. If either one reaches the configured threshold, the mail is considered
+good or bad, depending on which threshold was reached.
+
+RFC
+---
+
+While the following checks are not all about stricktly implementing the RFC,
+all of them try to identify suboptimal behaviour of the sending MTA, which
+often indicates a spammer.
+
+### HELO
+
+Check whether the name used in `HELO/EHLO` matches the reverse DNS entry.
+
+### DynIP
+
+Check whether the hostname looks like a dynamic one.
+
+### sender equals recipient
+
+People usually do not send mail themself "over the Internet" (and local mail
+should not be checked by a policy daemon). Spammers on the other hand, often
+try to bypass address-checks by using the same address as sender and receiver.
+
+### SPF
+
+The Sender Policy Framework allows domain owners to define which servers are
+allowed to send mail using their domain and which are not.
+
 BUILD STATUS
 ============
 [![Build Status](https://travis-ci.org/evgeni/bley.png?branch=master)](https://travis-ci.org/evgeni/bley)
