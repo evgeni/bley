@@ -29,6 +29,7 @@ from twisted.protocols.basic import LineOnlyReceiver
 from twisted.internet.protocol import Factory
 from twisted.internet.interfaces import IHalfCloseableProtocol
 from zope.interface import implements
+import ipaddr
 
 
 class PostfixPolicy(LineOnlyReceiver):
@@ -64,6 +65,8 @@ class PostfixPolicy(LineOnlyReceiver):
                     pval = pval.decode('utf-8', 'ignore').encode('us-ascii', 'ignore')
                 except:
                     pass
+                if pkey == 'client_address':
+                    pval = ipaddr.IPAddress(pval).exploded
                 self.params[pkey] = pval
             except:
                 print 'Could not parse "%s"' % line
