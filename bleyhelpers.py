@@ -108,6 +108,12 @@ def check_helo(params):
     @rtype:        int
     @return:       the score of the HELO
     '''
+    if params['helo_name'].startswith('[') and params['helo_name'].endswith(']'):
+        try:
+            params['helo_name'] = '[%s]' % ipaddr.IPAddress(params['helo_name'].strip('[]')).exploded
+        except:
+            pass
+
     if params['client_name'] != 'unknown' and params['client_name'] == params['helo_name']:
         score = 0
     elif domain_from_host(params['helo_name']) == domain_from_host(params['client_name']) or params['helo_name'] == '[%s]' % params['client_address']:
