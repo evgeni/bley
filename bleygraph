@@ -53,7 +53,14 @@ if not settings.conffile:
         print "Could not find a configuration file, exiting."
         sys.exit(1)
 
-config = SafeConfigParser()
+defaults = {
+    'dbhost': None,
+    'dbname': None,
+    'dbuser': None,
+    'dbpass': None,
+    'dbport': '0',
+}
+config = SafeConfigParser(defaults)
 config.read(settings.conffile)
 
 settings.destdir = settings.destdir or config.get('bleygraph', 'destdir')
@@ -76,6 +83,9 @@ elif dbtype == 'sqlite3':
 else:
     print "No supported database configured."
     sys.exit(1)
+
+if config.has_option('bley', 'dbport') and config.getint('bley', 'dbport') != 0:
+    dbsettings['port'] = config.getint('bley', 'dbport')
 
 exec("import %s as database" % database)
 
