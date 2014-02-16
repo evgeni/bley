@@ -19,6 +19,7 @@ setup(
     },
     data_files=[
         ('/etc/bley', ['bley.conf.example']),
-        ('/usr/share/man/man1', ['bley.1'])
+        ('/usr/share/man/man1', ['bley.1']),
+        ('/etc/logcheck/ignore.d.server/', ['bley.logcheck'])
     ]
 )
