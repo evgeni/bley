@@ -5,6 +5,7 @@ After=network.target remote-fs.target nss-lookup.target
 [Service]
 Type=forking
 User=bley
+RuntimeDirectory=bley
 ExecStart=/usr/bin/bley -c /etc/bley/bley.conf -p /run/bley/bley.pid
 PIDFile=/run/bley/bley.pid
 
