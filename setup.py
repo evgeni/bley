@@ -1,4 +1,13 @@
 from setuptools import setup
+import subprocess
+
+
+def systemd_unit_path():
+    try:
+        path = subprocess.check_output(["pkg-config", "--variable=systemdsystemunitdir", "systemd"], stderr=subprocess.STDOUT)
+        return path.replace('\n', '')
+    except (subprocess.CalledProcessError, OSError):
+        return "/lib/systemd/system"
 
 setup(
     name="bley",
@@ -20,6 +29,7 @@ setup(
     data_files=[
         ('/etc/bley', ['bley.conf.example']),
         ('/usr/share/man/man1', ['bley.1']),
-        ('/etc/logcheck/ignore.d.server/', ['bley.logcheck'])
+        ('/etc/logcheck/ignore.d.server/', ['bley.logcheck']),
+        (systemd_unit_path(), ['bley.service'])
     ]
 )
