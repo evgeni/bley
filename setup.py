@@ -1,4 +1,5 @@
 from setuptools import setup
+import commands
 
 setup(
     name="bley",
@@ -21,6 +22,6 @@ setup(
         ('/etc/bley', ['bley.conf.example']),
         ('/usr/share/man/man1', ['bley.1']),
         ('/etc/logcheck/ignore.d.server/', ['bley.logcheck']),
-        ('/usr/lib/systemd/system/', ['bley.service'])
+        (commands.getoutput("pkg-config --variable=systemdsystemunitdir systemd"), ['bley.service'])
     ]
 )
