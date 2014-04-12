@@ -1,6 +1,7 @@
 from setuptools import setup
 import subprocess
 
+
 def systemd_unit_path():
     try:
         path = subprocess.check_output(["pkg-config", "--variable=systemdsystemunitdir", "systemd"], stderr=subprocess.STDOUT)
