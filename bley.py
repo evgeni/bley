@@ -1,4 +1,4 @@
-# Copyright (c) 2009 Evgeni Golov <evgeni.golov@uni-duesseldorf.de>
+# Copyright (c) 2009-2014 Evgeni Golov <evgeni@golov.de>
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
