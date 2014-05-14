@@ -1,8 +1,8 @@
 sdist:
 	python setup.py sdist
 
-test: test-psql test-mysql test-sqlite
-	pep8 --ignore=E501,E221,E226 ./bley .
+test: 	test-sqlite	# test-psql test-mysql test-sqlite
+	pep8 --ignore=E501,E221,E226,E225 ./bley .
 	make test-clean
 
 test-sqlite: test-setup-sqlite
@@ -49,3 +49,6 @@ test-clean:
 	rm -rf ./test/bleygraphout/
 
 .PHONY: sdist test
+
+install:
+	python setup.py install --force --root=$(DESTDIR) --no-compile -O0 --install-layout=deb

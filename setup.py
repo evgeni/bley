@@ -27,9 +27,10 @@ setup(
         'publicsuffix.org support': ['publicsuffix'],
     },
     data_files=[
-        ('/etc/bley', ['bley.conf.example']),
+        ('/etc/bley', ['bley.conf', 'bley.conf.example']),
         ('/usr/share/man/man1', ['bley.1']),
         ('/etc/logcheck/ignore.d.server/', ['bley.logcheck']),
+        ('/var/lib/bley', []),
         (systemd_unit_path(), ['bley.service'])
     ]
 )
