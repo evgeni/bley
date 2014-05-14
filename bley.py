@@ -147,7 +147,7 @@ class BleyPolicy(PostfixPolicy):
                 else:
                     new_status = 0
                     self.factory.good_cache[postfix_params['client_address']] = datetime.datetime.now()
-            query = "INSERT INTO bley_status (ip, status, last_action, sender, recipient) VALUES(%(client_address)s, %(new_status)s, CURRENT_TIMESTAMP, %(sender)s, %(recipient)s)"
+            query = "INSERT INTO bley_status (ip, status, last_action, sender, recipient) VALUES(%(client_address)s, %(new_status)s, '" + str(datetime.datetime.now()) + "', %(sender)s, %(recipient)s)"
             postfix_params['new_status'] = new_status
             try:
                 self.safe_execute(query, postfix_params)
@@ -160,7 +160,7 @@ class BleyPolicy(PostfixPolicy):
             delta = datetime.datetime.now()-status[1]
             if delta > self.factory.settings.greylist_period+status[2]*self.factory.settings.greylist_penalty or delta > self.factory.settings.greylist_max:
                 action = 'DUNNO'
-                query = "UPDATE bley_status SET status=0, last_action=CURRENT_TIMESTAMP WHERE ip=%(client_address)s AND sender=%(sender)s AND recipient=%(recipient)s"
+                query = "UPDATE bley_status SET status=0, last_action='" + str(datetime.datetime.now()) + "' WHERE ip=%(client_address)s AND sender=%(sender)s AND recipient=%(recipient)s"
                 self.factory.good_cache[postfix_params['client_address']] = datetime.datetime.now()
             else:
                 action = 'DEFER_IF_PERMIT %s' % self.factory.settings.reject_msg
@@ -171,7 +171,7 @@ class BleyPolicy(PostfixPolicy):
         else:  # found to be clean
             check_results['DB'] = status[0]
             action = 'DUNNO'
-            query = "UPDATE bley_status SET last_action=CURRENT_TIMESTAMP WHERE ip=%(client_address)s AND sender=%(sender)s AND recipient=%(recipient)s"
+            query = "UPDATE bley_status SET last_action='" + str(datetime.datetime.now()) + "' WHERE ip=%(client_address)s AND sender=%(sender)s AND recipient=%(recipient)s"
             self.safe_execute(query, postfix_params)
             self.factory.good_cache[postfix_params['client_address']] = datetime.datetime.now()
 
