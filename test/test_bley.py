@@ -1,7 +1,9 @@
 from postfix import PostfixPolicy, PostfixPolicyFactory
 from twisted.trial import unittest
 from twisted.internet.protocol import ClientFactory
-from twisted.internet.defer import Deferred
+from twisted.internet.defer import Deferred, DeferredList
+from twisted.internet import task
+from twisted.internet import reactor
 import ipaddr
 
 
@@ -118,7 +120,11 @@ class BleyTestCase(unittest.TestCase):
 
         d.addCallback(self._assert_defer_action)
 
-        return d
+        d2 = get_wait_action(5, "127.0.0.1", 1337, data)
+
+        d2.addCallback(self._assert_dunno_action)
+
+        return DeferredList([d, d2])
 
     def test_ip_help_and_dyn_host_v4(self):
         ip = self._get_next_ipv4()
@@ -140,7 +146,11 @@ class BleyTestCase(unittest.TestCase):
 
         d.addCallback(self._assert_defer_action)
 
-        return d
+        d2 = get_wait_action(5, "127.0.0.1", 1337, data)
+
+        d2.addCallback(self._assert_dunno_action)
+
+        return DeferredList([d, d2])
 
     def test_same_sender_recipient_and_dyn_host_v4(self):
         ip = self._get_next_ipv4()
@@ -162,7 +172,11 @@ class BleyTestCase(unittest.TestCase):
 
         d.addCallback(self._assert_defer_action)
 
-        return d
+        d2 = get_wait_action(5, "127.0.0.1", 1337, data)
+
+        d2.addCallback(self._assert_dunno_action)
+
+        return DeferredList([d, d2])
 
     def test_same_sender_recipient_and_ip_helo_v4(self):
         ip = self._get_next_ipv4()
@@ -184,7 +198,11 @@ class BleyTestCase(unittest.TestCase):
 
         d.addCallback(self._assert_defer_action)
 
-        return d
+        d2 = get_wait_action(5, "127.0.0.1", 1337, data)
+
+        d2.addCallback(self._assert_dunno_action)
+
+        return DeferredList([d, d2])
 
     def test_bad_helo_v4(self):
         ip = self._get_next_ipv4()
@@ -218,7 +236,10 @@ class BleyTestCase(unittest.TestCase):
 
 
 def get_action(host, port, data):
-    from twisted.internet import reactor
     factory = PostfixPolicyClientFactory(data)
     reactor.connectTCP(host, port, factory)
     return factory.deferred
+
+def get_wait_action(wait, host, port, data):
+    d = task.deferLater(reactor, wait, get_action, host, port, data)
+    return d

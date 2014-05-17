@@ -31,7 +31,7 @@ dnsbl_threshold = 1
 rfc_threshold = 2
 
 # Wait greylist_period minutes before accepting greyed sender.
-greylist_period = 29
+greylist_period = 0
 # Max wait greylist_max minutes before accepting greyed sender.
 # (Accept all senders after 12h.)
 greylist_max    = 720
@@ -49,6 +49,9 @@ use_spf_guess = 0
 
 # Use Exim workaround (close the socket after an action has been sent)?
 exim_workaround = 0
+
+# How long should the cache entries be valid (in minutes)?
+cache_valid = 0
 
 [bleygraph]
 destdir = stats
