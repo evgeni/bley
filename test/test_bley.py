@@ -67,6 +67,12 @@ class BleyTestCase(unittest.TestCase):
             self.ipv6generator = self.ipv6net.iterhosts()
             return self.ipv6generator.next()
 
+    def _assert_dunno_action(self, action):
+        self.assertEquals(action, "action=DUNNO")
+
+    def _assert_defer_action(self, action):
+        self.assertEquals(action, "action=DEFER_IF_PERMIT")
+
     def test_incomplete_request(self):
         data = {
             'sender': 'root@example.com',
@@ -74,10 +80,7 @@ class BleyTestCase(unittest.TestCase):
         }
         d = get_action("127.0.0.1", 1337, data)
 
-        def got_action(action):
-            self.assertEquals(action, "action=DUNNO")
-
-        d.addCallback(got_action)
+        d.addCallback(self._assert_dunno_action)
 
         return d
 
@@ -91,10 +94,7 @@ class BleyTestCase(unittest.TestCase):
         }
         d = get_action("127.0.0.1", 1337, data)
 
-        def got_action(action):
-            self.assertEquals(action, "action=DUNNO")
-
-        d.addCallback(got_action)
+        d.addCallback(self._assert_dunno_action)
 
         return d
 
@@ -116,10 +116,7 @@ class BleyTestCase(unittest.TestCase):
         }
         d = get_action("127.0.0.1", 1337, data)
 
-        def got_action(action):
-            self.assertEquals(action, "action=DEFER_IF_PERMIT")
-
-        d.addCallback(got_action)
+        d.addCallback(self._assert_defer_action)
 
         return d
 
@@ -141,10 +138,7 @@ class BleyTestCase(unittest.TestCase):
         }
         d = get_action("127.0.0.1", 1337, data)
 
-        def got_action(action):
-            self.assertEquals(action, "action=DEFER_IF_PERMIT")
-
-        d.addCallback(got_action)
+        d.addCallback(self._assert_defer_action)
 
         return d
 
@@ -166,10 +160,7 @@ class BleyTestCase(unittest.TestCase):
         }
         d = get_action("127.0.0.1", 1337, data)
 
-        def got_action(action):
-            self.assertEquals(action, "action=DEFER_IF_PERMIT")
-
-        d.addCallback(got_action)
+        d.addCallback(self._assert_defer_action)
 
         return d
 
@@ -191,10 +182,7 @@ class BleyTestCase(unittest.TestCase):
         }
         d = get_action("127.0.0.1", 1337, data)
 
-        def got_action(action):
-            self.assertEquals(action, "action=DEFER_IF_PERMIT")
-
-        d.addCallback(got_action)
+        d.addCallback(self._assert_defer_action)
 
         return d
 
@@ -216,10 +204,7 @@ class BleyTestCase(unittest.TestCase):
         }
         d = get_action("127.0.0.1", 1337, data)
 
-        def got_action(action):
-            self.assertEquals(action, "action=DUNNO")
-
-        d.addCallback(got_action)
+        d.addCallback(self._assert_dunno_action)
 
         return d
 
