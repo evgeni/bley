@@ -50,5 +50,8 @@ use_spf_guess = 0
 # Use Exim workaround (close the socket after an action has been sent)?
 exim_workaround = 0
 
+# How long should the cache entries be valid (in minutes)?
+cache_valid = 60
+
 [bleygraph]
 destdir = stats
