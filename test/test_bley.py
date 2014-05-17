@@ -240,6 +240,7 @@ def get_action(host, port, data):
     reactor.connectTCP(host, port, factory)
     return factory.deferred
 
+
 def get_wait_action(wait, host, port, data):
     d = task.deferLater(reactor, wait, get_action, host, port, data)
     return d
