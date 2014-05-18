@@ -120,11 +120,7 @@ class BleyTestCase(unittest.TestCase):
 
         d.addCallback(self._assert_defer_action)
 
-        d2 = get_wait_action(5, "127.0.0.1", 1337, data)
-
-        d2.addCallback(self._assert_dunno_action)
-
-        return DeferredList([d, d2])
+        return d
 
     def test_ip_help_and_dyn_host_v4(self):
         ip = self._get_next_ipv4()
@@ -146,11 +142,7 @@ class BleyTestCase(unittest.TestCase):
 
         d.addCallback(self._assert_defer_action)
 
-        d2 = get_wait_action(5, "127.0.0.1", 1337, data)
-
-        d2.addCallback(self._assert_dunno_action)
-
-        return DeferredList([d, d2])
+        return d
 
     def test_same_sender_recipient_and_dyn_host_v4(self):
         ip = self._get_next_ipv4()
@@ -172,11 +164,7 @@ class BleyTestCase(unittest.TestCase):
 
         d.addCallback(self._assert_defer_action)
 
-        d2 = get_wait_action(5, "127.0.0.1", 1337, data)
-
-        d2.addCallback(self._assert_dunno_action)
-
-        return DeferredList([d, d2])
+        return d
 
     def test_same_sender_recipient_and_ip_helo_v4(self):
         ip = self._get_next_ipv4()
@@ -186,7 +174,8 @@ class BleyTestCase(unittest.TestCase):
         ip = self._get_next_ipv6()
         return self._test_same_sender_recipient_and_ip_helo(ip)
 
-    def _test_bad_helo(self, ip):
+    def test_greylisting(self):
+        ip = self._get_next_ipv4()
         data = {
             'sender': 'root@example.com',
             'recipient': 'user@example.com',
@@ -200,9 +189,27 @@ class BleyTestCase(unittest.TestCase):
 
         d2 = get_wait_action(5, "127.0.0.1", 1337, data)
 
-        d2.addCallback(self._assert_dunno_action)
+        d2.addCallback(self._assert_defer_action)
 
-        return DeferredList([d, d2])
+        d3 = get_wait_action(65, "127.0.0.1", 1337, data)
+
+        d3.addCallback(self._assert_dunno_action)
+
+        return DeferredList([d, d2, d3])
+
+    def _test_bad_helo(self, ip):
+        data = {
+            'sender': 'root@example.com',
+            'recipient': 'user@example.com',
+            'client_address': ip,
+            'client_name': 'localhost',
+            'helo_name': 'invalid.local',
+        }
+        d = get_action("127.0.0.1", 1337, data)
+
+        d.addCallback(self._assert_defer_action)
+
+        return d
 
     def test_bad_helo_v4(self):
         ip = self._get_next_ipv4()
