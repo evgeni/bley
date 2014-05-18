@@ -187,11 +187,11 @@ class BleyTestCase(unittest.TestCase):
 
         d.addCallback(self._assert_defer_action)
 
-        d2 = get_wait_action(5, "127.0.0.1", 1337, data)
+        d2 = task.deferLater(reactor, 5, get_action, "127.0.0.1", 1337, data)
 
         d2.addCallback(self._assert_defer_action)
 
-        d3 = get_wait_action(65, "127.0.0.1", 1337, data)
+        d3 = task.deferLater(reactor, 65, get_action, "127.0.0.1", 1337, data)
 
         d3.addCallback(self._assert_dunno_action)
 
@@ -246,8 +246,3 @@ def get_action(host, port, data):
     factory = PostfixPolicyClientFactory(data)
     reactor.connectTCP(host, port, factory)
     return factory.deferred
-
-
-def get_wait_action(wait, host, port, data):
-    d = task.deferLater(reactor, wait, get_action, host, port, data)
-    return d
