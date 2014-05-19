@@ -1,3 +1,7 @@
+TRIAL_VERSION := $(shell trial --version |sed "s/[^0-9]//g")
+#TRIAL_FLAGS ?= $(shell test $(TRIAL_VERSION) -ge 1230 && echo "-j2")
+TRIAL ?= trial
+
 sdist:
 	python setup.py sdist
 
@@ -6,7 +10,7 @@ test: 	test-sqlite	# test-psql test-mysql test-sqlite
 	make test-clean
 
 test-sqlite: test-setup-sqlite
-	trial test
+	$(TRIAL) $(TRIAL_FLAGS) test
 	[ ! -f ./test/bley_test.pid ] || kill $$(cat ./test/bley_test.pid)
 	./bleygraph -c ./test/bley_sqlite.conf -d ./test/bleygraphout
 	make test-clean
@@ -19,7 +23,7 @@ test-psql:
 	pg_virtualenv make test-psql-real
 
 test-psql-real: test-setup-psql
-	trial test
+	$(TRIAL) $(TRIAL_FLAGS) test
 	[ ! -f ./test/bley_test.pid ] || kill $$(cat ./test/bley_test.pid)
 	./bleygraph -c ./test/bley_psql.conf -d ./test/bleygraphout
 	make test-clean
@@ -33,7 +37,7 @@ test-mysql:
 	my_virtualenv make test-mysql-real
 
 test-mysql-real: test-setup-mysql
-	trial test
+	$(TRIAL) $(TRIAL_FLAGS) test
 	[ ! -f ./test/bley_test.pid ] || kill $$(cat ./test/bley_test.pid)
 	./bleygraph -c ./test/bley_mysql.conf -d ./test/bleygraphout
 	make test-clean

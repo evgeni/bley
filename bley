@@ -227,6 +227,7 @@ def bley_start():
         'dbuser': None,
         'dbpass': None,
         'dbport': '0',
+        'cache_valid': '60',
     }
     config = SafeConfigParser(defaults)
     config.read(settings.conffile)
@@ -235,6 +236,7 @@ def bley_start():
     settings.listen_port = config.getint('bley', 'listen_port')
     settings.pid_file    = settings.pid_file or config.get('bley', 'pid_file')
     settings.log_file    = config.get('bley', 'log_file')
+    settings.cache_valid = config.getint('bley', 'cache_valid')
     settings.dbtype      = config.get('bley', 'dbtype')
     if settings.dbtype == 'pgsql':
         database = 'psycopg2'

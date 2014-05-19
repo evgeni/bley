@@ -1,7 +1,9 @@
 from postfix import PostfixPolicy, PostfixPolicyFactory
 from twisted.trial import unittest
 from twisted.internet.protocol import ClientFactory
-from twisted.internet.defer import Deferred
+from twisted.internet.defer import Deferred, DeferredList
+from twisted.internet import task
+from twisted.internet import reactor
 import ipaddr
 
 
@@ -67,6 +69,12 @@ class BleyTestCase(unittest.TestCase):
             self.ipv6generator = self.ipv6net.iterhosts()
             return self.ipv6generator.next()
 
+    def _assert_dunno_action(self, action):
+        self.assertEquals(action, "action=DUNNO")
+
+    def _assert_defer_action(self, action):
+        self.assertEquals(action, "action=DEFER_IF_PERMIT")
+
     def test_incomplete_request(self):
         data = {
             'sender': 'root@example.com',
@@ -74,10 +82,7 @@ class BleyTestCase(unittest.TestCase):
         }
         d = get_action("127.0.0.1", 1337, data)
 
-        def got_action(action):
-            self.assertEquals(action, "action=DUNNO")
-
-        d.addCallback(got_action)
+        d.addCallback(self._assert_dunno_action)
 
         return d
 
@@ -91,10 +96,7 @@ class BleyTestCase(unittest.TestCase):
         }
         d = get_action("127.0.0.1", 1337, data)
 
-        def got_action(action):
-            self.assertEquals(action, "action=DUNNO")
-
-        d.addCallback(got_action)
+        d.addCallback(self._assert_dunno_action)
 
         return d
 
@@ -116,10 +118,7 @@ class BleyTestCase(unittest.TestCase):
         }
         d = get_action("127.0.0.1", 1337, data)
 
-        def got_action(action):
-            self.assertEquals(action, "action=DEFER_IF_PERMIT")
-
-        d.addCallback(got_action)
+        d.addCallback(self._assert_defer_action)
 
         return d
 
@@ -141,10 +140,7 @@ class BleyTestCase(unittest.TestCase):
         }
         d = get_action("127.0.0.1", 1337, data)
 
-        def got_action(action):
-            self.assertEquals(action, "action=DEFER_IF_PERMIT")
-
-        d.addCallback(got_action)
+        d.addCallback(self._assert_defer_action)
 
         return d
 
@@ -166,10 +162,7 @@ class BleyTestCase(unittest.TestCase):
         }
         d = get_action("127.0.0.1", 1337, data)
 
-        def got_action(action):
-            self.assertEquals(action, "action=DEFER_IF_PERMIT")
-
-        d.addCallback(got_action)
+        d.addCallback(self._assert_defer_action)
 
         return d
 
@@ -181,6 +174,29 @@ class BleyTestCase(unittest.TestCase):
         ip = self._get_next_ipv6()
         return self._test_same_sender_recipient_and_ip_helo(ip)
 
+    def test_greylisting(self):
+        ip = self._get_next_ipv4()
+        data = {
+            'sender': 'root@example.com',
+            'recipient': 'user@example.com',
+            'client_address': ip,
+            'client_name': 'localhost',
+            'helo_name': 'invalid.local',
+        }
+        d = get_action("127.0.0.1", 1337, data)
+
+        d.addCallback(self._assert_defer_action)
+
+        d2 = task.deferLater(reactor, 5, get_action, "127.0.0.1", 1337, data)
+
+        d2.addCallback(self._assert_defer_action)
+
+        d3 = task.deferLater(reactor, 65, get_action, "127.0.0.1", 1337, data)
+
+        d3.addCallback(self._assert_dunno_action)
+
+        return DeferredList([d, d2, d3])
+
     def _test_bad_helo(self, ip):
         data = {
             'sender': 'root@example.com',
@@ -191,10 +207,7 @@ class BleyTestCase(unittest.TestCase):
         }
         d = get_action("127.0.0.1", 1337, data)
 
-        def got_action(action):
-            self.assertEquals(action, "action=DEFER_IF_PERMIT")
-
-        d.addCallback(got_action)
+        d.addCallback(self._assert_defer_action)
 
         return d
 
@@ -216,10 +229,7 @@ class BleyTestCase(unittest.TestCase):
         }
         d = get_action("127.0.0.1", 1337, data)
 
-        def got_action(action):
-            self.assertEquals(action, "action=DUNNO")
-
-        d.addCallback(got_action)
+        d.addCallback(self._assert_dunno_action)
 
         return d
 
@@ -233,7 +243,6 @@ class BleyTestCase(unittest.TestCase):
 
 
 def get_action(host, port, data):
-    from twisted.internet import reactor
     factory = PostfixPolicyClientFactory(data)
     reactor.connectTCP(host, port, factory)
     return factory.deferred
