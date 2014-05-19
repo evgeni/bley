@@ -5,7 +5,7 @@ TRIAL ?= trial
 sdist:
 	python setup.py sdist
 
-test: 	test-sqlite	# test-psql test-mysql test-sqlite
+test: test-psql test-mysql test-sqlite
 	pep8 --ignore=E501,E221,E226,E225 ./bley .
 	make test-clean
 
