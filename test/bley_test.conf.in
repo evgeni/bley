@@ -19,6 +19,8 @@ dbuser = DBUSER
 dbpass = DBPASS
 dbname = DBNAME
 
+whitelist_recipients_file = ./test/whitelist_recipients
+whitelist_clients_file = ./test/whitelist_clients
 # Which DNSBLs and DNSWLs to use?
 dnsbls = 
 dnswls = 

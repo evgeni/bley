@@ -27,7 +27,7 @@ setup(
         'publicsuffix.org support': ['publicsuffix'],
     },
     data_files=[
-        ('/etc/bley', ['bley.conf', 'bley.conf.example']),
+        ('/etc/bley', ['bley.conf', 'bley.conf.example', 'whitelist_recipients']),
         ('/usr/share/man/man1', ['bley.1']),
         ('/etc/logcheck/ignore.d.server/', ['bley.logcheck']),
         ('/var/lib/bley', []),

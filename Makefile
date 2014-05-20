@@ -11,7 +11,7 @@ test: test-psql test-mysql test-sqlite
 
 test-sqlite: test-setup-sqlite
 	$(TRIAL) $(TRIAL_FLAGS) test
-	[ ! -f ./test/bley_test.pid ] || kill $$(cat ./test/bley_test.pid)
+	-[ ! -f ./test/bley_test.pid ] || kill $$(cat ./test/bley_test.pid)
 	./bleygraph -c ./test/bley_sqlite.conf -d ./test/bleygraphout
 	make test-clean
 
@@ -24,7 +24,7 @@ test-psql:
 
 test-psql-real: test-setup-psql
 	$(TRIAL) $(TRIAL_FLAGS) test
-	[ ! -f ./test/bley_test.pid ] || kill $$(cat ./test/bley_test.pid)
+	-[ ! -f ./test/bley_test.pid ] || kill $$(cat ./test/bley_test.pid)
 	./bleygraph -c ./test/bley_psql.conf -d ./test/bleygraphout
 	make test-clean
 
@@ -38,7 +38,7 @@ test-mysql:
 
 test-mysql-real: test-setup-mysql
 	$(TRIAL) $(TRIAL_FLAGS) test
-	[ ! -f ./test/bley_test.pid ] || kill $$(cat ./test/bley_test.pid)
+	-[ ! -f ./test/bley_test.pid ] || kill $$(cat ./test/bley_test.pid)
 	./bleygraph -c ./test/bley_mysql.conf -d ./test/bleygraphout
 	make test-clean
 
@@ -48,7 +48,7 @@ test-setup-mysql: test-clean
 	./bley -c ./test/bley_mysql.conf -p ./test/bley_test.pid
 
 test-clean:
-	[ ! -f ./test/bley_test.pid ] || kill $$(cat ./test/bley_test.pid)
+	-[ ! -f ./test/bley_test.pid ] || kill $$(cat ./test/bley_test.pid)
 	rm -f ./test/bley_sqlite.db ./test/bley_sqlite.conf ./test/bley_psql.conf ./test/bley_mysql.conf
 	rm -rf ./test/bleygraphout/
 

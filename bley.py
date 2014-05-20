@@ -37,6 +37,8 @@ from postfix import PostfixPolicy
 
 from time import sleep
 
+from netaddr import IPNetwork, IPAddress, AddrFormatError
+
 logger = logging.getLogger('bley')
 
 
@@ -77,7 +79,7 @@ class BleyPolicy(PostfixPolicy):
             except:
                 self.safe_reconnect()
 
-        check_results = {'DNSWL': 0, 'DNSBL': 0, 'HELO': 0, 'DYN': 0, 'DB': -1, 'SPF': 0, 'S_EQ_R': 0, 'POSTMASTER': 0, 'CACHE': 0}
+        check_results = {'DNSWL': 0, 'DNSBL': 0, 'HELO': 0, 'DYN': 0, 'DB': -1, 'SPF': 0, 'S_EQ_R': 0, 'WHITELISTED': 0, 'CACHE': 0}
         action = 'DUNNO'
         self.params['now'] = datetime.datetime.now()
         postfix_params = self.params
@@ -123,9 +125,15 @@ class BleyPolicy(PostfixPolicy):
         #  0 : regular host, not in black, not in white, let it go
         #  1 : regular host, but in white, let it go, dont check EHLO
         #  2 : regular host, but in black, lets grey for now
-        if postfix_params['recipient'].lower().startswith('postmaster'):
+        if self.check_whitelist(postfix_params['recipient'].lower(), self.factory.settings.whitelist_recipients):
             action = 'DUNNO'
-            check_results['POSTMASTER'] = 1
+            check_results['WHITELISTED'] = 1
+        elif self.check_whitelist(postfix_params['client_name'].lower(), self.factory.settings.whitelist_clients):
+            action = 'DUNNO'
+            check_results['WHITELISTED'] = 1
+        elif self.check_whitelist_ip(postfix_params['client_address'].lower(), self.factory.settings.whitelist_clients_ip):
+            action = 'DUNNO'
+            check_results['WHITELISTED'] = 1
         elif status == -1:  # not found in local db...
             check_results['DNSWL'] = yield self.check_dnswls(postfix_params['client_address'], self.factory.settings.dnswl_threshold)
             if check_results['DNSWL'] >= self.factory.settings.dnswl_threshold:
@@ -182,6 +190,68 @@ class BleyPolicy(PostfixPolicy):
             logger.info('decided action=%s, from=%s, to=%s' % (action, postfix_params['sender'], postfix_params['recipient']))
         self.factory.log_action(postfix_params, action, check_results)
         self.send_action(action)
+
+    def check_whitelist(self, email, whitelist):
+        '''Check the arg email against a whitelist
+        The whitelist consists of strings or compiled regular expressions
+        from the whitelist file
+        Return 1 if any of
+            email matches the entire entry
+            email matches the regular expression
+            email domain (or subdomain) matches the entry (which is a domain name)
+            emmail user@ part matches an entry of the form user@
+        '''
+        for allowdomain in whitelist:
+            if isinstance(allowdomain, type(re.compile(''))):
+                if allowdomain.search(email) is not None:
+                    logger.info('whitlisted %s due to rule %s' % (email, allowdomain.pattern))
+                    return 1
+                else:
+                    # It's a regex, but it doesn't match - next whitelist item please
+                    continue
+            # whitelist item is a string
+            if allowdomain.endswith('@'):
+                # user@ (any domain) match
+                emailuser = email.split('@', 2)[0]
+                if emailuser == allowdomain[:-1]:
+                    logger.info('whitlisted %s due to rule %s' % (email, allowdomain))
+                    return 1
+                else:
+                    continue
+            if len(email) > len(allowdomain):
+                allowdomain_length = len(allowdomain)+1
+                if ('.' + allowdomain) == email[-allowdomain_length:]:
+                    # subdomain match
+                    logger.info('whitlisted %s due to rule %s' % (email, allowdomain))
+                    return 1
+                elif ('@' + allowdomain) == email[-allowdomain_length:]:
+                    # @domain match
+                    logger.info('whitlisted %s due to rule %s' % (email, allowdomain))
+                    return 1
+            if allowdomain == email:
+                # Whole email match (for whitelist_recipients)
+                # Or domain match (for whitelist_clients)
+                logger.info('whitlisted %s due to rule %s' % (email, allowdomain))
+                return 1
+        return 0
+
+    def check_whitelist_ip(self, ipstr, whitelist_ip):
+        '''Check the arg ipstr against a whitelist
+        The whitelist consists of ip objects generated from the whitelist file
+        Return 1 if
+            ipstr is a valie ip address
+            -- AND --
+            ipstr matches one of the entries in the whitelist_ip list
+        '''
+        try:
+            ip = IPNetwork(ipstr)
+        except (AddrFormatError, ValueError):
+            return 0
+        for net in whitelist_ip:
+            if ip in net:
+                logger.debug('whitlisted %s because it is in subnet %s' % (str(ip), str(net)))
+                return 1
+        return 0
 
     def check_local_db(self, postfix_params):
         '''Check the sender for being in the local database.
@@ -330,7 +400,7 @@ class BleyPolicyFactory(Factory):
                 check_spf, check_s_eq_r, check_postmaster, check_cache)
                 VALUES(%(time)s, %(ip)s, %(from)s, %(to)s, %(action)s,
                 %(DNSWL)s, %(DNSBL)s, %(HELO)s, %(DYN)s, %(DB)s,
-                %(SPF)s, %(S_EQ_R)s, %(POSTMASTER)s, %(CACHE)s)'''
+                %(SPF)s, %(S_EQ_R)s, %(WHITELISTED)s, %(CACHE)s)'''
 
         if self.settings.dbtype == 'sqlite3':
             query = adapt_query_for_sqlite3(query)

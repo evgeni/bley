@@ -19,6 +19,10 @@ dbpass = bley
 dbname = bley.db
 #dbport = 5432
 
+# Static whitelist files
+whitelist_recipients_file = /etc/bley/whitelist_recipients
+whitelist_clients_file = /etc/bley/whitelist_clients
+
 # Which DNSBLs and DNSWLs to use?
 dnsbls = ix.dnsbl.manitu.net, dnsbl.ahbl.org, dnsbl.sorbs.net
 dnswls = list.dnswl.org

@@ -35,6 +35,9 @@ import logging
 from optparse import OptionParser
 from ConfigParser import SafeConfigParser
 
+from netaddr import IPNetwork, IPAddress, AddrFormatError
+import re
+
 import twisted
 
 # Find the best reactor
@@ -309,6 +312,19 @@ def bley_start():
         formatter = logging.Formatter('%(asctime)s %(name)s: %(message)s')
         lh.setFormatter(formatter)
         logger.addHandler(lh)
+
+    if config.has_option('bley', 'whitelist_recipients_file'):
+        settings.whitelist_recipients_file = config.get('bley', 'whitelist_recipients_file')
+        settings.whitelist_recipients = read_whitelist(settings.whitelist_recipients_file)[0]
+    else:
+        settings.whitelist_recipients = []
+    if config.has_option('bley', 'whitelist_clients_file'):
+        settings.whitelist_clients_file    = config.get('bley', 'whitelist_clients_file')
+        (settings.whitelist_clients, settings.whitelist_clients_ip) = read_whitelist(settings.whitelist_clients_file)
+    else:
+        settings.whitelist_clients = []
+        settings.whitelist_clients_ip = []
+
     logger.info("Starting up")
 
     db = settings.database.connect(**settings.dbsettings)
@@ -386,5 +402,37 @@ def clean_db(settings):
     dbc.close()
     db.close()
     reactor.callLater(30*60, clean_db, settings)
+
+
+def read_whitelist(whitelist_filename):
+    global logger
+    try:
+        whitelist_fh = open(whitelist_filename, 'r')
+    except:
+        logger.warning('Could not open file: %s' % (whitelist_filename))
+        return ((), ())
+    whitelist = list()
+    whitelist_ip = list()
+    while 1:
+        line = whitelist_fh.readline()
+        if not line:
+            break
+        line = line.split('#', 1)[0]
+        line = line.split(';', 1)[0]
+        line = line.strip()
+        if line == "":
+            continue
+        if line.startswith('/') and line.endswith('/'):
+            # line is regex
+            whitelist.append(re.compile(line[1:-1]))
+            continue
+        try:
+            line_ipaddr = IPNetwork(line)
+            # line is IP address
+            whitelist_ip.append(line_ipaddr)
+        except (AddrFormatError, ValueError):
+            # Ordinary string (domain name or username)
+            whitelist.append(line)
+    return (whitelist, whitelist_ip)
 
 bley_start()

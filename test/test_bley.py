@@ -241,6 +241,160 @@ class BleyTestCase(unittest.TestCase):
         ip = self._get_next_ipv6()
         return self._test_postmaster(ip)
 
+    def _test_whitelist_recipient_domain(self, ip):
+        data = {
+            'sender': 'someone@a1.example.com',
+            'recipient': 'user@dontgreylist.com',
+            'client_address': ip,
+            'client_name': 'localhost',
+            'helo_name': 'invalid.local',
+        }
+        d = get_action("127.0.0.1", 1337, data)
+
+        d.addCallback(self._assert_dunno_action)
+
+        return d
+
+    def test_whitelist_recipient_domain_v4(self):
+        ip = self._get_next_ipv4()
+        return self._test_whitelist_recipient_domain(ip)
+
+    def test_whitelist_recipient_domain_v6(self):
+        ip = self._get_next_ipv6()
+        return self._test_whitelist_recipient_domain(ip)
+
+    def _test_whitelist_recipient_subdomain(self, ip):
+        data = {
+            'sender': 'someone@a2.example.com',
+            'recipient': 'user@sub.dontgreylist.com',
+            'client_address': ip,
+            'client_name': 'localhost',
+            'helo_name': 'invalid.local',
+        }
+        d = get_action("127.0.0.1", 1337, data)
+
+        d.addCallback(self._assert_dunno_action)
+
+        return d
+
+    def test_whitelist_recipient_subdomain_v4(self):
+        ip = self._get_next_ipv4()
+        return self._test_whitelist_recipient_subdomain(ip)
+
+    def test_whitelist_recipient_subdomain_v6(self):
+        ip = self._get_next_ipv6()
+        return self._test_whitelist_recipient_subdomain(ip)
+
+    def _test_whitelist_recipient_negative_test(self, ip):
+        data = {
+            'sender': 'someone@a2.example.com',
+            'recipient': 'user@xdontgreylist.com',
+            'client_address': ip,
+            'client_name': 'localhost',
+            'helo_name': 'invalid.local',
+        }
+        d = get_action("127.0.0.1", 1337, data)
+
+        d.addCallback(self._assert_defer_action)
+
+        return d
+
+    def test_whitelist_recipient_negative_test_v4(self):
+        ip = self._get_next_ipv4()
+        return self._test_whitelist_recipient_negative_test(ip)
+
+    def test_whitelist_recipient_negative_test_v6(self):
+        ip = self._get_next_ipv6()
+        return self._test_whitelist_recipient_negative_test(ip)
+
+    def _test_whitelist_recipient_regex(self, ip):
+        data = {
+            'sender': 'someone@a2.example.com',
+            'recipient': 'user@application.fast',
+            'client_address': ip,
+            'client_name': 'localhost',
+            'helo_name': 'invalid.local',
+        }
+        d = get_action("127.0.0.1", 1337, data)
+
+        d.addCallback(self._assert_dunno_action)
+
+        return d
+
+    def test_whitelist_recipient_regex_v4(self):
+        ip = self._get_next_ipv4()
+        return self._test_whitelist_recipient_regex(ip)
+
+    def test_whitelist_recipient_regex_v6(self):
+        ip = self._get_next_ipv6()
+        return self._test_whitelist_recipient_regex(ip)
+
+    def _test_whitelist_clients_domain(self, ip):
+        data = {
+            'sender': 'someone@wcd.example.com',
+            'recipient': 'user@example.com',
+            'client_address': ip,
+            'client_name': 'mail.wlclient.net',
+            'helo_name': 'invalid.external',
+        }
+        d = get_action("127.0.0.1", 1337, data)
+
+        d.addCallback(self._assert_dunno_action)
+
+        return d
+
+    def test_whitelist_clients_domain_v4(self):
+        ip = self._get_next_ipv4()
+        return self._test_whitelist_clients_domain(ip)
+
+    def test_whitelist_clients_domain_v6(self):
+        ip = self._get_next_ipv6()
+        return self._test_whitelist_clients_domain(ip)
+
+    def _test_whitelist_clients_regex(self, ip):
+        data = {
+            'sender': 'someone@wcr.example.com',
+            'recipient': 'user@example.com',
+            'client_address': ip,
+            'client_name': 'important.customer.com',
+            'helo_name': 'invalid.local',
+        }
+        d = get_action("127.0.0.1", 1337, data)
+
+        d.addCallback(self._assert_dunno_action)
+
+        return d
+
+    def test_whitelist_clients_regex_v4(self):
+        ip = self._get_next_ipv4()
+        return self._test_whitelist_clients_regex(ip)
+
+    def test_whitelist_clients_regex_v6(self):
+        ip = self._get_next_ipv6()
+        return self._test_whitelist_clients_regex(ip)
+
+    def _test_whitelist_client_ip(self, ip):
+        data = {
+            'sender': 'someone@twci.example.com',
+            'recipient': 'user@example.com',
+            'client_address': ip,
+            'client_name': 'localhost',
+            'helo_name': 'invalid.local',
+        }
+        d = get_action("127.0.0.1", 1337, data)
+
+        d.addCallback(self._assert_dunno_action)
+
+        return d
+
+    def test_whitelist_client_ip_v4(self):
+        ip = '11.22.33.44'
+        return self._test_whitelist_client_ip(ip)
+
+    def test_whitelist_client_ip_v6(self):
+        ip = '5566::7788'
+        return self._test_whitelist_client_ip(ip)
+
 
 def get_action(host, port, data):
     factory = PostfixPolicyClientFactory(data)
