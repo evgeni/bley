@@ -174,11 +174,11 @@ class BleyTestCase(unittest.TestCase):
         ip = self._get_next_ipv6()
         return self._test_same_sender_recipient_and_ip_helo(ip)
 
-    def test_greylisting(self):
+    def test_zzz_greylisting(self):
         ip = self._get_next_ipv4()
         data = {
             'sender': 'root@example.com',
-            'recipient': 'user@example.com',
+            'recipient': 'user@gl.example.com',
             'client_address': ip,
             'client_name': 'localhost',
             'helo_name': 'invalid.local',
