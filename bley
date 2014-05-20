@@ -35,7 +35,8 @@ import logging
 from optparse import OptionParser
 from ConfigParser import SafeConfigParser
 
-from netaddr import IPNetwork, IPAddress, AddrFormatError
+#from netaddr import IPNetwork, IPAddress, AddrFormatError
+import ipaddr
 import re
 
 import twisted
@@ -427,10 +428,12 @@ def read_whitelist(whitelist_filename):
             whitelist.append(re.compile(line[1:-1]))
             continue
         try:
-            line_ipaddr = IPNetwork(line)
+            #line_ipaddr = IPNetwork(line)
+            line_ipaddr = ipaddr.IPNetwork(line)
             # line is IP address
             whitelist_ip.append(line_ipaddr)
-        except (AddrFormatError, ValueError):
+        #except (AddrFormatError, ValueError):
+        except (ValueError):
             # Ordinary string (domain name or username)
             whitelist.append(line)
     return (whitelist, whitelist_ip)

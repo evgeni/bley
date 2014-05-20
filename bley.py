@@ -37,7 +37,8 @@ from postfix import PostfixPolicy
 
 from time import sleep
 
-from netaddr import IPNetwork, IPAddress, AddrFormatError
+#from netaddr import IPNetwork, IPAddress, AddrFormatError
+import ipaddr
 
 logger = logging.getLogger('bley')
 
@@ -244,8 +245,10 @@ class BleyPolicy(PostfixPolicy):
             ipstr matches one of the entries in the whitelist_ip list
         '''
         try:
-            ip = IPNetwork(ipstr)
-        except (AddrFormatError, ValueError):
+            #ip = IPNetwork(ipstr)
+            ip = ipaddr.IPAddress(ipstr)
+        #except (AddrFormatError, ValueError):
+        except (ValueError):
             return 0
         for net in whitelist_ip:
             if ip in net:
