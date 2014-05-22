@@ -3,6 +3,6 @@
 postmaster@
 abuse@
 
-dontgreylist.com
+dontgreylist.test
 
-/app.*fast/
+/app.*test/

@@ -243,8 +243,8 @@ class BleyTestCase(unittest.TestCase):
 
     def _test_whitelist_recipient_domain(self, ip):
         data = {
-            'sender': 'someone@a1.example.com',
-            'recipient': 'user@dontgreylist.com',
+            'sender': 'someone@example.com',
+            'recipient': 'user@dontgreylist.test',
             'client_address': ip,
             'client_name': 'localhost',
             'helo_name': 'invalid.local',
@@ -265,8 +265,8 @@ class BleyTestCase(unittest.TestCase):
 
     def _test_whitelist_recipient_subdomain(self, ip):
         data = {
-            'sender': 'someone@a2.example.com',
-            'recipient': 'user@sub.dontgreylist.com',
+            'sender': 'someone@example.com',
+            'recipient': 'user@subdomain.dontgreylist.test',
             'client_address': ip,
             'client_name': 'localhost',
             'helo_name': 'invalid.local',
@@ -285,10 +285,11 @@ class BleyTestCase(unittest.TestCase):
         ip = self._get_next_ipv6()
         return self._test_whitelist_recipient_subdomain(ip)
 
-    def _test_whitelist_recipient_negative_test(self, ip):
+    # domain name is a substring of whlisted domain - should greylist
+    def _test_whitelist_recipient_negative_test1(self, ip):
         data = {
-            'sender': 'someone@a2.example.com',
-            'recipient': 'user@xdontgreylist.com',
+            'sender': 'someone@example.com',
+            'recipient': 'user@greylist.test',
             'client_address': ip,
             'client_name': 'localhost',
             'helo_name': 'invalid.local',
@@ -299,18 +300,41 @@ class BleyTestCase(unittest.TestCase):
 
         return d
 
-    def test_whitelist_recipient_negative_test_v4(self):
+    def test_whitelist_recipient_negative_test1_v4(self):
         ip = self._get_next_ipv4()
-        return self._test_whitelist_recipient_negative_test(ip)
+        return self._test_whitelist_recipient_negative_test1(ip)
 
-    def test_whitelist_recipient_negative_test_v6(self):
+    def test_whitelist_recipient_negative_test1_v6(self):
         ip = self._get_next_ipv6()
-        return self._test_whitelist_recipient_negative_test(ip)
+        return self._test_whitelist_recipient_negative_test1(ip)
+
+    # domain name contains whlisted domainname, but is not a subdomain - should greylist
+    def _test_whitelist_recipient_negative_test2(self, ip):
+        data = {
+            'sender': 'someone@example.com',
+            'recipient': 'user@xxxxdontgreylist.test',
+            'client_address': ip,
+            'client_name': 'localhost',
+            'helo_name': 'invalid.local',
+        }
+        d = get_action("127.0.0.1", 1337, data)
+
+        d.addCallback(self._assert_defer_action)
+
+        return d
+
+    def test_whitelist_recipient_negative_test2_v4(self):
+        ip = self._get_next_ipv4()
+        return self._test_whitelist_recipient_negative_test2(ip)
+
+    def test_whitelist_recipient_negative_test2_v6(self):
+        ip = self._get_next_ipv6()
+        return self._test_whitelist_recipient_negative_test2(ip)
 
     def _test_whitelist_recipient_regex(self, ip):
         data = {
             'sender': 'someone@a2.example.com',
-            'recipient': 'user@application.fast',
+            'recipient': 'user@application.test',
             'client_address': ip,
             'client_name': 'localhost',
             'helo_name': 'invalid.local',
@@ -334,7 +358,7 @@ class BleyTestCase(unittest.TestCase):
             'sender': 'someone@wcd.example.com',
             'recipient': 'user@example.com',
             'client_address': ip,
-            'client_name': 'mail.wlclient.net',
+            'client_name': 'mail.wlclient.test',
             'helo_name': 'invalid.external',
         }
         d = get_action("127.0.0.1", 1337, data)
@@ -353,10 +377,10 @@ class BleyTestCase(unittest.TestCase):
 
     def _test_whitelist_clients_regex(self, ip):
         data = {
-            'sender': 'someone@wcr.example.com',
+            'sender': 'someone@example.com',
             'recipient': 'user@example.com',
             'client_address': ip,
-            'client_name': 'important.customer.com',
+            'client_name': 'important.customer.test',
             'helo_name': 'invalid.local',
         }
         d = get_action("127.0.0.1", 1337, data)
@@ -375,7 +399,7 @@ class BleyTestCase(unittest.TestCase):
 
     def _test_whitelist_client_ip(self, ip):
         data = {
-            'sender': 'someone@twci.example.com',
+            'sender': 'someone@example.com',
             'recipient': 'user@example.com',
             'client_address': ip,
             'client_name': 'localhost',
@@ -388,11 +412,11 @@ class BleyTestCase(unittest.TestCase):
         return d
 
     def test_whitelist_client_ip_v4(self):
-        ip = '11.22.33.44'
+        ip = '192.0.2.202'
         return self._test_whitelist_client_ip(ip)
 
     def test_whitelist_client_ip_v6(self):
-        ip = '5566::7788'
+        ip = '2001:DB8::123:456'
         return self._test_whitelist_client_ip(ip)
 
 

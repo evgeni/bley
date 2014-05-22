@@ -54,5 +54,3 @@ test-clean:
 
 .PHONY: sdist test
 
-install:
-	python setup.py install --force --root=$(DESTDIR) --no-compile -O0 --install-layout=deb

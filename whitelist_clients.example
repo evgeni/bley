@@ -1,0 +1,12 @@
+# Static list of recipients that do NOT want greylisting
+# Entries are compatible with postgrey, ie
+# 192.0.2.0/24
+# example.com
+# /regexp/
+# NB example.com includes all subdomains of example.com, too
+# regexp is applied to the client name, not the IP address
+# client = remote mailserver, not sender's email address
+
+# 10.0.0.0/8
+# 172.16.0.0/12
+# 192.168.0.0/16

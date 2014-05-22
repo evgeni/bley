@@ -35,7 +35,6 @@ import logging
 from optparse import OptionParser
 from ConfigParser import SafeConfigParser
 
-#from netaddr import IPNetwork, IPAddress, AddrFormatError
 import ipaddr
 import re
 
@@ -411,13 +410,10 @@ def read_whitelist(whitelist_filename):
         whitelist_fh = open(whitelist_filename, 'r')
     except:
         logger.warning('Could not open file: %s' % (whitelist_filename))
-        return ((), ())
+        return (['postmaster@'], ())
     whitelist = list()
     whitelist_ip = list()
-    while 1:
-        line = whitelist_fh.readline()
-        if not line:
-            break
+    for line in whitelist_fh:
         line = line.split('#', 1)[0]
         line = line.split(';', 1)[0]
         line = line.strip()
@@ -428,11 +424,9 @@ def read_whitelist(whitelist_filename):
             whitelist.append(re.compile(line[1:-1]))
             continue
         try:
-            #line_ipaddr = IPNetwork(line)
             line_ipaddr = ipaddr.IPNetwork(line)
             # line is IP address
             whitelist_ip.append(line_ipaddr)
-        #except (AddrFormatError, ValueError):
         except (ValueError):
             # Ordinary string (domain name or username)
             whitelist.append(line)

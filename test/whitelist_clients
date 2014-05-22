@@ -1,10 +1,9 @@
 
 
-wlclient.net
+wlclient.test
 
 /import.*mer/
 
-11.22.33.40/29
-5566:0::0:7788
+192.0.2.200/30
+2001:DB8::123:0/112
 
-mail.wlclient.net

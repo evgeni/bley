@@ -37,10 +37,10 @@ from postfix import PostfixPolicy
 
 from time import sleep
 
-#from netaddr import IPNetwork, IPAddress, AddrFormatError
 import ipaddr
 
 logger = logging.getLogger('bley')
+regexp_type = type(re.compile(''))
 
 
 class BleyPolicy(PostfixPolicy):
@@ -202,37 +202,36 @@ class BleyPolicy(PostfixPolicy):
             email domain (or subdomain) matches the entry (which is a domain name)
             emmail user@ part matches an entry of the form user@
         '''
-        for allowdomain in whitelist:
-            if isinstance(allowdomain, type(re.compile(''))):
-                if allowdomain.search(email) is not None:
-                    logger.info('whitlisted %s due to rule %s' % (email, allowdomain.pattern))
+        for entry_wl in whitelist:
+            if isinstance(entry_wl, regexp_type):
+                if entry_wl.search(email) is not None:
+                    logger.info('whitelisted %s due to rule %s' % (email, entry_wl.pattern))
                     return 1
                 else:
                     # It's a regex, but it doesn't match - next whitelist item please
                     continue
             # whitelist item is a string
-            if allowdomain.endswith('@'):
+            if entry_wl.endswith('@'):
                 # user@ (any domain) match
-                emailuser = email.split('@', 2)[0]
-                if emailuser == allowdomain[:-1]:
-                    logger.info('whitlisted %s due to rule %s' % (email, allowdomain))
+                if email.startswith(entry_wl):
+                    logger.info('whitelisted %s due to rule %s' % (email, entry_wl))
                     return 1
                 else:
                     continue
-            if len(email) > len(allowdomain):
-                allowdomain_length = len(allowdomain)+1
-                if ('.' + allowdomain) == email[-allowdomain_length:]:
+            if len(email) > len(entry_wl):
+                entry_wl_length = len(entry_wl)+1
+                if ('.' + entry_wl) == email[-entry_wl_length:]:
                     # subdomain match
-                    logger.info('whitlisted %s due to rule %s' % (email, allowdomain))
+                    logger.info('whitelisted %s due to rule %s' % (email, entry_wl))
                     return 1
-                elif ('@' + allowdomain) == email[-allowdomain_length:]:
+                elif ('@' + entry_wl) == email[-entry_wl_length:]:
                     # @domain match
-                    logger.info('whitlisted %s due to rule %s' % (email, allowdomain))
+                    logger.info('whitelisted %s due to rule %s' % (email, entry_wl))
                     return 1
-            if allowdomain == email:
+            if entry_wl == email:
                 # Whole email match (for whitelist_recipients)
                 # Or domain match (for whitelist_clients)
-                logger.info('whitlisted %s due to rule %s' % (email, allowdomain))
+                logger.info('whitelisted %s due to rule %s' % (email, entry_wl))
                 return 1
         return 0
 
@@ -245,14 +244,12 @@ class BleyPolicy(PostfixPolicy):
             ipstr matches one of the entries in the whitelist_ip list
         '''
         try:
-            #ip = IPNetwork(ipstr)
             ip = ipaddr.IPAddress(ipstr)
-        #except (AddrFormatError, ValueError):
         except (ValueError):
             return 0
         for net in whitelist_ip:
             if ip in net:
-                logger.debug('whitlisted %s because it is in subnet %s' % (str(ip), str(net)))
+                logger.info('whitelisted %s because it is in subnet %s' % (str(ip), str(net)))
                 return 1
         return 0
 
