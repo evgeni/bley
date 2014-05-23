@@ -333,7 +333,7 @@ class BleyTestCase(unittest.TestCase):
 
     def _test_whitelist_recipient_regex(self, ip):
         data = {
-            'sender': 'someone@a2.example.com',
+            'sender': 'someone@example.com',
             'recipient': 'user@application.test',
             'client_address': ip,
             'client_name': 'localhost',
@@ -355,7 +355,7 @@ class BleyTestCase(unittest.TestCase):
 
     def _test_whitelist_clients_domain(self, ip):
         data = {
-            'sender': 'someone@wcd.example.com',
+            'sender': 'someone@example.com',
             'recipient': 'user@example.com',
             'client_address': ip,
             'client_name': 'mail.wlclient.test',
