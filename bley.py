@@ -200,7 +200,7 @@ class BleyPolicy(PostfixPolicy):
             email matches the entire entry
             email matches the regular expression
             email domain (or subdomain) matches the entry (which is a domain name)
-            emmail user@ part matches an entry of the form user@
+            email user@ part matches an entry of the form user@
         '''
         for entry_wl in whitelist:
             if isinstance(entry_wl, regexp_type):
