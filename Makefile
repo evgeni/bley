@@ -53,4 +53,3 @@ test-clean:
 	rm -rf ./test/bleygraphout/
 
 .PHONY: sdist test
-
