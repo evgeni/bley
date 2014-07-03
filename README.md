@@ -119,6 +119,32 @@ transmitted.
 
     exim_workaround = 0
 
+Whitelisting
+------------
+
+In some situations, it is useful to be able to whitelist senders or recipients.
+This can be done by providing lists as files (syntax is [postgrey](FIXME) compatible).
+
+    whitelist_recipients_file = ./whitelist_recipients
+    whitelist_clients_file = ./whitelist_clients
+
+### whitelist_recipients_file
+
+This file contains a list of recipients who are excluded from greylisting.
+One entry per line. An entry can be either a full email address, the local part,
+a domain name or a regular expression:
+
+  user@example.com
+  postmaster@
+  example.com
+  /app.*example/
+
+### whitelist_clients_file
+
+This file contains a list of clients who are excluded from greylisting.
+One entry per line. An entry can be either an IP adress, a subnet, a domain name
+or a regular expression.
+
 CHECKS
 ======
 
