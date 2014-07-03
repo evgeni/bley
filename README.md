@@ -134,16 +134,21 @@ This file contains a list of recipients who are excluded from greylisting.
 One entry per line. An entry can be either a full email address, the local part,
 a domain name or a regular expression:
 
-  user@example.com
-  postmaster@
-  example.com
-  /app.*example/
+    user@example.com
+    postmaster@
+    example.com
+    /app.*example/
 
 ### whitelist_clients_file
 
 This file contains a list of clients who are excluded from greylisting.
 One entry per line. An entry can be either an IP adress, a subnet, a domain name
 or a regular expression.
+
+    192.0.2.200/30
+    example.net
+    /sender.*example/
+
 
 CHECKS
 ======
