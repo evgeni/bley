@@ -193,6 +193,17 @@ try to bypass address-checks by using the same address as sender and receiver.
 The Sender Policy Framework allows domain owners to define which servers are
 allowed to send mail using their domain and which are not.
 
+bleygraph
+=========
+`bley` includes a small graphing utility called `bleygraph`.
+It will analyze the `bley_log` table of the database, and plot a few graphs
+using [matplotlib](FIXME).
+
+There is not much configuration possible for `bleygraph`: the database
+settings are taken from the `bley` section of `bley.conf` and the path
+for the graph output (`destdir`) is the only setting in the `bleygraph`
+section of the configuration file.
+
 BUILD STATUS
 ============
 [![Build Status](https://travis-ci.org/evgeni/bley.png?branch=master)](https://travis-ci.org/evgeni/bley)
