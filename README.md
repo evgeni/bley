@@ -123,7 +123,7 @@ Whitelisting
 ------------
 
 In some situations, it is useful to be able to whitelist senders or recipients.
-This can be done by providing lists as files (syntax is [postgrey](FIXME) compatible).
+This can be done by providing lists as files (syntax is [postgrey](http://postgrey.schweikert.ch/) compatible).
 
     whitelist_recipients_file = ./whitelist_recipients
     whitelist_clients_file = ./whitelist_clients
@@ -197,7 +197,7 @@ bleygraph
 =========
 `bley` includes a small graphing utility called `bleygraph`.
 It will analyze the `bley_log` table of the database, and plot a few graphs
-using [matplotlib](FIXME).
+using [matplotlib](http://matplotlib.org/).
 
 There is not much configuration possible for `bleygraph`: the database
 settings are taken from the `bley` section of `bley.conf` and the path
