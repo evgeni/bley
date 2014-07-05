@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!-- Bachelor thesis 
+     NOTE : copied from PhDThesis, so don't wonder if there are
+     strange fields in here.-->
+
+<!-- fill out the unique identifier ID (e.g. 'Mauve2000a') and
+     indicate the file formats that are available
+     e.g. pdf="yes" -->
+<bachelorthesis id="Golov2009a" pdf="yes" postscript="no">
+
+<!-- author of the thesis (REQUIRED) -->
+<author>
+   <firstname>Evgeni</firstname><lastname>Golov</lastname>
+</author>
+
+<!-- title of the thesis (REQUIRED) -->
+<title>Intelligent Greylisting</title>
+
+<supervisor>
+  <firstname>Peter</firstname><lastname>Lieven</lastname>
+</supervisor>
+
+<!-- school, i.e. responsibly institution (REQUIRED) -->
+<school>Heinrich-Heine-Universität Düsseldorf</school>
+
+<!-- date of publication (REQUIRED), e.g.
+     <day>31</day>
+     <month>December</month>
+     <year>2000</year>
+-->
+<!-- <day></day> -->
+<month>November</month>
+<year>2009</year>
+
+<!-- number of pages (OPTIONAL) -->
+<!-- <pages></pages> -->
+
+<!-- abstract (REQUIRED) -->
+<!-- <abstract></abstract> -->
+
+<!-- keyword(s) (REQUIRED) -->
+<!-- <keyword></keyword> -->
+<!-- <keyword></keyword> -->
+
+<!-- keyword(s) according to ACM Computing Classification System (OPTIONAL) -->
+<!-- <acmccs> -->
+   <!-- e.g. <category>I.4.8 Scene Analysis<category><subject>Motion</subject> -->
+<!--    <category></category><subject></subject> -->
+<!-- </acmccs> -->
+
+<!-- comments (OPTIONAL) -->
+<!-- <note></note> -->
+
+</bachelorthesis>
