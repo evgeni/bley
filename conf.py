@@ -671,9 +671,9 @@ COPY_SOURCES = False
 # before </head>
 # (translatable)
 EXTRA_HEAD_DATA = """
-    <link rel="stylesheet" href="assets/css/gh-fork-ribbon.css" />
+    <link rel="stylesheet" href="/assets/css/gh-fork-ribbon.css" />
     <!--[if IE]>
-        <link rel="stylesheet" href="assets/css/gh-fork-ribbon.ie.css" />
+        <link rel="stylesheet" href="/assets/css/gh-fork-ribbon.ie.css" />
     <![endif]-->
 """
 # Google Analytics or whatever else you use. Added to the bottom of <body>
