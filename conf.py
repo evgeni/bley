@@ -95,7 +95,7 @@ NAVIGATION_LINKS = {
     DEFAULT_LANG: (
         ('/index.html', 'Home', 'icon-home'),
         ("/download.html", "Download", 'icon-download-alt'),
-        ("/docs.html", "Documentation", 'icon-file-text'),
+        ("/docs.html", "Documentation", 'icon-book'),
         ("/license.html", "License", 'icon-legal'),
         ("/imprint.html", "Imprint", 'icon-envelope'),
         ("/archive.html", "Archive", 'icon-folder-open'),
