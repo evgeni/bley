@@ -93,12 +93,13 @@ TRANSLATIONS_PATTERN = "{path}.{lang}.{ext}"
 # (the same way you would do with a (translatable) setting.)
 NAVIGATION_LINKS = {
     DEFAULT_LANG: (
-        ("/download.html", "Download"),
-        ("/docs.html", "Documentation"),
-        ("/license.html", "License"),
-        ("/imprint.html", "Imprint"),
-        ("/archive.html", "Archive"),
-        ("/rss.xml", "RSS feed"),
+        ('/index.html', 'Home', 'icon-home'),
+        ("/download.html", "Download", 'icon-download-alt'),
+        ("/docs.html", "Documentation", 'icon-file-text'),
+        ("/license.html", "License", 'icon-legal'),
+        ("/imprint.html", "Imprint", 'icon-envelope'),
+        ("/archive.html", "Archive", 'icon-folder-open'),
+        ("/rss.xml", "RSS feed", 'icon-rss'),
     ),
 }
 
@@ -107,7 +108,7 @@ NAVIGATION_LINKS = {
 #          themes must be installed separately. In order to do this,
 #          use: nikola install_bs3
 ##THEME = "bootstrap"
-THEME = "bootstrap3"
+THEME = "zen"
 ##THEME = "bootstrap3-jinja"
 # Below this point, everything is optional
 
@@ -442,7 +443,7 @@ LICENSE = ""
 
 # A small copyright notice for the page footer (in HTML).
 # (translatable)
-CONTENT_FOOTER = '''Contents &copy; {date}         <a href="mailto:{email}">{author}</a> - Powered by         <a href="http://getnikola.com" rel="nofollow">Nikola</a>         {license}<br/>
+CONTENT_FOOTER = '''Contents &copy; {date}         <a href="mailto:{email}">{author}</a> - Powered by         <a href="http://getnikola.com" rel="nofollow">Nikola</a> - Theme is <a href="http://www.damian.oquanta.info/categories/zen.html">Zen</a>        {license}<br/>
  <a href="http://www.ohloh.net/p/bley/"><img src="http://www.ohloh.net/p/bley/widgets/project_thin_badge.gif" alt="ohloh.net stats for bley" /></a>
  <a href="https://flattr.com/thing/47646/bley-intelligent-greylisting" target="_blank"><img src="//api.flattr.com/button/flattr-badge-large.png" alt="Flattr this" title="Flattr this" border="0" /></a>
 
