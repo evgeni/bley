@@ -96,7 +96,7 @@ NAVIGATION_LINKS = {
         ('/index.html', 'Home', 'icon-home'),
         ("/download.html", "Download", 'icon-download-alt'),
         ("/docs.html", "Documentation", 'icon-book'),
-        ("/license.html", "License", 'icon-legal'),
+        ("/license.html", "License", 'icon-dollar'),
         ("/imprint.html", "Imprint", 'icon-envelope'),
         ("/archive.html", "Archive", 'icon-folder-open'),
         ("/rss.xml", "RSS feed", 'icon-rss'),
