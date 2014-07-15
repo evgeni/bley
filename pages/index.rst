@@ -19,3 +19,5 @@ news
 
 .. post-list::
    :start: -10
+
+`news archive </archive.html>`_

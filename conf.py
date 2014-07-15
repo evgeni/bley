@@ -98,7 +98,6 @@ NAVIGATION_LINKS = {
         ("/docs.html", "Documentation", 'icon-book'),
         ("/license.html", "License", 'icon-dollar'),
         ("/imprint.html", "Imprint", 'icon-envelope'),
-        ("/archive.html", "Archive", 'icon-folder-open'),
         ("/rss.xml", "RSS feed", 'icon-rss'),
     ),
 }
