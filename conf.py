@@ -18,7 +18,7 @@ import time
 
 # Data about this site
 BLOG_AUTHOR = "Evgeni Golov"  # (translatable)
-BLOG_TITLE = "bley.mx"  # (translatable)
+BLOG_TITLE = "bley"  # (translatable)
 # This is the main URL for your site. It will be used
 # in a prominent link
 SITE_URL = "http://bley.mx/"
@@ -619,7 +619,7 @@ COPY_SOURCES = False
 # RSS_LINK = None
 
 # Show only teasers in the RSS feed? Default to True
-# RSS_TEASERS = True
+RSS_TEASERS = False
 
 # Strip HTML in the RSS feed? Default to False
 # RSS_PLAIN = False
