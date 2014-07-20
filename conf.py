@@ -445,7 +445,7 @@ LICENSE = ""
 CONTENT_FOOTER = '''Contents &copy; {date}         <a href="mailto:{email}">{author}</a> - Powered by         <a href="http://getnikola.com" rel="nofollow">Nikola</a> - Theme is <a href="http://www.damian.oquanta.info/categories/zen.html">Zen</a>        {license}<br/>
  <a href="http://www.ohloh.net/p/bley/"><img src="http://www.ohloh.net/p/bley/widgets/project_thin_badge.gif" alt="ohloh.net stats for bley" /></a>
  <a href="https://flattr.com/thing/47646/bley-intelligent-greylisting" target="_blank"><img src="//api.flattr.com/button/flattr-badge-large.png" alt="Flattr this" title="Flattr this" border="0" /></a>
-
+ <a href="https://travis-ci.org/evgeni/bley"><img alt="Build Status" src="https://travis-ci.org/evgeni/bley.png?branch=master"></a>
 '''
 
 # Things that will be passed to CONTENT_FOOTER.format().  This is done

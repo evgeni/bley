@@ -212,7 +212,3 @@ There is not much configuration possible for `bleygraph`: the database
 settings are taken from the `bley` section of `bley.conf` and the path
 for the graph output (`destdir`) is the only setting in the `bleygraph`
 section of the configuration file.
-
-BUILD STATUS
-============
-[![Build Status](https://travis-ci.org/evgeni/bley.png?branch=master)](https://travis-ci.org/evgeni/bley)
