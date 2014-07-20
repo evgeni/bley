@@ -14,7 +14,7 @@ setup(
     version="0.2-git",
     description="intelligent greylisting daemon for postfix",
     author="Evgeni Golov",
-    author_email="sargentd@die-welt.net",
+    author_email="evgeni@golov.de",
     url="http://bley.mx",
     license="BSD",
     py_modules=['bley', 'bleyhelpers', 'postfix'],
