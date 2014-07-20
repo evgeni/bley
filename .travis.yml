@@ -1,3 +1,8 @@
+branches:
+  except:
+    - page-source
+    - gh-pages
+
 language: python
 python:
   - "2.6"
