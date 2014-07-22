@@ -23,14 +23,15 @@ case "$1" in
     fi
 
     if ! dpkg-statoverride --list /etc/bley/bley.conf >/dev/null; then
-        chown bley:bley /etc/bley/bley.conf
-        chmod 600 /etc/bley/bley.conf
+        chown root:bley /etc/bley/bley.conf
+        chmod 640 /etc/bley/bley.conf
     fi
 
     . /usr/share/debconf/confmodule
     . /usr/share/dbconfig-common/dpkg/postinst
     dbc_generate_include_args="-o template_infile=/usr/share/bley/bley.conf.template"
-    dbc_generate_include_owner="bley"
+    dbc_generate_include_owner="root:bley"
+    dbc_generate_include_perms=640
     dbc_generate_include=template:/etc/bley/dbconfig-common.conf
     dbc_go bley $@
     # db_stop is needed, or configure will hang forever
