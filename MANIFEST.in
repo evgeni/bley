@@ -3,6 +3,7 @@ include *.conf.example
 include *.1
 include bley.service
 include bley.logcheck
+include CHANGELOG.md
 include README.md
 include Makefile
 include test/*.py
