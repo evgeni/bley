@@ -28,7 +28,7 @@ setup(
     },
     data_files=[
         ('/etc/bley', ['bley.conf.example', 'whitelist_recipients.example', 'whitelist_clients.example']),
-        ('/usr/share/man/man1', ['bley.1']),
+        ('/usr/share/man/man1', ['bley.1', 'bleygraph.1']),
         ('/etc/logcheck/ignore.d.server/', ['bley.logcheck']),
         (systemd_unit_path(), ['bley.service'])
     ]
