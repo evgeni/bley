@@ -60,7 +60,8 @@ try:
     from twisted.scripts import _twistd_unix as twistd
     from twisted.scripts._twistd_unix import UnixApplicationRunner
 except:
-    from twisted.scripts import twistd
+    print "Could not import _twistd_unix. Exiting..."
+    sys.exit(1)
 
 from twisted.application import internet, service
 from bley import BleyPolicyFactory
