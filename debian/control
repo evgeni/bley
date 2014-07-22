@@ -16,6 +16,6 @@ Depends: ${misc:Depends}, ${python:Depends}, python-twisted-core (>= 8.1.0),
 Recommends: postgresql-client | mysql-client, postfix
 XB-Python-Version: ${python:Versions}
 Description: intelligent greylisting daemon for Postfix
- bley uses various test (incl. RBL and SPF) to decide whether a sender
+ bley uses various tests (incl. RBL and SPF) to decide whether a sender
  should be greylisted or not, thus mostly eliminating the usual
  greylisting delay while still filtering most of the spam.
