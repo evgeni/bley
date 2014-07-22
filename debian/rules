@@ -5,8 +5,18 @@
 #export DH_VERBOSE=1
 
 %:
-	dh  $@ --with python2
+	dh  $@ --buildsystem=python_distutils --with python2
+
+override_dh_install:
+	dh_install
+	mv $(CURDIR)/debian/bley/etc/bley/bley.conf.example $(CURDIR)/debian/bley/etc/bley/bley.conf
+	mv $(CURDIR)/debian/bley/etc/bley/whitelist_recipients.example $(CURDIR)/debian/bley/etc/bley/whitelist_recipients
+	mv $(CURDIR)/debian/bley/etc/bley/whitelist_clients.example $(CURDIR)/debian/bley/etc/bley/whitelist_clients
+
 
 override_dh_auto_clean:
 	dh_auto_clean
 	$(RM) -rf bley.egg-info
+
+override_dh_auto_test:
+	# skip for now
