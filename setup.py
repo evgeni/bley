@@ -11,7 +11,7 @@ def systemd_unit_path():
 
 setup(
     name="bley",
-    version="0.2-git",
+    version="2.0.0-beta.1",
     description="intelligent greylisting daemon for postfix",
     author="Evgeni Golov",
     author_email="evgeni@golov.de",
