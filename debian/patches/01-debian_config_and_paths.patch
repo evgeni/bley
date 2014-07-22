@@ -4,19 +4,19 @@ Author: Evgeni Golov <evgeni@debian.org>
 Forwarded: not-needed
 Last-Update: 2010-04-26
 
---- bley-0.1.1.orig/bley
-+++ bley-0.1.1/bley
-@@ -103,7 +103,7 @@ def bley_start():
-     (settings, args) = parser.parse_args()
+--- a/bley
++++ b/bley
+@@ -214,7 +214,7 @@ def bley_start():
  
      if not settings.conffile:
--        settings.conffile = '/etc/bley/bley.conf'
-+        settings.conffile = ['/etc/bley/bley.conf', '/etc/bley/dbconfig-common.conf']
- 
-     defaults = {
-         'listen_addr': '127.0.0.1',
---- bley-0.1.1.orig/bley.conf
-+++ bley-0.1.1/bley.conf
+         if os.path.isfile('/etc/bley/bley.conf'):
+-            settings.conffile = '/etc/bley/bley.conf'
++            settings.conffile = ['/etc/bley/bley.conf', '/etc/bley/dbconfig-common.conf']
+         elif os.path.isfile('bley.conf'):
+             settings.conffile = 'bley.conf'
+         else:
+--- a/bley.conf.example
++++ b/bley.conf.example
 @@ -4,9 +4,9 @@ listen_addr = 127.0.0.1
  listen_port = 1337
  
