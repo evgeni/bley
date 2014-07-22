@@ -1,5 +1,5 @@
 include *.conf
-include *.conf.example
+include *.example
 include *.1
 include bley.service
 include bley.logcheck
