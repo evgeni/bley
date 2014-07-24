@@ -4,17 +4,6 @@ Author: Evgeni Golov <evgeni@debian.org>
 Forwarded: not-needed
 Last-Update: 2010-04-26
 
---- a/bley
-+++ b/bley
-@@ -214,7 +214,7 @@ def bley_start():
- 
-     if not settings.conffile:
-         if os.path.isfile('/etc/bley/bley.conf'):
--            settings.conffile = '/etc/bley/bley.conf'
-+            settings.conffile = ['/etc/bley/bley.conf', '/etc/bley/dbconfig-common.conf']
-         elif os.path.isfile('bley.conf'):
-             settings.conffile = 'bley.conf'
-         else:
 --- a/bley.conf.example
 +++ b/bley.conf.example
 @@ -4,9 +4,9 @@ listen_addr = 127.0.0.1
@@ -29,3 +18,16 @@ Last-Update: 2010-04-26
  
  reject_msg = greylisted, try again later
  
+diff --git a/bley.service b/bley.service
+index 246bf1f..11e8f12 100644
+--- a/bley.service
++++ b/bley.service
+@@ -7,7 +7,7 @@ After=network.target remote-fs.target nss-lookup.target postgresql.service mysql
+ Type=forking
+ User=bley
+ RuntimeDirectory=bley
+-ExecStart=/usr/bin/bley -c /etc/bley/bley.conf -p /run/bley/bley.pid
++ExecStart=/usr/bin/bley -c /etc/bley/bley.conf -c /etc/bley/dbconfig-common.conf -p /run/bley/bley.pid
+ PIDFile=/run/bley/bley.pid
+ 
+ [Install]
