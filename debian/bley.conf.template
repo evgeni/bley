@@ -2,5 +2,6 @@
 dbtype=_DBC_DBTYPE_
 dbhost=_DBC_DBSERVER_
 dbname=_DBC_DBNAME_
+dbpath=_DBC_BASEPATH_
 dbuser=_DBC_DBUSER_
 dbpass=_DBC_DBPASS_

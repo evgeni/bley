@@ -29,6 +29,7 @@ case "$1" in
 
     . /usr/share/debconf/confmodule
     . /usr/share/dbconfig-common/dpkg/postinst
+    dbc_dbfile_owner="bley:bley"
     dbc_generate_include_args="-o template_infile=/usr/share/bley/bley.conf.template"
     dbc_generate_include_owner="root:bley"
     dbc_generate_include_perms=640

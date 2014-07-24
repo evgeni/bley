@@ -10,10 +10,10 @@ Homepage: http://bley.mx
 Package: bley
 Architecture: all
 Depends: ${misc:Depends}, ${python:Depends}, python-twisted-core (>= 8.1.0),
- python-twisted-names (>= 8.1.0), python-spf, python-psycopg2 | python-mysqldb,
+ python-twisted-names (>= 8.1.0), python-spf,
  python-ipaddr, python-publicsuffix,
  dbconfig-common, adduser
-Recommends: postgresql-client | mysql-client, postfix
+Recommends: postgresql-client | mysql-client | sqlite3, python-psycopg2 | python-mysqldb, postfix
 XB-Python-Version: ${python:Versions}
 Description: intelligent greylisting daemon for Postfix
  bley uses various tests (incl. RBL and SPF) to decide whether a sender
