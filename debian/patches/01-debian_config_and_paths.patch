@@ -2,24 +2,19 @@ Description: Use Debian paths and a Debian specific config
  Needed for dbconfig-common usage.
 Author: Evgeni Golov <evgeni@debian.org>
 Forwarded: not-needed
-Last-Update: 2010-04-26
+Last-Update: 2014-07-31
 
 --- a/bley.conf.example
 +++ b/bley.conf.example
-@@ -4,9 +4,9 @@ listen_addr = 127.0.0.1
- listen_port = 1337
- 
+@@ -6,7 +6,7 @@ listen_port = 1337
  # Where to save the PID file?
--pid_file = bley.pid
-+pid_file = /var/run/bley/bley.pid
+ pid_file = bley.pid
  # Where to save the log file?
 -log_file = bley.log
 +log_file = syslog
  
  reject_msg = greylisted, try again later
  
-diff --git a/bley.service b/bley.service
-index 246bf1f..11e8f12 100644
 --- a/bley.service
 +++ b/bley.service
 @@ -7,7 +7,7 @@ After=network.target remote-fs.target nss-lookup.target postgresql.service mysql
