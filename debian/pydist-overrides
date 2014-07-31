@@ -1,2 +1,6 @@
 pyspf python-spf
 Twisted-Core python-twisted-core
+Twisted-Names python-twisted-names
+Twisted python-twisted-core
+ipaddr python-ipaddr
+publicsuffix python-publicsuffix

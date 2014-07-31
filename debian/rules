@@ -20,3 +20,6 @@ override_dh_auto_clean:
 
 override_dh_auto_test:
 	# skip for now
+
+override_dh_python2:
+	dh_python2 --requires=requirements.txt --depends=Twisted-Names

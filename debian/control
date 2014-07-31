@@ -2,16 +2,14 @@ Source: bley
 Section: mail
 Priority: optional
 Maintainer: Evgeni Golov <evgeni@debian.org>
-Build-Depends: debhelper (>= 7.0.50~), dh-systemd, python-setuptools, python-all (>= 2.6.6-3~)
+Build-Depends: debhelper (>= 7.0.50~), dh-python, dh-systemd, python-setuptools, python-all (>= 2.6.6-3~)
 Standards-Version: 3.9.5
 X-Python-Version: >= 2.5
 Homepage: http://bley.mx
 
 Package: bley
 Architecture: all
-Depends: ${misc:Depends}, ${python:Depends}, python-twisted-core (>= 8.1.0),
- python-twisted-names (>= 8.1.0), python-spf,
- python-ipaddr, python-publicsuffix,
+Depends: ${misc:Depends}, ${python:Depends},
  dbconfig-common, adduser
 Recommends: postgresql-client | mysql-client | sqlite3, python-psycopg2 | python-mysqldb, postfix | exim4
 XB-Python-Version: ${python:Versions}
