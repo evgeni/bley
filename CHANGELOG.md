@@ -5,6 +5,7 @@
  * Rename bley.conf to bley.conf.example in the tarball
  * Rename README to README.md
  * Disable SPF Best Guess by default
+ * Use Semantic Versioning (http://semver.org/)
 
  * Support for SQLite
  * Support for Exim
