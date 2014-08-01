@@ -320,14 +320,14 @@ def bley_start():
     if config.has_option('bley', 'whitelist_recipients_file'):
         settings.whitelist_recipients_file = config.get('bley', 'whitelist_recipients_file')
         if not os.path.isabs(settings.whitelist_recipients_file):
-          settings.whitelist_recipients_file = os.path.join(settings.confdir, settings.whitelist_recipients_file)
+            settings.whitelist_recipients_file = os.path.join(settings.confdir, settings.whitelist_recipients_file)
         settings.whitelist_recipients = read_whitelist(settings.whitelist_recipients_file)[0]
     else:
         settings.whitelist_recipients = []
     if config.has_option('bley', 'whitelist_clients_file'):
         settings.whitelist_clients_file    = config.get('bley', 'whitelist_clients_file')
         if not os.path.isabs(settings.whitelist_clients_file):
-          settings.whitelist_clients_file = os.path.join(settings.confdir, settings.whitelist_clients_file)
+            settings.whitelist_clients_file = os.path.join(settings.confdir, settings.whitelist_clients_file)
         (settings.whitelist_clients, settings.whitelist_clients_ip) = read_whitelist(settings.whitelist_clients_file)
     else:
         settings.whitelist_clients = []
