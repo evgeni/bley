@@ -3,6 +3,8 @@ title: download
 source tarballs
 ===============
 
+* **bley 2.0.0-beta.1**:  
+  [bley-2.0.0-beta.1.tar.gz](download/bley-2.0.0-beta.1.tar.gz) (MD5: 8ab73ef19e374d0da3becd1a3546b984, SHA1: 9249855fca23fc55be52d54a97cc1223a2c55388)
 * **bley 0.1.5**:  
   [bley-0.1.5.tar.gz](download/bley-0.1.5.tar.gz) (MD5: 8e781d79304254194f4499ca9b6440eb, SHA1: 8d45c0494aeafaa9cde65336178c5668034e2f6c)
 * **bley 0.1.4**:  
