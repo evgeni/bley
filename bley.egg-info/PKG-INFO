@@ -1,0 +1,10 @@
+Metadata-Version: 1.0
+Name: bley
+Version: 2.0.0-beta.1
+Summary: intelligent greylisting daemon for postfix
+Home-page: http://bley.mx
+Author: Evgeni Golov
+Author-email: evgeni@golov.de
+License: BSD
+Description: UNKNOWN
+Platform: UNKNOWN

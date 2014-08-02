@@ -1,0 +1,139 @@
+2014-07-25 17:59:41,779 bley: Could not open file: ./test/./test/whitelist_recipients
+2014-07-25 17:59:41,779 bley: Could not open file: ./test/./test/whitelist_clients
+2014-07-25 17:59:41,779 bley: Starting up
+2014-07-25 18:01:07,932 bley: Could not open file: ./test/./test/whitelist_recipients
+2014-07-25 18:01:07,932 bley: Could not open file: ./test/./test/whitelist_clients
+2014-07-25 18:01:07,933 bley: Starting up
+2014-07-25 18:01:08,376 bley: decided action=DEFER_IF_PERMIT greylisted, try again later, from=root@example.com, to=user@example.com
+2014-07-25 18:01:08,398 bley: decided action=DEFER_IF_PERMIT greylisted, try again later, from=root@example.com, to=user@example.com
+2014-07-25 18:01:08,419 bley: decided action=DUNNO, from=root@example.com, to=user@example.com
+2014-07-25 18:01:08,442 bley: decided action=DUNNO, from=root@example.com, to=user@example.com
+2014-07-25 18:01:08,472 bley: decided action=DEFER_IF_PERMIT greylisted, try again later, from=nothinguseful@example.com, to=nothinguseful@example.com
+2014-07-25 18:01:08,493 bley: decided action=DEFER_IF_PERMIT greylisted, try again later, from=nothinguseful@example.com, to=nothinguseful@example.com
+2014-07-25 18:01:08,497 bley: whitelisted postmaster@example.com due to rule postmaster@
+2014-07-25 18:01:08,497 bley: decided action=DUNNO, from=angryuser@different.example.com, to=postmaster@example.com
+2014-07-25 18:01:08,500 bley: whitelisted postmaster@example.com due to rule postmaster@
+2014-07-25 18:01:08,500 bley: decided action=DUNNO, from=angryuser@different.example.com, to=postmaster@example.com
+2014-07-25 18:01:08,520 bley: decided action=DEFER_IF_PERMIT greylisted, try again later, from=nothinguseful@example.com, to=nothinguseful@example.com
+2014-07-25 18:01:08,538 bley: decided action=DEFER_IF_PERMIT greylisted, try again later, from=nothinguseful@example.com, to=nothinguseful@example.com
+2014-07-25 18:01:08,556 bley: decided action=DEFER_IF_PERMIT greylisted, try again later, from=nothinguseful@example.com, to=nothinguseful@example.com
+2014-07-25 18:01:08,574 bley: decided action=DEFER_IF_PERMIT greylisted, try again later, from=nothinguseful@example.com, to=nothinguseful@example.com
+2014-07-25 18:01:08,590 bley: decided action=DEFER_IF_PERMIT greylisted, try again later, from=someone@example.com, to=user@example.com
+2014-07-25 18:01:08,607 bley: decided action=DEFER_IF_PERMIT greylisted, try again later, from=someone@example.com, to=user@example.com
+2014-07-25 18:01:08,626 bley: decided action=DEFER_IF_PERMIT greylisted, try again later, from=someone@example.com, to=user@example.com
+2014-07-25 18:01:08,644 bley: decided action=DEFER_IF_PERMIT greylisted, try again later, from=someone@example.com, to=user@example.com
+2014-07-25 18:01:08,661 bley: decided action=DEFER_IF_PERMIT greylisted, try again later, from=someone@example.com, to=user@example.com
+2014-07-25 18:01:08,684 bley: decided action=DEFER_IF_PERMIT greylisted, try again later, from=someone@example.com, to=user@example.com
+2014-07-25 18:01:08,701 bley: decided action=DEFER_IF_PERMIT greylisted, try again later, from=someone@example.com, to=user@dontgreylist.test
+2014-07-25 18:01:08,718 bley: decided action=DEFER_IF_PERMIT greylisted, try again later, from=someone@example.com, to=user@dontgreylist.test
+2014-07-25 18:01:08,735 bley: decided action=DEFER_IF_PERMIT greylisted, try again later, from=someone@example.com, to=user@greylist.test
+2014-07-25 18:01:08,752 bley: decided action=DEFER_IF_PERMIT greylisted, try again later, from=someone@example.com, to=user@greylist.test
+2014-07-25 18:01:08,770 bley: decided action=DEFER_IF_PERMIT greylisted, try again later, from=someone@example.com, to=user@xxxxdontgreylist.test
+2014-07-25 18:01:08,786 bley: decided action=DEFER_IF_PERMIT greylisted, try again later, from=someone@example.com, to=user@xxxxdontgreylist.test
+2014-07-25 18:01:08,802 bley: decided action=DEFER_IF_PERMIT greylisted, try again later, from=someone@example.com, to=user@application.test
+2014-07-25 18:01:08,829 bley: decided action=DEFER_IF_PERMIT greylisted, try again later, from=someone@example.com, to=user@application.test
+2014-07-25 18:01:08,845 bley: decided action=DEFER_IF_PERMIT greylisted, try again later, from=someone@example.com, to=user@subdomain.dontgreylist.test
+2014-07-25 18:01:08,866 bley: decided action=DEFER_IF_PERMIT greylisted, try again later, from=someone@example.com, to=user@subdomain.dontgreylist.test
+2014-07-25 18:01:08,882 bley: decided action=DEFER_IF_PERMIT greylisted, try again later, from=root@example.com, to=user@gl.example.com
+2014-07-25 18:01:13,888 bley: decided action=DEFER_IF_PERMIT greylisted, try again later, from=root@example.com, to=user@gl.example.com
+2014-07-25 18:02:13,916 bley: decided action=DUNNO, from=root@example.com, to=user@gl.example.com
+2014-07-25 18:02:53,754 bley: Shutting down
+2014-07-25 18:02:53,755 bley: SQL error: attempt to write a readonly database
+2014-07-25 18:02:53,946 bley: Starting up
+2014-07-25 18:02:54,372 bley: decided action=DEFER_IF_PERMIT greylisted, try again later, from=root@example.com, to=user@example.com
+2014-07-25 18:02:54,399 bley: decided action=DEFER_IF_PERMIT greylisted, try again later, from=root@example.com, to=user@example.com
+2014-07-25 18:02:54,421 bley: decided action=DUNNO, from=root@example.com, to=user@example.com
+2014-07-25 18:02:54,447 bley: decided action=DUNNO, from=root@example.com, to=user@example.com
+2014-07-25 18:02:54,476 bley: decided action=DEFER_IF_PERMIT greylisted, try again later, from=nothinguseful@example.com, to=nothinguseful@example.com
+2014-07-25 18:02:54,498 bley: decided action=DEFER_IF_PERMIT greylisted, try again later, from=nothinguseful@example.com, to=nothinguseful@example.com
+2014-07-25 18:02:54,503 bley: whitelisted postmaster@example.com due to rule postmaster@
+2014-07-25 18:02:54,503 bley: decided action=DUNNO, from=angryuser@different.example.com, to=postmaster@example.com
+2014-07-25 18:02:54,507 bley: whitelisted postmaster@example.com due to rule postmaster@
+2014-07-25 18:02:54,507 bley: decided action=DUNNO, from=angryuser@different.example.com, to=postmaster@example.com
+2014-07-25 18:02:54,524 bley: decided action=DEFER_IF_PERMIT greylisted, try again later, from=nothinguseful@example.com, to=nothinguseful@example.com
+2014-07-25 18:02:54,547 bley: decided action=DEFER_IF_PERMIT greylisted, try again later, from=nothinguseful@example.com, to=nothinguseful@example.com
+2014-07-25 18:02:54,570 bley: decided action=DEFER_IF_PERMIT greylisted, try again later, from=nothinguseful@example.com, to=nothinguseful@example.com
+2014-07-25 18:02:54,598 bley: decided action=DEFER_IF_PERMIT greylisted, try again later, from=nothinguseful@example.com, to=nothinguseful@example.com
+2014-07-25 18:02:54,602 bley: whitelisted 192.0.2.202 because it is in subnet 192.0.2.200/30
+2014-07-25 18:02:54,602 bley: decided action=DUNNO, from=someone@example.com, to=user@example.com
+2014-07-25 18:02:54,606 bley: whitelisted 2001:db8::123:456 because it is in subnet 2001:db8::123:0/112
+2014-07-25 18:02:54,607 bley: decided action=DUNNO, from=someone@example.com, to=user@example.com
+2014-07-25 18:02:54,610 bley: whitelisted mail.wlclient.test due to rule wlclient.test
+2014-07-25 18:02:54,610 bley: decided action=DUNNO, from=someone@example.com, to=user@example.com
+2014-07-25 18:02:54,614 bley: whitelisted mail.wlclient.test due to rule wlclient.test
+2014-07-25 18:02:54,614 bley: decided action=DUNNO, from=someone@example.com, to=user@example.com
+2014-07-25 18:02:54,617 bley: whitelisted important.customer.test due to rule import.*mer
+2014-07-25 18:02:54,618 bley: decided action=DUNNO, from=someone@example.com, to=user@example.com
+2014-07-25 18:02:54,622 bley: whitelisted important.customer.test due to rule import.*mer
+2014-07-25 18:02:54,622 bley: decided action=DUNNO, from=someone@example.com, to=user@example.com
+2014-07-25 18:02:54,626 bley: whitelisted user@dontgreylist.test due to rule dontgreylist.test
+2014-07-25 18:02:54,626 bley: decided action=DUNNO, from=someone@example.com, to=user@dontgreylist.test
+2014-07-25 18:02:54,629 bley: whitelisted user@dontgreylist.test due to rule dontgreylist.test
+2014-07-25 18:02:54,629 bley: decided action=DUNNO, from=someone@example.com, to=user@dontgreylist.test
+2014-07-25 18:02:54,645 bley: decided action=DEFER_IF_PERMIT greylisted, try again later, from=someone@example.com, to=user@greylist.test
+2014-07-25 18:02:54,673 bley: decided action=DEFER_IF_PERMIT greylisted, try again later, from=someone@example.com, to=user@greylist.test
+2014-07-25 18:02:54,701 bley: decided action=DEFER_IF_PERMIT greylisted, try again later, from=someone@example.com, to=user@xxxxdontgreylist.test
+2014-07-25 18:02:54,717 bley: decided action=DEFER_IF_PERMIT greylisted, try again later, from=someone@example.com, to=user@xxxxdontgreylist.test
+2014-07-25 18:02:54,721 bley: whitelisted user@application.test due to rule app.*test
+2014-07-25 18:02:54,721 bley: decided action=DUNNO, from=someone@example.com, to=user@application.test
+2014-07-25 18:02:54,725 bley: whitelisted user@application.test due to rule app.*test
+2014-07-25 18:02:54,725 bley: decided action=DUNNO, from=someone@example.com, to=user@application.test
+2014-07-25 18:02:54,728 bley: whitelisted user@subdomain.dontgreylist.test due to rule dontgreylist.test
+2014-07-25 18:02:54,728 bley: decided action=DUNNO, from=someone@example.com, to=user@subdomain.dontgreylist.test
+2014-07-25 18:02:54,731 bley: whitelisted user@subdomain.dontgreylist.test due to rule dontgreylist.test
+2014-07-25 18:02:54,732 bley: decided action=DUNNO, from=someone@example.com, to=user@subdomain.dontgreylist.test
+2014-07-25 18:02:54,751 bley: decided action=DEFER_IF_PERMIT greylisted, try again later, from=root@example.com, to=user@gl.example.com
+2014-07-25 18:02:59,753 bley: decided action=DEFER_IF_PERMIT greylisted, try again later, from=root@example.com, to=user@gl.example.com
+2014-07-25 18:03:59,779 bley: decided action=DUNNO, from=root@example.com, to=user@gl.example.com
+2014-07-25 18:03:59,921 bley: Shutting down
+2014-07-28 07:59:35,319 bley: Starting up
+2014-07-28 07:59:35,734 bley: decided action=DEFER_IF_PERMIT greylisted, try again later, from=root@example.com, to=user@example.com
+2014-07-28 07:59:35,761 bley: decided action=DEFER_IF_PERMIT greylisted, try again later, from=root@example.com, to=user@example.com
+2014-07-28 07:59:35,786 bley: decided action=DUNNO, from=root@example.com, to=user@example.com
+2014-07-28 07:59:35,808 bley: decided action=DUNNO, from=root@example.com, to=user@example.com
+2014-07-28 07:59:35,832 bley: decided action=DEFER_IF_PERMIT greylisted, try again later, from=nothinguseful@example.com, to=nothinguseful@example.com
+2014-07-28 07:59:35,853 bley: decided action=DEFER_IF_PERMIT greylisted, try again later, from=nothinguseful@example.com, to=nothinguseful@example.com
+2014-07-28 07:59:35,858 bley: whitelisted postmaster@example.com due to rule postmaster@
+2014-07-28 07:59:35,858 bley: decided action=DUNNO, from=angryuser@different.example.com, to=postmaster@example.com
+2014-07-28 07:59:35,861 bley: whitelisted postmaster@example.com due to rule postmaster@
+2014-07-28 07:59:35,861 bley: decided action=DUNNO, from=angryuser@different.example.com, to=postmaster@example.com
+2014-07-28 07:59:35,882 bley: decided action=DEFER_IF_PERMIT greylisted, try again later, from=nothinguseful@example.com, to=nothinguseful@example.com
+2014-07-28 07:59:35,905 bley: decided action=DEFER_IF_PERMIT greylisted, try again later, from=nothinguseful@example.com, to=nothinguseful@example.com
+2014-07-28 07:59:35,925 bley: decided action=DEFER_IF_PERMIT greylisted, try again later, from=nothinguseful@example.com, to=nothinguseful@example.com
+2014-07-28 07:59:35,946 bley: decided action=DEFER_IF_PERMIT greylisted, try again later, from=nothinguseful@example.com, to=nothinguseful@example.com
+2014-07-28 07:59:35,951 bley: whitelisted 192.0.2.202 because it is in subnet 192.0.2.200/30
+2014-07-28 07:59:35,952 bley: decided action=DUNNO, from=someone@example.com, to=user@example.com
+2014-07-28 07:59:35,956 bley: whitelisted 2001:db8::123:456 because it is in subnet 2001:db8::123:0/112
+2014-07-28 07:59:35,956 bley: decided action=DUNNO, from=someone@example.com, to=user@example.com
+2014-07-28 07:59:35,961 bley: whitelisted mail.wlclient.test due to rule wlclient.test
+2014-07-28 07:59:35,961 bley: decided action=DUNNO, from=someone@example.com, to=user@example.com
+2014-07-28 07:59:35,966 bley: whitelisted mail.wlclient.test due to rule wlclient.test
+2014-07-28 07:59:35,966 bley: decided action=DUNNO, from=someone@example.com, to=user@example.com
+2014-07-28 07:59:35,973 bley: whitelisted important.customer.test due to rule import.*mer
+2014-07-28 07:59:35,973 bley: decided action=DUNNO, from=someone@example.com, to=user@example.com
+2014-07-28 07:59:35,979 bley: whitelisted important.customer.test due to rule import.*mer
+2014-07-28 07:59:35,979 bley: decided action=DUNNO, from=someone@example.com, to=user@example.com
+2014-07-28 07:59:35,982 bley: whitelisted user@dontgreylist.test due to rule dontgreylist.test
+2014-07-28 07:59:35,982 bley: decided action=DUNNO, from=someone@example.com, to=user@dontgreylist.test
+2014-07-28 07:59:35,986 bley: whitelisted user@dontgreylist.test due to rule dontgreylist.test
+2014-07-28 07:59:35,986 bley: decided action=DUNNO, from=someone@example.com, to=user@dontgreylist.test
+2014-07-28 07:59:36,005 bley: decided action=DEFER_IF_PERMIT greylisted, try again later, from=someone@example.com, to=user@greylist.test
+2014-07-28 07:59:36,032 bley: decided action=DEFER_IF_PERMIT greylisted, try again later, from=someone@example.com, to=user@greylist.test
+2014-07-28 07:59:36,053 bley: decided action=DEFER_IF_PERMIT greylisted, try again later, from=someone@example.com, to=user@xxxxdontgreylist.test
+2014-07-28 07:59:36,073 bley: decided action=DEFER_IF_PERMIT greylisted, try again later, from=someone@example.com, to=user@xxxxdontgreylist.test
+2014-07-28 07:59:36,078 bley: whitelisted user@application.test due to rule app.*test
+2014-07-28 07:59:36,078 bley: decided action=DUNNO, from=someone@example.com, to=user@application.test
+2014-07-28 07:59:36,082 bley: whitelisted user@application.test due to rule app.*test
+2014-07-28 07:59:36,082 bley: decided action=DUNNO, from=someone@example.com, to=user@application.test
+2014-07-28 07:59:36,086 bley: whitelisted user@subdomain.dontgreylist.test due to rule dontgreylist.test
+2014-07-28 07:59:36,086 bley: decided action=DUNNO, from=someone@example.com, to=user@subdomain.dontgreylist.test
+2014-07-28 07:59:36,089 bley: whitelisted user@subdomain.dontgreylist.test due to rule dontgreylist.test
+2014-07-28 07:59:36,089 bley: decided action=DUNNO, from=someone@example.com, to=user@subdomain.dontgreylist.test
+2014-07-28 07:59:36,112 bley: decided action=DEFER_IF_PERMIT greylisted, try again later, from=root@example.com, to=user@gl.example.com
+2014-07-28 07:59:41,109 bley: decided action=DEFER_IF_PERMIT greylisted, try again later, from=root@example.com, to=user@gl.example.com
+2014-07-28 08:00:41,136 bley: decided action=DUNNO, from=root@example.com, to=user@gl.example.com
+2014-07-28 08:00:41,286 bley: Shutting down
+2014-07-28 08:07:09,555 bley: Could not open file: ./whitelist_recipients
+2014-07-28 08:07:09,556 bley: Could not open file: ./whitelist_clients
+2014-07-28 08:07:09,556 bley: Starting up
+2014-07-28 08:07:33,013 bley: Shutting down
