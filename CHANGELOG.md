@@ -18,3 +18,29 @@
  * Improve documentation
  * Add tests
  * Add example logcheck filter rules
+
+0.1.5
+=====
+ * MySQL fixes
+ * Add a manpage
+ * Parse addresses case insensitive
+
+0.1.4
+=====
+ * Reconnect to dead databases
+
+0.1.3
+=====
+ * Strip non-ASCII chars from Postfix input
+
+0.1.2
+=====
+ * RBL fixes
+
+0.1.1
+=====
+ * MySQL fixes
+
+0.1
+===
+ * Initial release
