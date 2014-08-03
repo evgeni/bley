@@ -53,6 +53,7 @@ Basically you just have to configure the database:
     dbuser = the name of the database user
     dbpass = the password of the database user
     dbname = the name (or path in case of SQLite) of the database
+    dbpath = you can also set the path separately and load ${dbpath}/${dbname}
 
 After that you can point your Postfix to `bley` as a 
 [policy server](http://www.postfix.org/SMTPD_POLICY_README.html) by
