@@ -37,4 +37,6 @@ install:
   - sudo wget -O/usr/local/bin/my_virtualenv https://raw.github.com/evgeni/my_virtualenv/master/my_virtualenv
   - sudo chmod +x /usr/local/bin/my_virtualenv
 # command to run tests
-script: make test
+script:
+  - python setup.py install
+  - make test
