@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name = "bley",
-    version = "0.1.4",
+    version = "0.1.5",
     description = "intelligent greylisting daemon for postfix",
     author = "Evgeni Golov",
     author_email = "sargentd@die-welt.net",
@@ -11,6 +11,6 @@ setup(
     py_modules = ['bley', 'bleyhelpers', 'postfix'],
     scripts = ['bley'],
     zip_safe = False,
-    install_requires=['Twisted-Core>=8.1.0', 'pyspf', 'psycopg2'],
-    data_files = [('/etc/bley', ['bley.conf'])]
+    install_requires=['Twisted-Core>=8.1.0', 'pyspf'],
+    data_files = [('/etc/bley', ['bley.conf']), ('/usr/share/man/man1', ['bley.1'])]
 )

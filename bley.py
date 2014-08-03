@@ -30,7 +30,6 @@ from twisted.names import client
 from twisted.internet import defer
 from twisted.internet import reactor
 
-import psycopg2
 import datetime
 from bleyhelpers import *
 from postfix import PostfixPolicy
@@ -68,7 +67,10 @@ class BleyPolicy(PostfixPolicy):
 
         if not self.db:
             self.db = self.factory.settings.db
-            self.dbc = self.db.cursor()
+            try:
+                self.dbc = self.db.cursor()
+            except:
+                self.safe_reconnect()
 
         check_results = {'DNSWL': 0, 'DNSBL': 0, 'HELO': 0, 'DYN': 0, 'DB': -1, 'SPF': 0, 'S_EQ_R': 0 }
         action = 'DUNNO'
@@ -124,9 +126,9 @@ class BleyPolicy(PostfixPolicy):
                 # check_sender_eq_recipient:
                 if postfix_params['sender']==postfix_params['recipient']:
                     check_results['S_EQ_R'] = 1
-		if check_results['DNSBL'] < self.factory.settings.dnsbl_threshold and check_results['HELO']+check_results['DYN']+check_results['S_EQ_R'] < self.factory.settings.rfc_threshold:
-	            check_results['SPF'] = check_spf(postfix_params)
-		else:
+                if check_results['DNSBL'] < self.factory.settings.dnsbl_threshold and check_results['HELO']+check_results['DYN']+check_results['S_EQ_R'] < self.factory.settings.rfc_threshold:
+                    check_results['SPF'] = check_spf(postfix_params)
+                else:
                     check_results['SPF'] = 0
                 if check_results['DNSBL'] >= self.factory.settings.dnsbl_threshold or check_results['HELO']+check_results['DYN']+check_results['SPF']+check_results['S_EQ_R'] >= self.factory.settings.rfc_threshold:
                     new_status = 2
@@ -142,7 +144,6 @@ class BleyPolicy(PostfixPolicy):
             except:
                 # the other thread already commited while we checked, ignore
                 pass
-            self.db.commit()
 
         elif status[0] >= 2: # found to be greyed
             check_results['DB'] = status[0]
@@ -156,14 +157,12 @@ class BleyPolicy(PostfixPolicy):
                 query = "UPDATE bley_status SET fail_count=fail_count+1 WHERE ip=%(client_address)s AND sender=%(sender)s AND recipient=%(recipient)s"
                 self.factory.bad_cache[postfix_params['client_address']] = datetime.datetime.now()
             self.safe_execute(query, postfix_params)
-            self.db.commit()
 
         else: # found to be clean
             check_results['DB'] = status[0]
             action = 'DUNNO'
             query = "UPDATE bley_status SET last_action=NOW() WHERE ip=%(client_address)s AND sender=%(sender)s AND recipient=%(recipient)s"
             self.safe_execute(query, postfix_params)
-            self.db.commit()
             self.factory.good_cache[postfix_params['client_address']] = datetime.datetime.now()
 
         if self.factory.settings.verbose:
@@ -262,26 +261,33 @@ class BleyPolicy(PostfixPolicy):
     def safe_execute(self, query, params=None):
         try:
             self.dbc.execute(query, params)
+            self.db.commit()
         except self.factory.settings.database.OperationalError:
-            try:
-                self.db.close()
-            except:
-                pass
-            self.db = None
-            retries = 0
-            while not self.db and retries < 30:
-                try:
-                    self.db = self.factory.settings.database.connect(**self.factory.settings.dbsettings)
-                    self.dbc = self.db.cursor()
-                except self.factory.settings.database.OperationalError:
-                    self.db = None
-                    retries += 1
-                    sleep(1)
+            self.safe_reconnect()
             if self.db:
                 self.dbc.execute(query, params)
+                self.db.commit()
             else:
                 self.factory.settings.logger('Could not reconnect to the database, exiting.\n')
                 reactor.stop()
+
+    def safe_reconnect(self):
+        self.factory.settings.logger('Reconnecting to the database after an error.\n')
+        try:
+            self.db.close()
+        except:
+            pass
+        self.db = None
+        retries = 0
+        while not self.db and retries < 30:
+            try:
+                self.factory.settings.db = self.db = self.factory.settings.database.connect(**self.factory.settings.dbsettings)
+                self.dbc = self.db.cursor()
+            except self.factory.settings.database.OperationalError:
+                self.db = None
+                retries += 1
+                sleep(1)
+        
 
 class BleyPolicyFactory(Factory):
     protocol = BleyPolicy
