@@ -38,5 +38,5 @@ install:
   - sudo chmod +x /usr/local/bin/my_virtualenv
 # command to run tests
 script:
-  - python setup.py install
+  - sudo python setup.py install
   - make test
