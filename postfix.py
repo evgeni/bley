@@ -45,6 +45,10 @@ class PostfixPolicy(LineOnlyReceiver):
         else:
             try:
                 (pkey, pval) = line.split('=', 1)
+                try:
+                    pval = pval.decode('utf-8', 'ignore').encode('us-ascii', 'ignore')
+                except:
+                    pass
                 self.params[pkey] = pval
             except:
                 print 'Could not parse "%s"' % line
