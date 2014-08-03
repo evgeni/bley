@@ -114,13 +114,14 @@ to <code>/etc/bley/bley.conf</code>, adjust it to your needs (see CONFIGURATION 
 and run <code>/usr/bin/bley</code>.</p>
 <h2>CONFIGURATION</h2>
 <p>Basically you just have to configure the database:</p>
-<pre class="code literal-block"><span class="n">dbtype</span> <span class="o">=</span> <span class="n">pgsql</span> <span class="k">for</span> <span class="n">PostgreSQL</span><span class="p">,</span> <span class="n">mysql</span> <span class="k">for</span> <span class="n">MySQL</span> <span class="n">or</span> <span class="n">sqlite3</span> <span class="k">for</span> <span class="n">SQLite</span>
-<span class="n">dbhost</span> <span class="o">=</span> <span class="n">the</span> <span class="n">host</span> <span class="n">where</span> <span class="n">the</span> <span class="n">database</span> <span class="n">runs</span> <span class="n">on</span> <span class="p">(</span><span class="n">usually</span> <span class="n">localhost</span><span class="p">)</span>
-<span class="n">dbport</span> <span class="o">=</span> <span class="n">the</span> <span class="n">port</span> <span class="n">where</span> <span class="n">the</span> <span class="n">database</span> <span class="n">runs</span> <span class="n">on</span> <span class="p">(</span><span class="n">can</span> <span class="n">be</span> <span class="n">left</span> <span class="n">unset</span> <span class="k">for</span>
-         <span class="n">the</span> <span class="k">default</span> <span class="mi">5432</span> <span class="k">for</span> <span class="n">PostgreSQL</span> <span class="n">and</span> <span class="mi">3306</span> <span class="k">for</span> <span class="n">MySQL</span><span class="p">)</span>
-<span class="n">dbuser</span> <span class="o">=</span> <span class="n">the</span> <span class="n">name</span> <span class="n">of</span> <span class="n">the</span> <span class="n">database</span> <span class="n">user</span>
-<span class="n">dbpass</span> <span class="o">=</span> <span class="n">the</span> <span class="n">password</span> <span class="n">of</span> <span class="n">the</span> <span class="n">database</span> <span class="n">user</span>
-<span class="n">dbname</span> <span class="o">=</span> <span class="n">the</span> <span class="n">name</span> <span class="p">(</span><span class="n">or</span> <span class="n">path</span> <span class="n">in</span> <span class="k">case</span> <span class="n">of</span> <span class="n">SQLite</span><span class="p">)</span> <span class="n">of</span> <span class="n">the</span> <span class="n">database</span>
+<pre class="code literal-block">dbtype = pgsql for PostgreSQL, mysql for MySQL or sqlite3 for SQLite
+dbhost = the host where the database runs on (usually localhost)
+dbport = the port where the database runs on (can be left unset for
+         the default 5432 for PostgreSQL and 3306 for MySQL)
+dbuser = the name of the database user
+dbpass = the password of the database user
+dbname = the name (or path in case of SQLite) of the database
+dbpath = you can also set the path separately and load <span class="cp">${</span><span class="n">dbpath</span><span class="cp">}</span>/<span class="cp">${</span><span class="n">dbname</span><span class="cp">}</span>
 </pre>
 
 
