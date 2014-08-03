@@ -84,9 +84,6 @@ __CREATE_DB_QUERY = '''
 __UPDATE_DB_QUERY = '''
   ALTER TABLE bley_status CHANGE last_action last_action TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
 '''
-__UPDATE_DB_QUERY = '''
-  ALTER TABLE bley_status CHANGE last_action last_action TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
-'''
 __CREATE_DB_QUERY_PG = '''
   CREATE TABLE bley_status
   (
