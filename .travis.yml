@@ -1,0 +1,4 @@
+branches:
+  except:
+    - page-source
+    - gh-pages
