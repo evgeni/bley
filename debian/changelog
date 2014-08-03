@@ -1,3 +1,24 @@
+bley (2.0.0~beta.1-1) unstable; urgency=medium
+
+  * Imported Upstream version 2.0.0~beta.1
+    + Does not use SPF Best Guess by default (Closes: #656612)
+  * fix config file permissions (Closes: #731123)
+  * drop 02-drop-dnsbl.njabl.org-it-s-not-maintained-anymore.patch
+  * refresh and simplify debian_config_and_paths.patch
+  * drop manpage, it's upstream now
+  * Standards-Version: 3.9.5
+  * fix a typo in debian/control
+  * enable SQLite3 support
+  * use dh-systemd and create /run/bley using a tmpfiles.d snipet
+  * start the daemon with
+     -c /etc/bley/bley.conf -c /etc/bley/dbconfig-common.conf
+  * add MySQL and PostgreSQL to Should-Start/Stop (Closes: #630905)
+  * mention Exim support in Recommends and Description
+  * update d/copyright for copyright-format/1.0
+  * use dh-python instead of hardcoding all the pythonic deps
+
+ -- Evgeni Golov <evgeni@debian.org>  Sun, 03 Aug 2014 10:02:17 +0200
+
 bley (0.1.5-2) unstable; urgency=low
 
   * cherry-pick patch from upstream to disable njabl.org
