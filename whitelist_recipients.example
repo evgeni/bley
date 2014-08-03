@@ -1,0 +1,10 @@
+# Static list of recipients that do NOT want greylisting
+# Entries are compatible with postgrey, ie
+# user@
+# example.com
+# /regexp/
+# NB example.com includes all subdomains of example.com, too
+
+postmaster@
+abuse@
+

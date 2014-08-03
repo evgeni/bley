@@ -1,0 +1,40 @@
+branches:
+  except:
+    - page-source
+    - gh-pages
+
+language: python
+python:
+  - "2.6"
+  - "2.7"
+env:
+  # oldest working via pypi
+  - TWISTED_VERSION=9.0.0
+  # Ubuntu Lucid
+  - TWISTED_VERSION=10.0.0
+  # Debian Squeeze
+  - TWISTED_VERSION=10.1.0
+  # Ubuntu Precise
+  - TWISTED_VERSION=11.1.0
+  # Debian Wheezy
+  - TWISTED_VERSION=12.0.0
+  # Ubuntu Quantal, RedHat RHEL 7
+  - TWISTED_VERSION=12.2.0
+  # Ubuntu Saucy
+  - TWISTED_VERSION=13.0.0
+  # Ubuntu Trusty, Utopic, Debian Jessie, Wheezy Backports
+  - TWISTED_VERSION=13.2.0
+  # latest upstream
+  - TWISTED_VERSION=14.0.0
+# command to install dependencies
+install:
+  - pip install pep8
+  - pip install Twisted==$TWISTED_VERSION --use-mirrors
+  - pip install psycopg2
+  - pip install MySQL-python
+  - pip install matplotlib
+  - pip install -r requirements.txt --use-mirrors
+  - sudo wget -O/usr/local/bin/my_virtualenv https://raw.github.com/evgeni/my_virtualenv/master/my_virtualenv
+  - sudo chmod +x /usr/local/bin/my_virtualenv
+# command to run tests
+script: make test

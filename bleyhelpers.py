@@ -1,4 +1,4 @@
-# Copyright (c) 2009 Evgeni Golov <evgeni.golov@uni-duesseldorf.de>
+# Copyright (c) 2009-2014 Evgeni Golov <evgeni@golov.de>
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -27,9 +27,17 @@
 
 import spf
 import re
+import ipaddr
+try:
+    import publicsuffix
+except ImportError:
+    publicsuffix = None
+
+publicsuffixlist = None
 
 __dyn_host = re.compile('(\.bb\.|broadband|cable|dial|dip|dsl|dyn|gprs|pool|ppp|umts|wimax|wwan|[0-9]{1,3}[.-][0-9]{1,3}[.-][0-9]{1,3}[.-][0-9]{1,3})', re.I)
 __static_host = re.compile('(colo|dedi|hosting|mail|mx[^$]|smtp|static)', re.I)
+
 
 def reverse_ip(ip):
     '''Returns the IP address in reversed notation (A.B.C.D -> D.C.B.A).
@@ -39,7 +47,16 @@ def reverse_ip(ip):
     @rtype:    string
     @return:   the reversed IP address
     '''
-    return spf.reverse_dots(ip)
+    ip = ipaddr.IPAddress(ip)
+    if ip.version == 4:
+        a = str(ip.exploded).split('.')
+        a.reverse()
+        return '.'.join(a)
+    else:
+        a = list(str(ip.exploded).replace(':', ''))
+        a.reverse()
+        return '.'.join(a)
+
 
 def domain_from_host(host):
     '''Return the domain part of a host.
@@ -49,12 +66,20 @@ def domain_from_host(host):
     @rtype:      string
     @return:     the extracted domain
     '''
-    d = host.split('.')
-    if len(d) > 1:
-       domain = '%s.%s' % (d[-2], d[-1])
+
+    if publicsuffix:
+        global publicsuffixlist
+        if publicsuffixlist is None:
+            publicsuffixlist = publicsuffix.PublicSuffixList()
+        domain = publicsuffixlist.get_public_suffix(host)
     else:
-       domain = host
+        d = host.split('.')
+        if len(d) > 1:
+            domain = '%s.%s' % (d[-2], d[-1])
+        else:
+            domain = host
     return domain
+
 
 def check_dyn_host(host):
     '''Check the host for being a dynamic/dialup one.
@@ -70,6 +95,7 @@ def check_dyn_host(host):
         return 1
     return 0
 
+
 def check_helo(params):
     '''Check the HELO for being RFC 5321 complaint.
     Returns 0 when the HELO match the reverse DNS.
@@ -82,23 +108,32 @@ def check_helo(params):
     @rtype:        int
     @return:       the score of the HELO
     '''
+    if params['helo_name'].startswith('[') and params['helo_name'].endswith(']'):
+        try:
+            params['helo_name'] = '[%s]' % ipaddr.IPAddress(params['helo_name'].strip('[]')).exploded
+        except:
+            pass
+
     if params['client_name'] != 'unknown' and params['client_name'] == params['helo_name']:
         score = 0
     elif domain_from_host(params['helo_name']) == domain_from_host(params['client_name']) or params['helo_name'] == '[%s]' % params['client_address']:
         score = 1
     else:
         score = 2
-        
+
     return score
 
-def check_spf(params):
+
+def check_spf(params, guess):
     '''Check the SPF record of the sending address.
     Try Best Guess when the domain has no SPF record.
     Returns 1 when the SPF result is in ['fail', 'softfail'],
     returns 0 else.
 
     @type  params: dict
-    @param params: the params from Postfix          
+    @param params: the params from Postfix
+    @type  guess:  int
+    @param guess:  1 if use 'best guess', 0 if not
     @rtype:        int
     @return:       1 if bad SPF, 0 else
     '''
@@ -110,7 +145,7 @@ def check_spf(params):
             score = 1
         elif r[0] in ['pass']:
             score = 0
-        else:
+        elif guess > 0 and r[0] in ['none']:
             r = s.best_guess()
             if r[0] in ['fail', 'softfail']:
                 score = 1
@@ -121,3 +156,8 @@ def check_spf(params):
         print 'something went wrong in check_spf()'
     return score
 
+
+def adapt_query_for_sqlite3(query):
+    # WARNING: This is a hack to convert the usual pyformat strings
+    # to named ones used by sqlite3
+    return query.replace('%(', ':').replace(')s', '')
