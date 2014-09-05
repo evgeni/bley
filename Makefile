@@ -6,7 +6,7 @@ sdist:
 	python setup.py sdist
 
 test: test-psql test-mysql test-sqlite
-	pep8 --ignore=E501,E221,E226,E225 ./bley .
+	pep8 --ignore=E501,E221,E226 ./bley .
 	make test-clean
 
 test-sqlite: test-setup-sqlite
