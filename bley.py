@@ -32,7 +32,9 @@ from twisted.internet import reactor
 
 import datetime
 import logging
-from bleyhelpers import *
+import re
+
+import bleyhelpers
 from postfix import PostfixPolicy
 
 from time import sleep
@@ -141,13 +143,13 @@ class BleyPolicy(PostfixPolicy):
                 new_status = 1
             else:
                 check_results['DNSBL'] = yield self.check_dnsbls(postfix_params['client_address'], self.factory.settings.dnsbl_threshold)
-                check_results['HELO'] = check_helo(postfix_params)
-                check_results['DYN'] = check_dyn_host(postfix_params['client_name'])
+                check_results['HELO'] = bleyhelpers.check_helo(postfix_params)
+                check_results['DYN'] = bleyhelpers.check_dyn_host(postfix_params['client_name'])
                 # check_sender_eq_recipient:
                 if postfix_params['sender'] == postfix_params['recipient']:
                     check_results['S_EQ_R'] = 1
                 if self.factory.settings.use_spf and check_results['DNSBL'] < self.factory.settings.dnsbl_threshold and check_results['HELO']+check_results['DYN']+check_results['S_EQ_R'] < self.factory.settings.rfc_threshold:
-                    check_results['SPF'] = check_spf(postfix_params, self.factory.settings.use_spf_guess)
+                    check_results['SPF'] = bleyhelpers.check_spf(postfix_params, self.factory.settings.use_spf_guess)
                 else:
                     check_results['SPF'] = 0
                 if check_results['DNSBL'] >= self.factory.settings.dnsbl_threshold or check_results['HELO']+check_results['DYN']+check_results['SPF']+check_results['S_EQ_R'] >= self.factory.settings.rfc_threshold:
@@ -335,14 +337,14 @@ class BleyPolicy(PostfixPolicy):
         @return: twisted.names.client resolver
         '''
 
-        rip = reverse_ip(ip)
+        rip = bleyhelpers.reverse_ip(ip)
         lookup = '%s.%s' % (rip, lst)
         d = client.lookupAddress(lookup)
         return d
 
     def safe_execute(self, query, params=None):
         if self.factory.settings.dbtype == 'sqlite3':
-            query = adapt_query_for_sqlite3(query)
+            query = bleyhelpers.adapt_query_for_sqlite3(query)
         try:
             self.dbc.execute(query, params)
             self.db.commit()
@@ -403,7 +405,7 @@ class BleyPolicyFactory(Factory):
                 %(SPF)s, %(S_EQ_R)s, %(WHITELISTED)s, %(CACHE)s)'''
 
         if self.settings.dbtype == 'sqlite3':
-            query = adapt_query_for_sqlite3(query)
+            query = bleyhelpers.adapt_query_for_sqlite3(query)
 
         try:
             db = self.settings.database.connect(**self.settings.dbsettings)
