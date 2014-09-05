@@ -1,4 +1,4 @@
-from postfix import PostfixPolicy, PostfixPolicyFactory
+from postfix import PostfixPolicy
 from twisted.trial import unittest
 from twisted.internet.protocol import ClientFactory
 from twisted.internet.defer import Deferred, DeferredList
