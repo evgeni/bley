@@ -308,7 +308,8 @@ class BleyTestCase(unittest.TestCase):
         ip = self._get_next_ipv6()
         return self._test_whitelist_recipient_negative_test1(ip)
 
-    # domain name contains whitelisted domainname, but is not a subdomain - should greylist
+    # domain name contains whitelisted domainname,
+    # but is not a subdomain - should greylist
     def _test_whitelist_recipient_negative_test2(self, ip):
         data = {
             'sender': 'someone@example.com',

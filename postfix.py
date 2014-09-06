@@ -62,7 +62,8 @@ class PostfixPolicy(LineOnlyReceiver):
             try:
                 (pkey, pval) = line.split('=', 1)
                 try:
-                    pval = pval.decode('utf-8', 'ignore').encode('us-ascii', 'ignore')
+                    pval = pval.decode('utf-8', 'ignore')
+                    pval = pval.encode('us-ascii', 'ignore')
                 except:
                     pass
                 if pkey == 'client_address':
