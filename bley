@@ -65,7 +65,8 @@ __CREATE_DB_QUERY = '''
   ) CHARACTER SET 'ascii'
 '''
 __UPDATE_DB_QUERY = '''
-  ALTER TABLE bley_status CHANGE last_action last_action TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+  ALTER TABLE bley_status CHANGE last_action
+  last_action TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
 '''
 __CREATE_DB_QUERY_PG = '''
   CREATE TABLE bley_status
@@ -78,7 +79,8 @@ __CREATE_DB_QUERY_PG = '''
     fail_count INT DEFAULT 0
   );
   CREATE INDEX bley_status_index
-   ON bley_status USING btree (ip ASC NULLS LAST, sender ASC NULLS LAST, recipient ASC NULLS LAST);
+   ON bley_status USING btree (ip ASC NULLS LAST, sender ASC NULLS LAST,
+   recipient ASC NULLS LAST);
   CREATE INDEX bley_status_action_index
    ON bley_status USING btree (last_action ASC NULLS LAST);
 '''
@@ -103,10 +105,12 @@ __CREATE_DB_QUERY_SL = '''
 '''
 
 __CLEAN_DB_QUERY = '''
-   DELETE FROM bley_status WHERE last_action<%(old)s OR (last_action<%(old_bad)s AND status>=2)
+   DELETE FROM bley_status WHERE last_action<%(old)s OR
+   (last_action<%(old_bad)s AND status>=2)
 '''
 __CLEAN_DB_QUERY_SL = '''
-   DELETE FROM bley_status WHERE last_action<:old OR (last_action<:old_bad AND status>=2)
+   DELETE FROM bley_status WHERE last_action<:old OR
+   (last_action<:old_bad AND status>=2)
 '''
 
 __CREATE_LOGDB_QUERY = '''
@@ -230,12 +234,16 @@ def bley_start():
     settings.dbtype = config.get('bley', 'dbtype')
     if settings.dbtype == 'pgsql':
         database = 'psycopg2'
-        settings.dbsettings = {'host': config.get('bley', 'dbhost'), 'database': config.get('bley', 'dbname'),
-                               'user': config.get('bley', 'dbuser'), 'password': config.get('bley', 'dbpass')}
+        settings.dbsettings = {'host': config.get('bley', 'dbhost'),
+                               'database': config.get('bley', 'dbname'),
+                               'user': config.get('bley', 'dbuser'),
+                               'password': config.get('bley', 'dbpass')}
     elif settings.dbtype == 'mysql':
         database = 'MySQLdb'
-        settings.dbsettings = {'host': config.get('bley', 'dbhost'), 'db': config.get('bley', 'dbname'),
-                               'user': config.get('bley', 'dbuser'), 'passwd': config.get('bley', 'dbpass')}
+        settings.dbsettings = {'host': config.get('bley', 'dbhost'),
+                               'db': config.get('bley', 'dbname'),
+                               'user': config.get('bley', 'dbuser'),
+                               'passwd': config.get('bley', 'dbpass')}
     elif settings.dbtype == 'sqlite3':
         global __CLEAN_DB_QUERY
         database = 'sqlite3'
@@ -244,7 +252,8 @@ def bley_start():
     else:
         print "No supported database configured."
         sys.exit(1)
-    if config.has_option('bley', 'dbport') and config.getint('bley', 'dbport') != 0:
+    if (config.has_option('bley', 'dbport') and
+       config.getint('bley', 'dbport') != 0):
         settings.dbsettings['port'] = config.getint('bley', 'dbport')
 
     exec "import %s as databasemodule" % database in globals(), locals()
@@ -365,10 +374,18 @@ def bley_start():
 
         def createOrGetApplication(self):
             bley_app = service.Application("bley")
-            bley_service = internet.TCPServer(settings.listen_port, BleyPolicyFactory(settings), interface=settings.listen_addr)
+            bley_service = internet.TCPServer(settings.listen_port,
+                                              BleyPolicyFactory(settings),
+                                              interface=settings.listen_addr)
             bley_service.setServiceParent(bley_app)
             return bley_app
-    bley_config = {'originalname': None, 'euid': None, 'profile': None, 'no_save': True, 'debug': False, 'uid': None, 'gid': None, 'chroot': None, 'rundir': '.', 'nodaemon': settings.foreground, 'umask': None, 'pidfile': settings.pid_file, 'syslog': settings.log_file == 'syslog', 'prefix': 'bley', 'logfile': settings.log_file}
+    bley_config = {'originalname': None, 'euid': None, 'profile': None,
+                   'no_save': True, 'debug': False, 'uid': None, 'gid': None,
+                   'chroot': None, 'rundir': '.',
+                   'nodaemon': settings.foreground, 'umask': None,
+                   'pidfile': settings.pid_file,
+                   'syslog': settings.log_file == 'syslog', 'prefix': 'bley',
+                   'logfile': settings.log_file}
     runner = BleyRunner(bley_config)
     reactor.addSystemEventTrigger('before', 'shutdown', bley_stop, settings)
     reactor.callWhenRunning(clean_db, settings)
