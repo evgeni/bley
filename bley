@@ -224,10 +224,10 @@ def bley_start():
 
     settings.listen_addr = config.get('bley', 'listen_addr')
     settings.listen_port = config.getint('bley', 'listen_port')
-    settings.pid_file    = settings.pid_file or config.get('bley', 'pid_file')
-    settings.log_file    = config.get('bley', 'log_file')
+    settings.pid_file = settings.pid_file or config.get('bley', 'pid_file')
+    settings.log_file = config.get('bley', 'log_file')
     settings.cache_valid = config.getint('bley', 'cache_valid')
-    settings.dbtype      = config.get('bley', 'dbtype')
+    settings.dbtype = config.get('bley', 'dbtype')
     if settings.dbtype == 'pgsql':
         database = 'psycopg2'
         settings.dbsettings = {'host': config.get('bley', 'dbhost'), 'database': config.get('bley', 'dbname'),
@@ -249,23 +249,23 @@ def bley_start():
 
     exec "import %s as databasemodule" % database in globals(), locals()
     settings.database = databasemodule
-    settings.reject_msg  = config.get('bley', 'reject_msg')
+    settings.reject_msg = config.get('bley', 'reject_msg')
 
-    settings.dnswls      = [d.strip() for d in config.get('bley', 'dnswls').split(',') if d.strip() != ""]
-    settings.dnsbls      = [d.strip() for d in config.get('bley', 'dnsbls').split(',') if d.strip() != ""]
+    settings.dnswls = [d.strip() for d in config.get('bley', 'dnswls').split(',') if d.strip() != ""]
+    settings.dnsbls = [d.strip() for d in config.get('bley', 'dnsbls').split(',') if d.strip() != ""]
 
-    settings.dnswl_threshold  = config.getint('bley', 'dnswl_threshold')
-    settings.dnsbl_threshold  = config.getint('bley', 'dnsbl_threshold')
-    settings.rfc_threshold    = config.getint('bley', 'rfc_threshold')
-    settings.greylist_period  = datetime.timedelta(0, config.getint('bley', 'greylist_period') * 60, 0)
-    settings.greylist_max     = datetime.timedelta(0, config.getint('bley', 'greylist_max') * 60, 0)
+    settings.dnswl_threshold = config.getint('bley', 'dnswl_threshold')
+    settings.dnsbl_threshold = config.getint('bley', 'dnsbl_threshold')
+    settings.rfc_threshold = config.getint('bley', 'rfc_threshold')
+    settings.greylist_period = datetime.timedelta(0, config.getint('bley', 'greylist_period') * 60, 0)
+    settings.greylist_max = datetime.timedelta(0, config.getint('bley', 'greylist_max') * 60, 0)
     settings.greylist_penalty = datetime.timedelta(0, config.getint('bley', 'greylist_penalty') * 60, 0)
-    settings.purge_days       = config.getint('bley', 'purge_days')
-    settings.purge_bad_days   = config.getint('bley', 'purge_bad_days')
-    settings.use_spf          = config.getint('bley', 'use_spf')
-    settings.use_spf_guess    = config.getint('bley', 'use_spf_guess')
+    settings.purge_days = config.getint('bley', 'purge_days')
+    settings.purge_bad_days = config.getint('bley', 'purge_bad_days')
+    settings.use_spf = config.getint('bley', 'use_spf')
+    settings.use_spf_guess = config.getint('bley', 'use_spf_guess')
 
-    settings.exim_workaround  = config.getboolean('bley', 'exim_workaround')
+    settings.exim_workaround = config.getboolean('bley', 'exim_workaround')
 
     if settings.debug:
         settings.foreground = True
@@ -308,7 +308,7 @@ def bley_start():
     else:
         settings.whitelist_recipients = []
     if config.has_option('bley', 'whitelist_clients_file'):
-        settings.whitelist_clients_file    = config.get('bley', 'whitelist_clients_file')
+        settings.whitelist_clients_file = config.get('bley', 'whitelist_clients_file')
         if not os.path.isabs(settings.whitelist_clients_file):
             settings.whitelist_clients_file = os.path.join(settings.confdir, settings.whitelist_clients_file)
         (settings.whitelist_clients, settings.whitelist_clients_ip) = read_whitelist(settings.whitelist_clients_file)
