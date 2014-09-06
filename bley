@@ -274,9 +274,9 @@ def bley_start():
     settings.dnswl_threshold  = config.getint('bley', 'dnswl_threshold')
     settings.dnsbl_threshold  = config.getint('bley', 'dnsbl_threshold')
     settings.rfc_threshold    = config.getint('bley', 'rfc_threshold')
-    settings.greylist_period  = datetime.timedelta(0, config.getint('bley', 'greylist_period')*60, 0)
-    settings.greylist_max     = datetime.timedelta(0, config.getint('bley', 'greylist_max')*60, 0)
-    settings.greylist_penalty = datetime.timedelta(0, config.getint('bley', 'greylist_penalty')*60, 0)
+    settings.greylist_period  = datetime.timedelta(0, config.getint('bley', 'greylist_period') * 60, 0)
+    settings.greylist_max     = datetime.timedelta(0, config.getint('bley', 'greylist_max') * 60, 0)
+    settings.greylist_penalty = datetime.timedelta(0, config.getint('bley', 'greylist_penalty') * 60, 0)
     settings.purge_days       = config.getint('bley', 'purge_days')
     settings.purge_bad_days   = config.getint('bley', 'purge_bad_days')
     settings.use_spf          = config.getint('bley', 'use_spf')
@@ -409,7 +409,7 @@ def clean_db(settings):
     db.commit()
     dbc.close()
     db.close()
-    reactor.callLater(30*60, clean_db, settings)
+    reactor.callLater(30 * 60, clean_db, settings)
 
 
 def read_whitelist(whitelist_filename):

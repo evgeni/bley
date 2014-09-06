@@ -89,12 +89,12 @@ class BleyPolicy(PostfixPolicy):
 
         # Strip everything after a + in the localpart, usefull for mailinglists etc
         if postfix_params['sender'].find('+') != -1:
-            postfix_params['sender'] = postfix_params['sender'][:postfix_params['sender'].find('+')]+postfix_params['sender'][postfix_params['sender'].find('@'):]
+            postfix_params['sender'] = postfix_params['sender'][:postfix_params['sender'].find('+')] + postfix_params['sender'][postfix_params['sender'].find('@'):]
         if postfix_params['recipient'].find('+') != -1:
-            postfix_params['recipient'] = postfix_params['recipient'][:postfix_params['recipient'].find('+')]+postfix_params['recipient'][postfix_params['recipient'].find('@'):]
+            postfix_params['recipient'] = postfix_params['recipient'][:postfix_params['recipient'].find('+')] + postfix_params['recipient'][postfix_params['recipient'].find('@'):]
 
         if postfix_params['client_address'] in self.factory.bad_cache.keys():
-            delta = datetime.datetime.now()-self.factory.bad_cache[postfix_params['client_address']]
+            delta = datetime.datetime.now() - self.factory.bad_cache[postfix_params['client_address']]
             if delta < datetime.timedelta(0, self.factory.settings.cache_valid, 0):
                 action = 'DEFER_IF_PERMIT %s (cached result)' % self.factory.settings.reject_msg
                 check_results['CACHE'] = 1
@@ -109,7 +109,7 @@ class BleyPolicy(PostfixPolicy):
                 del self.factory.bad_cache[postfix_params['client_address']]
 
         if postfix_params['client_address'] in self.factory.good_cache.keys():
-            delta = datetime.datetime.now()-self.factory.good_cache[postfix_params['client_address']]
+            delta = datetime.datetime.now() - self.factory.good_cache[postfix_params['client_address']]
             if delta < datetime.timedelta(0, self.factory.settings.cache_valid, 0):
                 action = 'DUNNO'
                 check_results['CACHE'] = 1
@@ -148,11 +148,11 @@ class BleyPolicy(PostfixPolicy):
                 # check_sender_eq_recipient:
                 if postfix_params['sender'] == postfix_params['recipient']:
                     check_results['S_EQ_R'] = 1
-                if self.factory.settings.use_spf and check_results['DNSBL'] < self.factory.settings.dnsbl_threshold and check_results['HELO']+check_results['DYN']+check_results['S_EQ_R'] < self.factory.settings.rfc_threshold:
+                if self.factory.settings.use_spf and check_results['DNSBL'] < self.factory.settings.dnsbl_threshold and check_results['HELO'] + check_results['DYN'] + check_results['S_EQ_R'] < self.factory.settings.rfc_threshold:
                     check_results['SPF'] = bleyhelpers.check_spf(postfix_params, self.factory.settings.use_spf_guess)
                 else:
                     check_results['SPF'] = 0
-                if check_results['DNSBL'] >= self.factory.settings.dnsbl_threshold or check_results['HELO']+check_results['DYN']+check_results['SPF']+check_results['S_EQ_R'] >= self.factory.settings.rfc_threshold:
+                if check_results['DNSBL'] >= self.factory.settings.dnsbl_threshold or check_results['HELO'] + check_results['DYN'] + check_results['SPF'] + check_results['S_EQ_R'] >= self.factory.settings.rfc_threshold:
                     new_status = 2
                     action = 'DEFER_IF_PERMIT %s' % self.factory.settings.reject_msg
                     self.factory.bad_cache[postfix_params['client_address']] = datetime.datetime.now()
@@ -169,8 +169,8 @@ class BleyPolicy(PostfixPolicy):
 
         elif status[0] >= 2:  # found to be greyed
             check_results['DB'] = status[0]
-            delta = datetime.datetime.now()-status[1]
-            if delta > self.factory.settings.greylist_period+status[2]*self.factory.settings.greylist_penalty or delta > self.factory.settings.greylist_max:
+            delta = datetime.datetime.now() - status[1]
+            if delta > self.factory.settings.greylist_period + status[2] * self.factory.settings.greylist_penalty or delta > self.factory.settings.greylist_max:
                 action = 'DUNNO'
                 query = "UPDATE bley_status SET status=0, last_action=%(now)s WHERE ip=%(client_address)s AND sender=%(sender)s AND recipient=%(recipient)s"
                 self.factory.good_cache[postfix_params['client_address']] = datetime.datetime.now()
@@ -221,7 +221,7 @@ class BleyPolicy(PostfixPolicy):
                 else:
                     continue
             if len(email) > len(entry_wl):
-                entry_wl_length = len(entry_wl)+1
+                entry_wl_length = len(entry_wl) + 1
                 if ('.' + entry_wl) == email[-entry_wl_length:]:
                     # subdomain match
                     logger.info('whitelisted %s due to rule %s' % (email, entry_wl))
@@ -384,7 +384,7 @@ class BleyPolicyFactory(Factory):
         self.bad_cache = {}
         self.actionlog = []
         self.exim_workaround = settings.exim_workaround
-        reactor.callLater(30*60, self.dump_log)
+        reactor.callLater(30 * 60, self.dump_log)
         reactor.addSystemEventTrigger('before', 'shutdown', self.dump_log)
 
     def log_action(self, postfix_params, action, check_results):
@@ -420,4 +420,4 @@ class BleyPolicyFactory(Factory):
             db.close()
         except self.settings.database.DatabaseError, e:
             logger.warn('SQL error: %s' % e)
-        reactor.callLater(30*60, self.dump_log)
+        reactor.callLater(30 * 60, self.dump_log)

@@ -63,7 +63,7 @@ class BleyHelpersTestCase(unittest.TestCase):
             self.assertEquals(bleyhelpers.check_dyn_host(host), 0)
 
     def test_check_helo_good(self):
-        for host in self.dynamic_hosts+self.static_hosts:
+        for host in self.dynamic_hosts + self.static_hosts:
             params = {
                 'client_name': host,
                 'helo_name': host,
@@ -71,7 +71,7 @@ class BleyHelpersTestCase(unittest.TestCase):
             self.assertEquals(bleyhelpers.check_helo(params), 0)
 
     def test_check_helo_domain(self):
-        for host in self.dynamic_hosts+self.static_hosts:
+        for host in self.dynamic_hosts + self.static_hosts:
             params = {
                 'client_name': host,
                 'helo_name': 'mail.%s' % host,
