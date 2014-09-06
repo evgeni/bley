@@ -378,7 +378,7 @@ def bley_start():
         loggerFactory = NoAppLogger
 
         def createOrGetApplication(self):
-            bley_app = application = service.Application("bley")
+            bley_app = service.Application("bley")
             bley_service = internet.TCPServer(settings.listen_port, BleyPolicyFactory(settings), interface=settings.listen_addr)
             bley_service.setServiceParent(bley_app)
             return bley_app
