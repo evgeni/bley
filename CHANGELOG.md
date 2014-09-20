@@ -1,3 +1,9 @@
+2.0.0-beta.2
+============
+
+ * Lots of PEP8 and PyFlakes fixes
+ * Python 2.6 support in setup.py
+
 2.0.0-beta.1
 ============
 
