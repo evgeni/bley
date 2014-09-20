@@ -6,82 +6,86 @@
                         http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
  <url>
   <loc>http://bley.mx/2010/index.html</loc>
-  <lastmod>2014-08-02</lastmod>
+  <lastmod>2014-09-20</lastmod>
  </url>
  <url>
   <loc>http://bley.mx/2011/index.html</loc>
-  <lastmod>2014-08-02</lastmod>
+  <lastmod>2014-09-20</lastmod>
  </url>
  <url>
   <loc>http://bley.mx/2014/index.html</loc>
-  <lastmod>2014-08-02</lastmod>
+  <lastmod>2014-09-20</lastmod>
  </url>
  <url>
   <loc>http://bley.mx/archive.html</loc>
-  <lastmod>2014-08-02</lastmod>
+  <lastmod>2014-09-20</lastmod>
  </url>
  <url>
   <loc>http://bley.mx/categories/index.html</loc>
-  <lastmod>2014-08-02</lastmod>
+  <lastmod>2014-09-20</lastmod>
  </url>
  <url>
   <loc>http://bley.mx/docs.html</loc>
-  <lastmod>2014-08-02</lastmod>
+  <lastmod>2014-09-20</lastmod>
  </url>
  <url>
   <loc>http://bley.mx/download.html</loc>
-  <lastmod>2014-08-02</lastmod>
+  <lastmod>2014-09-20</lastmod>
  </url>
  <url>
   <loc>http://bley.mx/imprint.html</loc>
-  <lastmod>2014-08-02</lastmod>
+  <lastmod>2014-09-20</lastmod>
  </url>
  <url>
   <loc>http://bley.mx/index.html</loc>
-  <lastmod>2014-08-02</lastmod>
+  <lastmod>2014-09-20</lastmod>
  </url>
  <url>
   <loc>http://bley.mx/license.html</loc>
-  <lastmod>2014-08-02</lastmod>
+  <lastmod>2014-09-20</lastmod>
  </url>
  <url>
   <loc>http://bley.mx/news/bley_011_accepted_to_debian.html</loc>
-  <lastmod>2014-08-02</lastmod>
+  <lastmod>2014-09-20</lastmod>
  </url>
  <url>
   <loc>http://bley.mx/news/bley_011_released.html</loc>
-  <lastmod>2014-08-02</lastmod>
+  <lastmod>2014-09-20</lastmod>
  </url>
  <url>
   <loc>http://bley.mx/news/bley_011_uploaded_to_debian.html</loc>
-  <lastmod>2014-08-02</lastmod>
+  <lastmod>2014-09-20</lastmod>
  </url>
  <url>
   <loc>http://bley.mx/news/bley_012_released.html</loc>
-  <lastmod>2014-08-02</lastmod>
+  <lastmod>2014-09-20</lastmod>
  </url>
  <url>
   <loc>http://bley.mx/news/bley_014_released.html</loc>
-  <lastmod>2014-08-02</lastmod>
+  <lastmod>2014-09-20</lastmod>
  </url>
  <url>
   <loc>http://bley.mx/news/bley_015_released.html</loc>
-  <lastmod>2014-08-02</lastmod>
+  <lastmod>2014-09-20</lastmod>
  </url>
  <url>
   <loc>http://bley.mx/news/bley_01_released.html</loc>
-  <lastmod>2014-08-02</lastmod>
+  <lastmod>2014-09-20</lastmod>
  </url>
  <url>
   <loc>http://bley.mx/news/bley_200-beta1_released.html</loc>
-  <lastmod>2014-08-02</lastmod>
+  <lastmod>2014-09-20</lastmod>
+ </url>
+ <url>
+  <loc>http://bley.mx/news/bley_200-beta2_released.html</loc>
+  <lastmod>2014-09-20</lastmod>
  </url>
  <url>
   <loc>http://bley.mx/news/index.html</loc>
-  <lastmod>2014-08-02</lastmod>
+  <lastmod>2014-09-20</lastmod>
  </url>
  <url>
   <loc>http://bley.mx/sidebar.html</loc>
-  <lastmod>2014-08-02</lastmod>
+  <lastmod>2014-09-20</lastmod>
  </url>
 </urlset>
