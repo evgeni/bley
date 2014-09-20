@@ -10,8 +10,10 @@ class BleyHelpersTestCase(unittest.TestCase):
         ("127.0.2.1", "1.2.0.127"),
         ("192.0.2.23", "23.2.0.192"),
         ("10.11.12.13", "13.12.11.10"),
-        ("2001:DB8::1", "1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.8.b.d.0.1.0.0.2"),
-        ("2001:0db8:1000:0100:0010:0001:0000:0000", "0.0.0.0.0.0.0.0.1.0.0.0.0.1.0.0.0.0.1.0.0.0.0.1.8.b.d.0.1.0.0.2"),
+        ("2001:DB8::1",
+         "1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.8.b.d.0.1.0.0.2"),
+        ("2001:0db8:1000:0100:0010:0001:0000:0000",
+         "0.0.0.0.0.0.0.0.1.0.0.0.0.1.0.0.0.0.1.0.0.0.0.1.8.b.d.0.1.0.0.2"),
     ]
     dynamic_hosts = [
         'ip-178-231-86-123.unitymediagroup.de',
@@ -41,7 +43,8 @@ class BleyHelpersTestCase(unittest.TestCase):
 
     def test_domain_from_host(self):
         if not bleyhelpers.publicsuffix:
-            raise unittest.SkipTest("publicsuffix module not available, domain tests skipped")
+            raise unittest.SkipTest("publicsuffix module not available, "
+                                    "domain tests skipped")
         domains = [
             ("example.com", "example.com"),
             ("example.co.uk", "example.co.uk"),
@@ -63,7 +66,7 @@ class BleyHelpersTestCase(unittest.TestCase):
             self.assertEquals(bleyhelpers.check_dyn_host(host), 0)
 
     def test_check_helo_good(self):
-        for host in self.dynamic_hosts+self.static_hosts:
+        for host in self.dynamic_hosts + self.static_hosts:
             params = {
                 'client_name': host,
                 'helo_name': host,
@@ -71,7 +74,7 @@ class BleyHelpersTestCase(unittest.TestCase):
             self.assertEquals(bleyhelpers.check_helo(params), 0)
 
     def test_check_helo_domain(self):
-        for host in self.dynamic_hosts+self.static_hosts:
+        for host in self.dynamic_hosts + self.static_hosts:
             params = {
                 'client_name': host,
                 'helo_name': 'mail.%s' % host,

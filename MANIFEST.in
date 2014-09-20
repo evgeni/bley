@@ -9,3 +9,4 @@ include requirements.txt
 include Makefile
 include test/*.py
 include test/*.conf.in
+include test/whitelist_*
