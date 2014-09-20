@@ -15,6 +15,12 @@ It uses various test (incl. RBL and SPF) to decide whether a sender
 should be greylisted or not, thus mostly eliminating the usual
 greylisting delay while still filtering most of the spam.
 
+PACKAGES
+========
+ * Arch: [releases](https://aur.archlinux.org/packages/bley/) and [git](https://aur.archlinux.org/packages/bley-git)
+ * [Debian](http://packages.debian.org/bley)
+ * [Ubuntu](http://packages.ubuntu.com/bley)
+
 DEPENDENCIES
 ============
 `bley` is written in [Python](http://python.org) using the
