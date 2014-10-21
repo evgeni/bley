@@ -3,7 +3,7 @@ Section: mail
 Priority: optional
 Maintainer: Evgeni Golov <evgeni@debian.org>
 Build-Depends: debhelper (>= 7.0.50~), dh-python, dh-systemd, python-setuptools, python-all (>= 2.6.6-3~)
-Standards-Version: 3.9.5
+Standards-Version: 3.9.6
 X-Python-Version: >= 2.5
 Homepage: http://bley.mx
 
