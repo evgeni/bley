@@ -1,3 +1,11 @@
+bley (2.0.0-1) unstable; urgency=medium
+
+  * Imported Upstream version 2.0.0
+  * Standards-Version: 3.9.6
+  * X-Python-Version: >= 2.6
+
+ -- Evgeni Golov <evgeni@debian.org>  Tue, 21 Oct 2014 08:33:50 +0200
+
 bley (2.0.0~beta.2-1) unstable; urgency=medium
 
   * Imported Upstream version 2.0.0~beta.2
