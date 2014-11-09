@@ -1,8 +1,15 @@
+BLEY_VERSION := $(shell python setup.py -V)
 TRIAL_VERSION := $(shell trial --version |sed "s/[^0-9]//g")
 #TRIAL_FLAGS ?= $(shell test $(TRIAL_VERSION) -ge 1230 && echo "-j2")
 TRIAL ?= trial
 
-sdist:
+RPM_DATESTAMP := $(shell LC_ALL=C date +"%a %b %_d %Y")
+
+spec:
+	sed -e 's/@VERSION@/${BLEY_VERSION}/g;s/@DATESTAMP@/${RPM_DATESTAMP}/' \
+		bley.spec.in > bley.spec
+
+sdist: spec
 	python setup.py sdist
 
 test: test-psql test-mysql test-sqlite
