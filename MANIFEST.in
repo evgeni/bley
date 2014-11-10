@@ -2,6 +2,7 @@ include *.conf
 include *.example
 include *.1
 include bley.service
+include bley.spec
 include bley.logcheck
 include CHANGELOG.md
 include README.md
