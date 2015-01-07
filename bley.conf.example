@@ -24,7 +24,7 @@ whitelist_recipients_file = ./whitelist_recipients
 whitelist_clients_file = ./whitelist_clients
 
 # Which DNSBLs and DNSWLs to use?
-dnsbls = ix.dnsbl.manitu.net, dnsbl.ahbl.org, dnsbl.sorbs.net
+dnsbls = ix.dnsbl.manitu.net, dnsbl.sorbs.net
 dnswls = list.dnswl.org
 
 # Whitelist after dnswl_threshold hits.
