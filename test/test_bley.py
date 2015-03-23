@@ -25,7 +25,7 @@ class PostfixPolicyClient(PostfixPolicy):
             if len(actionline) == 2:
                 self.reason = actionline[1]
         if line == b"":
-            self.factory.action_received(self.action)
+            self.factory.action_received(self.action, self.reason)
             self.transport.loseConnection()
 
 
@@ -39,7 +39,7 @@ class PostfixPolicyClientFactory(ClientFactory):
     def action_received(self, action, text=""):
         if self.deferred is not None:
             d, self.deferred = self.deferred, None
-            d.callback(action)
+            d.callback({'action': action, 'text': text})
 
     def clientConnectionFailed(self, connector, reason):
         if self.deferred is not None:
@@ -64,11 +64,16 @@ class BleyTestCase(unittest.TestCase):
         self.ipv6[-1] += 1
         return str(":").join([str(x) for x in self.ipv6])
 
-    def _assert_dunno_action(self, action):
-        self.assertEquals(action, b"action=DUNNO")
+    def _assert_dunno_action(self, data):
+        self.assertEquals(data['action'], b"action=DUNNO")
 
-    def _assert_defer_action(self, action):
-        self.assertEquals(action, b"action=DEFER_IF_PERMIT")
+    def _assert_defer_action(self, data):
+        self.assertEquals(data['action'], b"action=DEFER_IF_PERMIT")
+        self.assertEquals(data['text'], b"greylisted, try again later")
+
+    def _assert_prepend_action(self, data):
+        self.assertEquals(data['action'], b"action=PREPEND")
+        self.assertRegexpMatches(data['text'].decode('ascii'), r"X-Greylist: delayed .* seconds by bley-.* at .*; .*")
 
     def test_incomplete_request(self):
         data = {
@@ -188,7 +193,7 @@ class BleyTestCase(unittest.TestCase):
 
         d3 = task.deferLater(reactor, 65, get_action, "127.0.0.1", 1337, data)
 
-        d3.addCallback(self._assert_dunno_action)
+        d3.addCallback(self._assert_prepend_action)
 
         return DeferredList([d, d2, d3])
 
