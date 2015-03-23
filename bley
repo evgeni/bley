@@ -33,6 +33,7 @@ import os
 import sys
 import datetime
 import logging
+import socket
 
 from optparse import OptionParser
 from configparser import ConfigParser
@@ -185,7 +186,8 @@ __CREATE_LOGDB_QUERY_SL = '''
 
 def bley_start():
 
-    parser = OptionParser(version='2.0.0')
+    version = '2.0.0'
+    parser = OptionParser(version=version)
     parser.add_option("-p", "--pidfile", dest="pid_file",
                       help="use PID_FILE for storing the PID")
     parser.add_option("-c", "--config", dest="conffile", action="append",
@@ -200,6 +202,8 @@ def bley_start():
                       action="store_true", dest="foreground",
                       help="don't daemonize the process")
     (settings, args) = parser.parse_args()
+    settings.version = version
+    settings.hostname = socket.getfqdn()
 
     if not settings.conffile:
         if os.path.isfile('/etc/bley/bley.conf'):
@@ -218,6 +222,7 @@ def bley_start():
         'dbpath': '',
         'dbport': '0',
         'cache_valid': '60',
+        'greylist_header': 'X-Greylist: delayed %(delta)s seconds by bley-%(version)s at %(hostname)s; %(date)s',
     }
     config = ConfigParser(defaults)
     config.read(settings.conffile)
@@ -259,6 +264,7 @@ def bley_start():
         settings.dbsettings['port'] = config.getint('bley', 'dbport')
 
     settings.reject_msg = config.get('bley', 'reject_msg')
+    settings.greylist_header = config.get('bley', 'greylist_header', raw=True)
 
     settings.dnswls = [d.strip() for d in config.get('bley', 'dnswls').split(',') if d.strip() != ""]
     settings.dnsbls = [d.strip() for d in config.get('bley', 'dnsbls').split(',') if d.strip() != ""]

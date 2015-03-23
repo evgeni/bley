@@ -57,5 +57,12 @@ exim_workaround = 0
 # How long should the cache entries be valid (in minutes)?
 cache_valid = 60
 
+# Insert a header when a message was delayed
+# you can use %(delta)s for the time in seconds,
+# %(version)s for the bley version,
+# %(hostname)s for the hostname of the machine we are running on
+# and %(date) for the current date
+greylist_header = X-Greylist: delayed %(delta)s seconds by bley-%(version)s at %(hostname)s; %(date)s
+
 [bleygraph]
 destdir = stats
