@@ -22,10 +22,12 @@ env:
   - TWISTED_VERSION=12.2.0
   # Ubuntu Saucy
   - TWISTED_VERSION=13.0.0
-  # Ubuntu Trusty, Utopic, Debian Jessie, Wheezy Backports
+  # Ubuntu Trusty, Utopic, Wheezy Backports
   - TWISTED_VERSION=13.2.0
+  # Debian Jessie
+  - TWISTED_VERSION=14.0.2
   # latest upstream
-  - TWISTED_VERSION=14.0.0
+  - TWISTED_VERSION=15.0.0
 # command to install dependencies
 install:
   - pip install pep8
