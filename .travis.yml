@@ -32,9 +32,11 @@ install:
   - pip install MySQL-python
   - pip install matplotlib
   - pip install -r requirements.txt --use-mirrors
-  - sudo wget -O/usr/local/bin/my_virtualenv https://raw.github.com/evgeni/my_virtualenv/master/my_virtualenv
-  - sudo chmod +x /usr/local/bin/my_virtualenv
+  - mkdir -p $HOME/bin/
+  - wget -O $HOME/bin/my_virtualenv https://raw.github.com/evgeni/my_virtualenv/master/my_virtualenv
+  - chmod +x $HOME/bin/my_virtualenv
 # command to run tests
 script:
-  - sudo python setup.py install
-  - make test
+  - python setup.py install --root=/tmp/bley
+  - PATH=$HOME/bin:$PATH make test
+sudo: false
