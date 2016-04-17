@@ -22,8 +22,12 @@ env:
   - TWISTED_VERSION=13.2.0
   # Debian Jessie, Ubuntu Vivid
   - TWISTED_VERSION=14.0.2
-  # Debian Strech, Ubuntu Wily
+  # Ubuntu Wily
   - TWISTED_VERSION=15.2.1
+  # Debian Strech, Ubuntu Xenial
+  - TWISTED_VERSION=16.0
+  # Debian Sid
+  - TWISTED_VERSION=16.1.1
 # command to install dependencies
 install:
   - pip install pep8
