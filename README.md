@@ -8,7 +8,6 @@ greylisting delay while still filtering most of the spam.
 
 PACKAGES
 ========
- * Arch: [releases](https://aur.archlinux.org/packages/bley/) and [git](https://aur.archlinux.org/packages/bley-git)
  * [Debian](http://packages.debian.org/bley)
  * [Ubuntu](http://packages.ubuntu.com/bley)
 
