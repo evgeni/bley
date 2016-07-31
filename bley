@@ -27,6 +27,8 @@
 # OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 
+from __future__ import print_function
+
 import os
 import sys
 import datetime
@@ -44,7 +46,7 @@ from twisted.internet import reactor
 try:
     from twisted.scripts._twistd_unix import UnixApplicationRunner
 except:
-    print "Could not import _twistd_unix. Exiting..."
+    print("Could not import _twistd_unix. Exiting...")
     sys.exit(1)
 
 from twisted.application import internet, service
@@ -206,7 +208,7 @@ def bley_start():
         elif os.path.isfile('bley.conf'):
             settings.conffile = ['bley.conf']
         else:
-            print "Could not find a configuration file, exiting."
+            print("Could not find a configuration file, exiting.")
             sys.exit(1)
 
     settings.confdir = os.path.dirname(settings.conffile[0])
@@ -251,7 +253,7 @@ def bley_start():
         settings.dbsettings = {'database': os.path.join(config.get('bley', 'dbpath'), config.get('bley', 'dbname')), 'detect_types': 1}
         __CLEAN_DB_QUERY = __CLEAN_DB_QUERY_SL
     else:
-        print "No supported database configured."
+        print("No supported database configured.")
         sys.exit(1)
     if (config.has_option('bley', 'dbport') and
        config.getint('bley', 'dbport') != 0):

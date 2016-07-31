@@ -25,6 +25,8 @@
 # OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 
+from __future__ import print_function
+
 from twisted.protocols.basic import LineOnlyReceiver
 from twisted.internet.protocol import Factory
 from twisted.internet.interfaces import IHalfCloseableProtocol
@@ -70,7 +72,7 @@ class PostfixPolicy(LineOnlyReceiver):
                     pval = ipaddress.ip_address(six.u(pval)).exploded
                 self.params[pkey] = pval
             except:
-                print 'Could not parse "%s"' % line
+                print('Could not parse "%s"' % line)
 
     def check_policy(self):
         '''Check the incoming mail based on our policy and tell Postfix
