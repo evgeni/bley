@@ -4,7 +4,7 @@ from twisted.internet.protocol import ClientFactory
 from twisted.internet.defer import Deferred, DeferredList
 from twisted.internet import task
 from twisted.internet import reactor
-import ipaddr
+import ipaddress
 
 
 class PostfixPolicyClient(PostfixPolicy):
@@ -50,24 +50,20 @@ class PostfixPolicyClientFactory(ClientFactory):
 
 class BleyTestCase(unittest.TestCase):
 
-    ipv4net = ipaddr.IPNetwork('192.0.2.0/24')
-    ipv4generator = ipv4net.iterhosts()
-    ipv6net = ipaddr.IPNetwork('2001:DB8::/32')
-    ipv6generator = ipv6net.iterhosts()
+    ipv4 = [192, 0, 2, 0]
+    ipv6 = ['2001', 'DB8', '', 0]
 
     def _get_next_ipv4(self):
-        try:
-            return self.ipv4generator.next()
-        except StopIteration:
-            self.ipv4generator = self.ipv4net.iterhosts()
-            return self.ipv4generator.next()
+        if self.ipv4[-1] == 255:
+            self.ipv4[-1] = 0
+        self.ipv4[-1] += 1
+        return str(".").join([str(x) for x in self.ipv4])
 
     def _get_next_ipv6(self):
-        try:
-            return self.ipv6generator.next()
-        except StopIteration:
-            self.ipv6generator = self.ipv6net.iterhosts()
-            return self.ipv6generator.next()
+        if self.ipv6[-1] == 1000:
+            self.ipv6[-1] = 0
+        self.ipv6[-1] += 1
+        return str(":").join([str(x) for x in self.ipv6])
 
     def _assert_dunno_action(self, action):
         self.assertEquals(action, "action=DUNNO")

@@ -39,7 +39,7 @@ from postfix import PostfixPolicy
 
 from time import sleep
 
-import ipaddr
+import ipaddress
 
 logger = logging.getLogger('bley')
 regexp_type = type(re.compile(''))
@@ -268,7 +268,7 @@ class BleyPolicy(PostfixPolicy):
             ipstr matches one of the entries in the whitelist_ip list
         '''
         try:
-            ip = ipaddr.IPAddress(ipstr)
+            ip = ipaddress.ip_address(ipstr)
         except (ValueError):
             return 0
         for net in whitelist_ip:
