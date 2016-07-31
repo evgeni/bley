@@ -8,10 +8,6 @@ python:
   - "2.6"
   - "2.7"
 env:
-  # oldest working via pypi
-  - TWISTED_VERSION=9.0.0
-  # Debian Squeeze
-  - TWISTED_VERSION=10.1.0
   # Ubuntu Precise
   - TWISTED_VERSION=11.1.0
   # Debian Wheezy
@@ -22,18 +18,20 @@ env:
   - TWISTED_VERSION=13.2.0
   # Debian Jessie, Ubuntu Vivid
   - TWISTED_VERSION=14.0.2
-  # Ubuntu Wily
-  - TWISTED_VERSION=15.2.1
-  # Debian Strech, Ubuntu Xenial
-  - TWISTED_VERSION=16.0
-  # Debian Sid
-  - TWISTED_VERSION=16.1.1
+  # Ubuntu Xenial
+  - TWISTED_VERSION=16.0.0
+  # Debian Stretch, Debian Sid, Debian Jessie Backports
+  - TWISTED_VERSION=16.2.0
+  # latest upstream
+  - TWISTED_VERSION=16.3.0
 matrix:
   exclude:
     - python: "2.6"
-      env: TWISTED_VERSION=16.0
+      env: TWISTED_VERSION=16.0.0
     - python: "2.6"
-      env: TWISTED_VERSION=16.1.1
+      env: TWISTED_VERSION=16.2.0
+    - python: "2.6"
+      env: TWISTED_VERSION=16.3.0
 # command to install dependencies
 install:
   - pip install pep8
