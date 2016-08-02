@@ -11,7 +11,7 @@ class PostfixPolicyTestCase(unittest.TestCase):
         self.proto.makeConnection(self.tr)
 
     def test_DUNNO(self):
-        self.proto.lineReceived("sender=root@example.com")
-        self.proto.lineReceived("recipient=user@example.com")
-        self.proto.lineReceived("")
-        self.assertEqual(self.tr.value(), "action=DUNNO\n\n")
+        self.proto.lineReceived(b"sender=root@example.com")
+        self.proto.lineReceived(b"recipient=user@example.com")
+        self.proto.lineReceived(b"")
+        self.assertEqual(self.tr.value(), b"action=DUNNO\n\n")

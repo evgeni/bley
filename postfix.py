@@ -43,12 +43,12 @@ class PostfixPolicy(LineOnlyReceiver):
 
     def __init__(self):
         self.params = {}
-        self.delimiter = '\n'
+        self.delimiter = b'\n'
 
     def lineReceived(self, line):
         '''Parse stuff from Postfix and call check_policy() afterwards.'''
         line = line.strip().lower()
-        if line == '':
+        if line == '' or line == b'':
             if len(self.params) > 0:
                 valid_request = True
                 for p in self.required_params:
@@ -62,10 +62,14 @@ class PostfixPolicy(LineOnlyReceiver):
             self.params = {}
         else:
             try:
-                (pkey, pval) = line.split('=', 1)
+                (pkey, pval) = line.split(b'=', 1)
                 try:
-                    pval = pval.decode('utf-8', 'ignore')
-                    pval = pval.encode('us-ascii', 'ignore')
+                    if six.PY3:
+                        pkey = pkey.decode('ascii', 'ignore')
+                        pval = pval.decode('ascii', 'ignore')
+                    else:
+                        pval = pval.decode('utf-8', 'ignore')
+                        pval = pval.encode('us-ascii', 'ignore')
                 except:
                     pass
                 if pkey == 'client_address':
@@ -89,7 +93,9 @@ class PostfixPolicy(LineOnlyReceiver):
         @type action: string
         @param action: the action to be sent to Postfix (default: 'DUNNO')
         '''
-        self.sendLine('action=%s\n' % action)
+        line = six.b('action=%s' % action)
+        self.sendLine(line)
+        self.sendLine(b'')
         if self.factory.exim_workaround:
             self.transport.loseConnection()
 

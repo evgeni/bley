@@ -5,6 +5,7 @@ from twisted.internet.defer import Deferred, DeferredList
 from twisted.internet import task
 from twisted.internet import reactor
 import ipaddress
+import six
 
 
 class PostfixPolicyClient(PostfixPolicy):
@@ -15,17 +16,17 @@ class PostfixPolicyClient(PostfixPolicy):
     def connectionMade(self):
         for x in self.factory.data:
             line = "%s=%s" % (x, self.factory.data[x])
-            self.sendLine(line)
-        self.sendLine("")
+            self.sendLine(six.b(line))
+        self.sendLine(b'')
 
     def lineReceived(self, line):
         line = line.strip()
-        if line.startswith("action"):
+        if line.startswith(b"action"):
             actionline = line.split(None, 1)
             self.action = actionline[0]
             if len(actionline) == 2:
                 self.reason = actionline[1]
-        if line == "":
+        if line == b"":
             self.factory.action_received(self.action)
             self.transport.loseConnection()
 
@@ -66,10 +67,10 @@ class BleyTestCase(unittest.TestCase):
         return str(":").join([str(x) for x in self.ipv6])
 
     def _assert_dunno_action(self, action):
-        self.assertEquals(action, "action=DUNNO")
+        self.assertEquals(action, b"action=DUNNO")
 
     def _assert_defer_action(self, action):
-        self.assertEquals(action, "action=DEFER_IF_PERMIT")
+        self.assertEquals(action, b"action=DEFER_IF_PERMIT")
 
     def test_incomplete_request(self):
         data = {

@@ -444,6 +444,6 @@ class BleyPolicyFactory(Factory):
             db.commit()
             dbc.close()
             db.close()
-        except self.settings.database.DatabaseError, e:
+        except self.settings.database.DatabaseError as e:
             logger.warn('SQL error: %s' % e)
         reactor.callLater(30 * 60, self.dump_log)
