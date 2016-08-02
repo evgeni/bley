@@ -27,12 +27,17 @@
 # OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 
+from __future__ import print_function
+
 import datetime
 import sys
 import os
 
 from optparse import OptionParser
-from ConfigParser import SafeConfigParser
+try:
+    from ConfigParser import SafeConfigParser
+except:
+    from configparser import ConfigParser as SafeConfigParser
 
 parser = OptionParser(version='2.0.0')
 parser.add_option("-d", "--destdir", dest="destdir",
@@ -50,7 +55,7 @@ if not settings.conffile:
     elif os.path.isfile('bley.conf'):
         settings.conffile = 'bley.conf'
     else:
-        print "Could not find a configuration file, exiting."
+        print("Could not find a configuration file, exiting.")
         sys.exit(1)
 
 defaults = {
@@ -65,7 +70,7 @@ config.read(settings.conffile)
 
 settings.destdir = settings.destdir or config.get('bleygraph', 'destdir')
 if not os.path.exists(settings.destdir):
-    print 'creating destination dir: %s' % settings.destdir
+    print('creating destination dir: %s' % settings.destdir)
     os.mkdir(settings.destdir)
 
 dbtype = config.get('bley', 'dbtype')
@@ -81,7 +86,7 @@ elif dbtype == 'sqlite3':
     database = 'sqlite3'
     dbsettings = {'database': config.get('bley', 'dbname'), 'detect_types': 1}
 else:
-    print "No supported database configured."
+    print("No supported database configured.")
     sys.exit(1)
 
 if config.has_option('bley', 'dbport') and config.getint('bley', 'dbport') != 0:
@@ -172,7 +177,7 @@ for s in __TIMESLOTS:
     for check in __goodcheck_queries:
         checks[check] = {'dates': [], 'mails': [], 'color': __goodcheck_queries[check]['color']}
 
-    if not settings.quiet: print "plotting %s:" % (s['title'])
+    if not settings.quiet: print("plotting %s:" % (s['title']))
     fig = plt.figure()
     ax = fig.add_subplot(111)
     fig2 = plt.figure()
@@ -237,8 +242,8 @@ for s in __TIMESLOTS:
     fig.autofmt_xdate()
     fig2.autofmt_xdate()
     if not settings.quiet:
-        print " - %s" % (os.path.join(settings.destdir, 'ar-%s.png' % s['title']))
-        print " - %s" % (os.path.join(settings.destdir, 'ch-%s.png' % s['title']))
+        print(" - %s" % (os.path.join(settings.destdir, 'ar-%s.png' % s['title'])))
+        print(" - %s" % (os.path.join(settings.destdir, 'ch-%s.png' % s['title'])))
     fig.savefig(os.path.join(settings.destdir, 'ar-%s.png' % s['title']))
     fig2.savefig(os.path.join(settings.destdir, 'ch-%s.png' % s['title']))
     __ar_files.append('<img src="ar-%s.png" alt="bley ACCEPT/REJECT stats for the last %s" />' % (s['title'], s['title']))
