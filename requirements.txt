@@ -6,3 +6,4 @@ py3dns; python_version == '3.4' or python_version == '3.5'
 pyspf
 publicsuffix
 ipaddress; python_version == '2.6' or python_version == '2.7'
+six
