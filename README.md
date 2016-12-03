@@ -210,6 +210,46 @@ settings are taken from the `bley` section of `bley.conf` and the path
 for the graph output (`destdir`) is the only setting in the `bleygraph`
 section of the configuration file.
 
+MAIL SERVER CONFIGURATION
+=========================
+
+Exim
+----
+
+For exim4, we can install the following ACL:
+
+``` exim
+# Check policy service "bley", using the postfix policy service protocol.
+ defer log_message = greylisted host $sender_host_address
+        set acl_m0 = request=smtpd_access_policy\n\
+                     protocol_state=RCPT\n\
+                     protocol_name=${uc:$received_protocol}\n\
+                     helo_name=$sender_helo_name\n\
+                     client_address=$sender_host_address\n\
+                     client_name=$sender_host_name\n\
+                     sender=$sender_address\n\
+                     recipient=$local_part@$domain\n\
+                     \n
+        set acl_m0 = ${sg\
+                       {${readsocket{inet:127.0.0.1:1337}{$acl_m0}{5s}{}{action=DUNNO}}}\
+                       {action=}\
+                       {}\
+                     }
+           message = ${sg{$acl_m0}{^\\w+\\s*}{}}
+         condition = ${if eq{${uc:${substr{0}{5}{$acl_m0}}}}{DEFER}{true}{false}}
+
+# Warn if delayed
+warn message = ${sg{$acl_m0}{^\\w+\\s*}{}}
+   condition = ${if eq{${uc:${substr{0}{7}{$acl_m0}}}}{PREPEND}{true}{false}}
+```
+
+On a Debian system using split configuration for Exim, this can be placed in a file, for instance `/etc/exim4/greylist.bley.conf`, and included from the RCPT acl by setting the `CHECK_RCPT_LOCAL_ACL_FILE` variable to point to that file, in `/etc/exim4/conf.d/main/01_local-variables`.
+
+```
+# /etc/exim4/conf.d/main/01_local-variables
+CHECK_RCPT_LOCAL_ACL_FILE = /etc/exim4/greylist.bley.conf
+```
+
 BUILD STATUS
 ============
 [![Build Status](https://travis-ci.org/evgeni/bley.png?branch=master)](https://travis-ci.org/evgeni/bley)
