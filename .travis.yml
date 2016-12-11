@@ -7,6 +7,7 @@ language: python
 python:
   - "3.4"
   - "3.5"
+  - "2.7"
 env:
   # Ubuntu Precise
   - TWISTED_VERSION=11.1.0
@@ -20,18 +21,14 @@ env:
   - TWISTED_VERSION=14.0.2
   # Ubuntu Xenial
   - TWISTED_VERSION=16.0.0
-  # Debian Stretch, Debian Sid, Debian Jessie Backports
+  # Debian Jessie Backports
   - TWISTED_VERSION=16.2.0
-  # latest upstream
-  - TWISTED_VERSION=16.4.0
+  # Ubuntu Yakkety, Zesty
+  - TWISTED_VERSION=16.4.1
+  # Debian Stretch, Debian Sid, latest upstream
+  - TWISTED_VERSION=16.6.0
 matrix:
   exclude:
-    - python: "2.6"
-      env: TWISTED_VERSION=16.0.0
-    - python: "2.6"
-      env: TWISTED_VERSION=16.2.0
-    - python: "2.6"
-      env: TWISTED_VERSION=16.3.0
     - python: "3.4"
       env: TWISTED_VERSION=11.1.0
     - python: "3.4"
@@ -62,19 +59,14 @@ matrix:
       env: TWISTED_VERSION=16.2.0
 # command to install dependencies
 install:
-  - pip install pep8
-  - pip install Twisted==$TWISTED_VERSION
-  - pip install psycopg2
-  - pip install mysqlclient
-  - pip install matplotlib
-  - pip install -r requirements.txt
+  - pip install tox-travis
   - mkdir -p $HOME/bin/
   - wget -O $HOME/bin/my_virtualenv https://raw.github.com/evgeni/my_virtualenv/master/my_virtualenv
   - chmod +x $HOME/bin/my_virtualenv
 # command to run tests
 script:
+  - PATH=$HOME/bin:$PATH tox
   - python setup.py install --root=/tmp/bley
-  - PATH=$HOME/bin:$PATH make test
 sudo: false
 cache:
   directories:
