@@ -28,20 +28,15 @@ env:
   - TWISTED_VERSION=16.6.0
 # command to install dependencies
 install:
-  - pip install pep8
-  - pip install Twisted==$TWISTED_VERSION
-  - pip install psycopg2
-  - pip install MySQL-python
-  - pip install matplotlib
-  - pip install -r requirements.txt
+  - pip install tox-travis
   - mkdir -p $HOME/bin/
   - wget -O $HOME/bin/my_virtualenv https://raw.github.com/evgeni/my_virtualenv/master/my_virtualenv
   - chmod +x $HOME/bin/my_virtualenv
 # command to run tests
 script:
-  - sudo python setup.py install
-  - PATH=$HOME/bin:$PATH make test
-sudo: true
+  - PATH=$HOME/bin:$PATH tox
+  - python setup.py install --root=/tmp/bley
+sudo: false
 cache:
   directories:
     - $HOME/.cache/pip
