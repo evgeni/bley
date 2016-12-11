@@ -24,7 +24,7 @@ test-sqlite: test-setup-sqlite
 
 test-setup-sqlite: test-clean
 	sed "s#.*DBPORT##;s#DBTYPE#sqlite3#;s#DBNAME#./test/bley_sqlite.db#" ./test/bley_test.conf.in > ./test/bley_sqlite.conf
-	./bley -c ./test/bley_sqlite.conf -p ./test/bley_test.pid --verbose
+	./bley -c ./test/bley_sqlite.conf -p ./test/bley_test.pid
 
 test-psql:
 	pg_virtualenv make test-psql-real
