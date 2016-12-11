@@ -52,9 +52,9 @@ install:
   - chmod +x $HOME/bin/my_virtualenv
 # command to run tests
 script:
-  - python setup.py install --root=/tmp/bley
+  - python setup.py install
   - PATH=$HOME/bin:$PATH make test
-sudo: false
+sudo: true
 cache:
   directories:
     - $HOME/.cache/pip
