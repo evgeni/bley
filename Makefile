@@ -17,7 +17,7 @@ test: test-psql test-mysql test-sqlite
 	make test-clean
 
 test-sqlite: test-setup-sqlite
-	$(TRIAL) $(TRIAL_FLAGS) test
+	$(TRIAL) $(TRIAL_FLAGS) test/test_*.py
 	-[ ! -f ./test/bley_test.pid ] || kill $$(cat ./test/bley_test.pid)
 	./bleygraph -c ./test/bley_sqlite.conf -d ./test/bleygraphout
 	make test-clean
@@ -30,7 +30,7 @@ test-psql:
 	pg_virtualenv make test-psql-real
 
 test-psql-real: test-setup-psql
-	$(TRIAL) $(TRIAL_FLAGS) test
+	$(TRIAL) $(TRIAL_FLAGS) test/test_*.py
 	-[ ! -f ./test/bley_test.pid ] || kill $$(cat ./test/bley_test.pid)
 	./bleygraph -c ./test/bley_psql.conf -d ./test/bleygraphout
 	make test-clean
@@ -44,7 +44,7 @@ test-mysql:
 	my_virtualenv make test-mysql-real
 
 test-mysql-real: test-setup-mysql
-	$(TRIAL) $(TRIAL_FLAGS) test
+	$(TRIAL) $(TRIAL_FLAGS) test/test_*.py
 	-[ ! -f ./test/bley_test.pid ] || kill $$(cat ./test/bley_test.pid)
 	./bleygraph -c ./test/bley_mysql.conf -d ./test/bleygraphout
 	make test-clean
