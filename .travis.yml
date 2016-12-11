@@ -21,7 +21,6 @@ env:
   - TWISTED_VERSION=16.0.0
   # Debian Jessie Backports
   - TWISTED_VERSION=16.2.0
-  - TWISTED_VERSION=16.4.0
   # Ubuntu Yakkety, Zesty
   - TWISTED_VERSION=16.4.1
   # Debian Stretch, Debian Sid, latest upstream
