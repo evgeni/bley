@@ -7,7 +7,10 @@ from subprocess import check_output
 def systemd_unit_path():
     try:
         command = ["pkg-config", "--variable=systemdsystemunitdir", "systemd"]
-        path = subprocess.check_output(command, stderr=subprocess.STDOUT)
+        try:
+            path = subprocess.getoutput(command)
+        except AttributeError:
+            path = subprocess.check_output(command, stderr=subprocess.STDOUT)
         return path.strip()
     except (subprocess.CalledProcessError, OSError):
         return "/lib/systemd/system"
