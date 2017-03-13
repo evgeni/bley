@@ -10,21 +10,21 @@ python:
   - "3.6"
   - "2.7"
 env:
-  # Ubuntu Precise
+  # Ubuntu Precise (12.04 LTS)
   - TWISTED_VERSION=11.1.0
   # Debian Wheezy
   - TWISTED_VERSION=12.0.0
   # Red Hat Enterprise Linux 7
   - TWISTED_VERSION=12.2.0
-  # Ubuntu Trusty, Debian Wheezy Backports
+  # Ubuntu Trusty (14.04 LTS), Debian Wheezy Backports
   - TWISTED_VERSION=13.2.0
-  # Debian Jessie, Ubuntu Vivid
+  # Debian Jessie
   - TWISTED_VERSION=14.0.2
-  # Ubuntu Xenial
+  # Ubuntu Xenial (16.04 LTS)
   - TWISTED_VERSION=16.0.0
   # Debian Jessie Backports
   - TWISTED_VERSION=16.2.0
-  # Ubuntu Yakkety, Zesty
+  # Ubuntu Yakkety (16.10), Zesty (17.04)
   - TWISTED_VERSION=16.4.1
   # Debian Stretch, Debian Sid
   - TWISTED_VERSION=16.6.0
