@@ -26,8 +26,10 @@ env:
   - TWISTED_VERSION=16.2.0
   # Ubuntu Yakkety, Zesty
   - TWISTED_VERSION=16.4.1
-  # Debian Stretch, Debian Sid, latest upstream
+  # Debian Stretch, Debian Sid
   - TWISTED_VERSION=16.6.0
+  # latest upstream
+  - TWISTED_VERSION=17.1.0
 matrix:
   exclude:
     - python: "3.4"
