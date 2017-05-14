@@ -1,8 +1,6 @@
 from setuptools import setup
 import subprocess
 
-from subprocess import check_output
-
 
 def systemd_unit_path():
     try:
