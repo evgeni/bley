@@ -307,7 +307,7 @@ class BleyPolicy(PostfixPolicy):
             return result
 
     @defer.inlineCallbacks
-    def check_dnswls(self, ip, max):
+    def check_dnswls(self, ip, max_listed):
         '''Check the IP address in DNSWLs.
 
         @type ip: string
@@ -324,12 +324,12 @@ class BleyPolicy(PostfixPolicy):
                 result += 1
             except Exception:
                 pass
-            if result >= max:
+            if result >= max_listed:
                 break
         defer.returnValue(result)
 
     @defer.inlineCallbacks
-    def check_dnsbls(self, ip, max):
+    def check_dnsbls(self, ip, max_listed):
         '''Check the IP address in DNSBLs.
 
         @type ip: string
@@ -346,7 +346,7 @@ class BleyPolicy(PostfixPolicy):
                 result += 1
             except Exception:
                 pass
-            if result >= max:
+            if result >= max_listed:
                 break
         defer.returnValue(result)
 
