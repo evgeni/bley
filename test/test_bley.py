@@ -4,7 +4,6 @@ from twisted.internet.protocol import ClientFactory
 from twisted.internet.defer import Deferred, DeferredList
 from twisted.internet import task
 from twisted.internet import reactor
-import ipaddress
 import six
 
 
