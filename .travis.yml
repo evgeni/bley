@@ -10,8 +10,6 @@ python:
   - "3.6"
   - "2.7"
 env:
-  # Ubuntu Precise (12.04 LTS)
-  - TWISTED_VERSION=11.1.0
   # Debian Wheezy
   - TWISTED_VERSION=12.0.0
   # Red Hat Enterprise Linux 7
@@ -26,15 +24,13 @@ env:
   - TWISTED_VERSION=16.2.0
   # Ubuntu Yakkety (16.10), Zesty (17.04)
   - TWISTED_VERSION=16.4.1
-  # Debian Stretch, Debian Sid
+  # Debian Stretch
   - TWISTED_VERSION=16.6.0
-  # latest upstream
-  - TWISTED_VERSION=17.1.0
+  # Debian Buster, Debian Sid, latest upstream
+  - TWISTED_VERSION=17.5.0
 matrix:
   exclude:
     - python: "3.4"
-      env: TWISTED_VERSION=11.1.0
-    - python: "3.4"
       env: TWISTED_VERSION=12.0.0
     - python: "3.4"
       env: TWISTED_VERSION=12.2.0
@@ -47,8 +43,6 @@ matrix:
     - python: "3.4"
       env: TWISTED_VERSION=16.2.0
     - python: "3.5"
-      env: TWISTED_VERSION=11.1.0
-    - python: "3.5"
       env: TWISTED_VERSION=12.0.0
     - python: "3.5"
       env: TWISTED_VERSION=12.2.0
@@ -60,8 +54,6 @@ matrix:
       env: TWISTED_VERSION=16.0.0
     - python: "3.5"
       env: TWISTED_VERSION=16.2.0
-    - python: "3.6"
-      env: TWISTED_VERSION=11.1.0
     - python: "3.6"
       env: TWISTED_VERSION=12.0.0
     - python: "3.6"
