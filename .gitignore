@@ -2,3 +2,4 @@ output
 cache
 *.pyc
 *.db
+venv
