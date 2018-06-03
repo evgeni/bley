@@ -1,94 +1,54 @@
 <!DOCTYPE html>
 <html prefix="og: http://ogp.me/ns# article: http://ogp.me/ns/article# " lang="en">
-    <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width">
-    <title>docs | bley</title>
-
-    
-            <link href="assets/css/all-nocdn.css" rel="stylesheet" type="text/css">
-
-    
-            <link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
-
-      <link rel="canonical" href="http://bley.mx/docs.html">
-
-
-
-    
-        <!--[if lt IE 9]><script src="/assets/js/html5.js"></script><![endif]-->
-
-    
-    <link rel="stylesheet" href="assets/css/gh-fork-ribbon.css">
-    <!--[if IE]>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<title>docs | bley</title>
+<link href="assets/css/all-nocdn.css" rel="stylesheet" type="text/css">
+<link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
+<link rel="canonical" href="https://bley.mx/docs.html">
+<!--[if lt IE 9]><script src="/assets/js/html5.js"></script><![endif]--><link rel="stylesheet" href="assets/css/gh-fork-ribbon.css">
+<!--[if IE]>
         <link rel="stylesheet" href="/assets/css/gh-fork-ribbon.ie.css" />
-    <![endif]-->
-
-
-
-    
-    
-
-    <meta name="author" content="Evgeni Golov">
-    
-        <meta name="og:title" content="docs">
-        <meta name="og:url" content="http://bley.mx/docs.html">
-            <meta name="og:description" content="ABOUT
+    <![endif]--><meta name="author" content="Evgeni Golov">
+<meta property="og:site_name" content="bley">
+<meta property="og:title" content="docs">
+<meta property="og:url" content="https://bley.mx/docs.html">
+<meta property="og:description" content="ABOUT
 bley is an intelligent greylisting daemon for Postfix (and Exim).
 It uses various test (incl. RBL and SPF) to decide whether a sender
 should be greylisted or not, thus mostly eliminating the usu">
-        <meta name="og:site_name" content="bley">
-        <meta name="og:type" content="article">
-
-    
-
-    
-
-
-    <meta name="author" content="Evgeni Golov">
-    
-        <meta name="og:title" content="docs">
-        <meta name="og:url" content="http://bley.mx/docs.html">
-            <meta name="og:description" content="ABOUT
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="2018-06-03T07:37:56Z">
+<meta name="author" content="Evgeni Golov">
+<meta property="og:site_name" content="bley">
+<meta property="og:title" content="docs">
+<meta property="og:url" content="https://bley.mx/docs.html">
+<meta property="og:description" content="ABOUT
 bley is an intelligent greylisting daemon for Postfix (and Exim).
 It uses various test (incl. RBL and SPF) to decide whether a sender
 should be greylisted or not, thus mostly eliminating the usu">
-        <meta name="og:site_name" content="bley">
-        <meta name="og:type" content="article">
-
-    
-
-    
-
-
-
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="2018-06-03T07:37:56Z">
 </head>
 <body>
-    <section class="social">
-        <ul>
-        
-            <li><a href="index.html" title="Home"><i class="icon-home"></i></a></li>
+    <section class="social"><ul>
+<li><a href="index.html" title="Home"><i class="icon-home"></i></a></li>
             <li><a href="download.html" title="Download"><i class="icon-download-alt"></i></a></li>
             <li><a href="#" title="Documentation"><i class="icon-book"></i></a></li>
             <li><a href="license.html" title="License"><i class="icon-dollar"></i></a></li>
             <li><a href="imprint.html" title="Imprint"><i class="icon-envelope"></i></a></li>
             <li><a href="rss.xml" title="RSS feed"><i class="icon-rss"></i></a></li>
 
-        </ul>
-    </section>
-    <section class="page-content">
-        <div class="content" rel="main">
+        </ul></section><section class="page-content"><div class="content" rel="main">
             
-<article class="storypage" itemscope="itemscope" itemtype="http://schema.org/Article">
-    <header>
-        
-    <h1 class="p-name entry-title" itemprop="headline name">docs</h1>
+<article class="storypage" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title" itemprop="headline name">docs</h1>
 
         
 
-    </header>
-    <div itemprop="articleBody text">
-    <h2>ABOUT</h2>
+    </header><div itemprop="articleBody text">
+    <div>
+<h2>ABOUT</h2>
 <p><code>bley</code> is an intelligent greylisting daemon for Postfix (and Exim).</p>
 <p>It uses various test (incl. RBL and SPF) to decide whether a sender
 should be greylisted or not, thus mostly eliminating the usual
@@ -121,7 +81,7 @@ to <code>/etc/bley/bley.conf</code>, adjust it to your needs (see CONFIGURATION 
 and run <code>/usr/bin/bley</code>.</p>
 <h2>CONFIGURATION</h2>
 <p>Basically you just have to configure the database:</p>
-<pre class="code literal-block">dbtype = pgsql for PostgreSQL, mysql for MySQL or sqlite3 for SQLite
+<pre class="code literal-block"><span></span>dbtype = pgsql for PostgreSQL, mysql for MySQL or sqlite3 for SQLite
 dbhost = the host where the database runs on (usually localhost)
 dbport = the port where the database runs on (can be left unset for
          the default 5432 for PostgreSQL and 3306 for MySQL)
@@ -142,15 +102,15 @@ and the hit thresholds).</p>
 <h3>Additional Configuration</h3>
 <p>Sometimes, you want to bind <code>bley</code> to something else than <code>127.0.0.1:1337</code>,
 this can be achieved with the following two parameters.</p>
-<pre class="code literal-block"><span class="n">listen_addr</span> <span class="o">=</span> <span class="mf">127.0.0.1</span>
-<span class="n">listen_port</span> <span class="o">=</span> <span class="mi">1337</span>
+<pre class="code literal-block"><span></span>listen_addr = 127.0.0.1
+listen_port = 1337
 </pre>
 
 
 <p>As <code>bley</code> is designed to be a deamon, it will write a pid file and a log file.
 The locations of the two can be configured with the following parameters.</p>
-<pre class="code literal-block"><span class="n">pid_file</span> <span class="o">=</span> <span class="n">bley</span><span class="p">.</span><span class="n">pid</span>
-<span class="n">log_file</span> <span class="o">=</span> <span class="n">bley</span><span class="p">.</span><span class="n">log</span>
+<pre class="code literal-block"><span></span>pid_file = bley.pid
+log_file = bley.log
 </pre>
 
 
@@ -158,46 +118,46 @@ The locations of the two can be configured with the following parameters.</p>
 <code>syslog</code> instead of a file, using the <code>mail</code> facility.</p>
 <p>If you want to inform the sender about the greylisting, you can adjust
 the message sent via</p>
-<pre class="code literal-block"><span class="n">reject_msg</span> <span class="o">=</span> <span class="n">greylisted</span><span class="p">,</span> <span class="n">try</span> <span class="n">again</span> <span class="n">later</span>
+<pre class="code literal-block"><span></span>reject_msg = greylisted, try again later
 </pre>
 
 
 <p>The DNSWLs and DNSBLs <code>bley</code> uses for its tests can be set via</p>
-<pre class="code literal-block"><span class="n">dnsbls</span> <span class="o">=</span> <span class="n">ix</span><span class="p">.</span><span class="n">dnsbl</span><span class="p">.</span><span class="n">manitu</span><span class="p">.</span><span class="n">net</span><span class="p">,</span> <span class="n">dnsbl</span><span class="p">.</span><span class="n">ahbl</span><span class="p">.</span><span class="n">org</span><span class="p">,</span> <span class="n">dnsbl</span><span class="p">.</span><span class="n">sorbs</span><span class="p">.</span><span class="n">net</span>
-<span class="n">dnswls</span> <span class="o">=</span> <span class="n">list</span><span class="p">.</span><span class="n">dnswl</span><span class="p">.</span><span class="n">org</span>
+<pre class="code literal-block"><span></span>dnsbls = ix.dnsbl.manitu.net, dnsbl.ahbl.org, dnsbl.sorbs.net
+dnswls = list.dnswl.org
 </pre>
 
 
 <p>Thresholds define how many sub-checks have to hit, to trigger a feature
 (whitelisting in case of dnswl, greylisting in case of dnsbl and rfc).</p>
-<pre class="code literal-block"><span class="n">dnswl_threshold</span> <span class="o">=</span> <span class="mi">1</span>
-<span class="n">dnsbl_threshold</span> <span class="o">=</span> <span class="mi">1</span>
-<span class="n">rfc_threshold</span> <span class="o">=</span> <span class="mi">2</span>
+<pre class="code literal-block"><span></span>dnswl_threshold = 1
+dnsbl_threshold = 1
+rfc_threshold = 2
 </pre>
 
 
 <p>How long should a sender be greylisted, when should we allow him in at
 the very last and how long should he have to wait more, if he retries to
 early (all in minutes)?</p>
-<pre class="code literal-block"><span class="n">greylist_period</span> <span class="o">=</span> <span class="mi">29</span>
-<span class="n">greylist_max</span>    <span class="o">=</span> <span class="mi">720</span>
-<span class="n">greylist_penalty</span><span class="o">=</span> <span class="mi">10</span>
+<pre class="code literal-block"><span></span>greylist_period = 29
+greylist_max    = 720
+greylist_penalty= 10
 </pre>
 
 
 <p>After how many days should old entries be deleted from the database?
 Entries of senders who have not verified to be "good" should be purged
 earlier.</p>
-<pre class="code literal-block"><span class="n">purge_days</span> <span class="o">=</span> <span class="mi">40</span>
-<span class="n">purge_bad_days</span> <span class="o">=</span> <span class="mi">10</span>
+<pre class="code literal-block"><span></span>purge_days = 40
+purge_bad_days = 10
 </pre>
 
 
 <p>SPF (<a href="http://www.openspf.org">Sender Policy Framework</a>) checks can be turned
 off. <a href="http://www.openspf.net/Best_Practices/No_Best_Guess">SPF Best Guess</a>
 should always be turned off.</p>
-<pre class="code literal-block"><span class="n">use_spf</span> <span class="o">=</span> <span class="mi">1</span>
-<span class="n">use_spf_guess</span> <span class="o">=</span> <span class="mi">0</span>
+<pre class="code literal-block"><span></span>use_spf = 1
+use_spf_guess = 0
 </pre>
 
 
@@ -206,15 +166,15 @@ close connections after the decision is sent. While Postfix supports
 checking multiple senders over the same connections, Exim does not. In fact
 it even closes the sending part of the socket as soon all details have been
 transmitted.</p>
-<pre class="code literal-block"><span class="n">exim_workaround</span> <span class="o">=</span> <span class="mi">0</span>
+<pre class="code literal-block"><span></span>exim_workaround = 0
 </pre>
 
 
 <h3>Whitelisting</h3>
 <p>In some situations, it is useful to be able to whitelist senders or recipients.
 This can be done by providing lists as files (syntax is <a href="http://postgrey.schweikert.ch/">postgrey</a> compatible).</p>
-<pre class="code literal-block"><span class="n">whitelist_recipients_file</span> <span class="o">=</span> <span class="p">.</span><span class="o">/</span><span class="n">whitelist_recipients</span>
-<span class="n">whitelist_clients_file</span> <span class="o">=</span> <span class="p">.</span><span class="o">/</span><span class="n">whitelist_clients</span>
+<pre class="code literal-block"><span></span>whitelist_recipients_file = ./whitelist_recipients
+whitelist_clients_file = ./whitelist_clients
 </pre>
 
 
@@ -222,10 +182,10 @@ This can be done by providing lists as files (syntax is <a href="http://postgrey
 <p>This file contains a list of recipients who are excluded from greylisting.
 One entry per line. An entry can be either a full email address, the local part,
 a domain name or a regular expression:</p>
-<pre class="code literal-block"><span class="n">user</span><span class="err">@</span><span class="n">example</span><span class="p">.</span><span class="n">com</span>
-<span class="n">postmaster</span><span class="err">@</span>
-<span class="n">example</span><span class="p">.</span><span class="n">com</span>
-<span class="o">/</span><span class="n">app</span><span class="p">.</span><span class="o">*</span><span class="n">example</span><span class="o">/</span>
+<pre class="code literal-block"><span></span>user@example.com
+postmaster@
+example.com
+/app.*example/
 </pre>
 
 
@@ -233,9 +193,9 @@ a domain name or a regular expression:</p>
 <p>This file contains a list of clients who are excluded from greylisting.
 One entry per line. An entry can be either an IP adress, a subnet, a domain name
 or a regular expression.</p>
-<pre class="code literal-block"><span class="mf">192.0.2.200</span><span class="o">/</span><span class="mi">30</span>
-<span class="n">example</span><span class="p">.</span><span class="n">net</span>
-<span class="o">/</span><span class="n">sender</span><span class="p">.</span><span class="o">*</span><span class="n">example</span><span class="o">/</span>
+<pre class="code literal-block"><span></span>192.0.2.200/30
+example.net
+/sender.*example/
 </pre>
 
 
@@ -271,23 +231,15 @@ using <a href="http://matplotlib.org/">matplotlib</a>.</p>
 settings are taken from the <code>bley</code> section of <code>bley.conf</code> and the path
 for the graph output (<code>destdir</code>) is the only setting in the <code>bleygraph</code>
 section of the configuration file.</p>
+</div>
     </div>
-</article>
-
-             
-        <footer id="footer" role="contentinfo">
-            <p>Contents © 2014         <a href="mailto:evgeni@golov.de">Evgeni Golov</a> - Powered by         <a href="http://getnikola.com" rel="nofollow">Nikola</a> - Theme is <a href="http://www.damian.oquanta.info/categories/zen.html">Zen</a>        <br>
- <a href="https://www.openhub.net/p/bley?ref=sample" target="_blank"><img alt="Open Hub project report for bley" border="0" src="https://www.openhub.net/p/bley/widgets/project_thin_badge.gif"></a>
- <a href="https://flattr.com/thing/47646/bley-intelligent-greylisting" target="_blank"><img src="//api.flattr.com/button/flattr-badge-large.png" alt="Flattr this" title="Flattr this" border="0"></a>
+</article><footer id="footer"><p>Contents © 2018         <a href="mailto:evgeni@golov.de">Evgeni Golov</a> - Powered by         <a href="http://getnikola.com" rel="nofollow">Nikola</a> - Theme is <a href="http://www.damian.oquanta.info/categories/zen.html">Zen</a>        <br><a href="https://www.openhub.net/p/bley?ref=sample" target="_blank"><img alt="Open Hub project report for bley" border="0" src="https://www.openhub.net/p/bley/widgets/project_thin_badge.gif"></a>
  <a href="https://travis-ci.org/evgeni/bley"><img alt="Build Status" src="https://travis-ci.org/evgeni/bley.png?branch=master"></a>
 </p>
             
         </footer>
-
-        </div>
-    </section>
-    
-    <div id="github" class="github-fork-ribbon-wrapper right fixed">
+</div>
+    </section><div id="github" class="github-fork-ribbon-wrapper right fixed">
         <div class="github-fork-ribbon">
             <a href="https://github.com/evgeni/bley">Fork me on GitHub</a>
         </div>
@@ -295,15 +247,10 @@ section of the configuration file.</p>
 
     
     
-            <script src="assets/js/all-nocdn.js" type="text/javascript"></script>
-    
-
-    
-        <script type="text/javascript">
+            <script src="assets/js/all-nocdn.js" type="text/javascript"></script><script type="text/javascript">
             $(function(){
                 $('.timeago').timeago();
             });
         </script>
-    
 </body>
 </html>

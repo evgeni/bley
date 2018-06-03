@@ -1,2 +1,4 @@
-Sitemap: http://bley.mx/sitemapindex.xml
+Sitemap: https://bley.mx/sitemapindex.xml
 
+User-Agent: *
+Host: bley.mx

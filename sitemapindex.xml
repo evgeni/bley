@@ -1,19 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sitemapindex
     xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+    xmlns:xhtml="http://www.w3.org/1999/xhtml"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
                         http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
  <sitemap>
-  <loc>http://bley.mx/Golov2009a.xml</loc>
-  <lastmod>2014-10-20</lastmod>
+  <loc>https://bley.mx/rss.xml</loc>
+  <lastmod>2018-06-03T08:11:00Z</lastmod>
  </sitemap>
  <sitemap>
-  <loc>http://bley.mx/rss.xml</loc>
-  <lastmod>2014-10-20</lastmod>
- </sitemap>
- <sitemap>
-  <loc>http://bley.mx/sitemap.xml</loc>
-  <lastmod>2014-10-20</lastmod>
+  <loc>https://bley.mx/sitemap.xml</loc>
+  <lastmod>2018-06-03T08:19:00Z</lastmod>
  </sitemap>
 </sitemapindex>

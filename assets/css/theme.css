@@ -1,7 +1,7 @@
 @charset "UTF-8";
 
 /*
-	Copyright © 2014 Daniel Aleksandersen and others.
+	Copyright © 2014-2017 Daniel Aleksandersen and others.
 
 	Permission is hereby granted, free of charge, to any
 	person obtaining a copy of this software and associated
@@ -32,11 +32,6 @@ body {
 	font-size: 17px;
 	line-height: 1.4;
 	padding: 1em;
-}
-@media print {
-	body {
-		font-family: Garamond, serif;
-	}
 }
 
 #container {
@@ -89,7 +84,7 @@ body {
 	float: left;
 }
 
-.posttranslations h3 {
+.posttranslations h3, .translationslist h3 {
 	display: inline;
 	font-size: 1em;
 }
@@ -98,7 +93,7 @@ body {
 	font-size: 2em;
 }
 
-.posttranslations h3:last-child {
+.posttranslations h3:last-child, .translationslist h3:last-child {
 	display: none;
 }
 
@@ -125,7 +120,8 @@ body {
 }
 .metadata p:before,
 .postpromonav .tags li:before,
-.postlist .listdate:before {
+.postlist .listdate:after,
+.translationslist p:before {
 	content: " — ";
 }
 .postlist li {
@@ -136,40 +132,71 @@ body {
 .postindexpager .pager .next:before {
 	content: "↓ ";
 }
-.postindexpager .pager .previous:before {
+.postindexpager .pager .previous:before,
+.archivenav .pager .up:before {
 	content: "↑ ";
 }
-.postpromonav .pager .next:after {
+.postpromonav .pager .next:after,
+.archivenav .pager .next:after {
 	content: " →";
 }
-.postpromonav .pager .previous:dir(rtl):after {
+.postpromonav .pager .previous:dir(rtl):after,
+.archivenav .pager .previous:dir(rtl):after {
 	content: " →";
 }
-.postpromonav .pager .previous:before {
+.postpromonav .pager .previous:before,
+.archivenav .pager .previous:before {
 	content: "← ";
 }
-.postpromonav .pager .next:dir(rtl):before {
+.postpromonav .pager .next:dir(rtl):before,
+.archivenav .pager .next:dir(rtl):before {
 	content: "← ";
 }
 
 .metadata p:first-of-type:before,
-.postpromonav .tags li:first-of-type:before {
+.postpromonav .tags li:first-of-type:before,
+.translationslist p:first-of-type:before {
 	content: "";
 }
 .postpromonav .pager {
+	clear: both;
 	height: 1em;
 }
 .postpromonav .tags li,
-.postpromonav .pager li {
+.postpromonav .pager li,
+.archivenav .pager li {
 	display: inline-block;
 }
-.postpromonav .pager .next {
+.archivenav .pager {
+	text-align: center
+}
+.postpromonav .pager .next,
+.archivenav .pager .next {
 	float: right;
 }
-.postpromonav .pager .next:dir(rtl) {
+.postpromonav .pager .next:dir(rtl),
+.archivenav .pager .next:dir(rtl) {
 	float: left;
 }
-.metadata p {
+
+.postpromonav .pager .previous,
+.archivenav .pager .previous {
+	float: left;
+}
+.postpromonav .pager .previous:dir(rtl),
+.archivenav .pager .previous:dir(rtl) {
+	float: right;
+}
+
+.archivenav .pager .disabled,
+.archivenav .pager .disabled a,
+.archivenav .pager .disabled:link {
+    color: #888;
+    cursor: not-allowed;
+}
+
+.metadata p,
+.translationslist p {
 	display: inline;
 }
 
@@ -252,4 +279,134 @@ img {
 
 .codetable .linenos {
 	padding-right: 10px;
+}
+
+.sr-only {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	border: 0;
+}
+
+.sr-only-focusable:active,
+.sr-only-focusable:focus {
+	position: static;
+	width: auto;
+	height: auto;
+	margin: 0;
+	overflow: visible;
+	clip: auto;
+}
+
+pre.code, code {
+	white-space: pre;
+	word-wrap: normal;
+	overflow: auto;
+}
+
+/* SOURCE: https://github.com/h5bp/html5-boilerplate/blob/master/src/css/main.css */
+@media print {
+	*,
+	*:before,
+	*:after {
+		background: transparent !important;
+		color: #000 !important; /* Black prints faster: http://www.sanbeiji.com/archives/953 */
+		box-shadow: none !important;
+		text-shadow: none !important;
+		font-family: Garamond, Junicode, serif;
+	}
+
+	body {
+		font-size: 12pt;
+	}
+
+	a,
+	a:visited {
+		text-decoration: underline;
+	}
+
+	a[href]:after {
+		content: " (" attr(href) ")";
+	}
+
+	abbr[title]:after {
+		content: " (" attr(title) ")";
+	}
+
+	/*
+	 * Don't show links that are fragment identifiers,
+	 * or use the `javascript:` pseudo protocol
+	 */
+
+	a[href^="#"]:after,
+	a[href^="data:"]:after,
+	a[href^="javascript:"]:after {
+		content: "";
+	}
+
+	pre,
+	blockquote {
+		border: 1px solid #999;
+		page-break-inside: avoid;
+	}
+
+	/*
+	 * Printing Tables:
+	 * http://css-discuss.incutio.com/wiki/Printing_Tables
+	 */
+
+	thead {
+		display: table-header-group;
+	}
+
+	tr,
+	img {
+		page-break-inside: avoid;
+	}
+
+	img {
+		max-width: 100% !important;
+	}
+
+	p,
+	h2,
+	h3 {
+		orphans: 3;
+		widows: 3;
+	}
+
+	h2,
+	h3 {
+		page-break-after: avoid;
+	}
+
+	.hidden-print {
+		display: none !important;
+	}
+
+	article .entry-title a[href]:after,
+	article .metadata a[href]:after,
+	article .tags a[href]:after {
+		content: "";
+	}
+
+	article .metadata .sourceline {
+		display: none;
+	}
+
+	article .metadata .linkline a[href]:after {
+		content: " (" attr(href) ")";
+	}
+
+	#header {
+		display: none;
+	}
+
+	.postpromonav {
+		padding: 0;
+	}
 }
