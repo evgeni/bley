@@ -12,7 +12,7 @@ spec:
 sdist: spec
 	python setup.py sdist
 
-test: test-psql test-mysql test-sqlite
+test: test-psql test-sqlite
 	pep8 --ignore=E501 ./bley .
 	make test-clean
 
