@@ -5,67 +5,18 @@ branches:
 
 language: python
 python:
-  - "3.4"
   - "3.5"
   - "3.6"
+  - "3.7"
+  - "3.8"
   - "2.7"
 env:
-  # Debian Wheezy
-  - TWISTED_VERSION=12.0.0
-  # Red Hat Enterprise Linux 7
-  - TWISTED_VERSION=12.2.0
-  # Ubuntu Trusty (14.04 LTS), Debian Wheezy Backports
-  - TWISTED_VERSION=13.2.0
-  # Debian Jessie
-  - TWISTED_VERSION=14.0.2
-  # Ubuntu Xenial (16.04 LTS)
-  - TWISTED_VERSION=16.0.0
-  # Debian Jessie Backports
-  - TWISTED_VERSION=16.2.0
-  # Ubuntu Yakkety (16.10), Zesty (17.04)
-  - TWISTED_VERSION=16.4.1
   # Debian Stretch
   - TWISTED_VERSION=16.6.0
-  # Debian Buster, Debian Sid, latest upstream
-  - TWISTED_VERSION=17.5.0
-matrix:
-  exclude:
-    - python: "3.4"
-      env: TWISTED_VERSION=12.0.0
-    - python: "3.4"
-      env: TWISTED_VERSION=12.2.0
-    - python: "3.4"
-      env: TWISTED_VERSION=13.2.0
-    - python: "3.4"
-      env: TWISTED_VERSION=14.0.2
-    - python: "3.4"
-      env: TWISTED_VERSION=16.0.0
-    - python: "3.4"
-      env: TWISTED_VERSION=16.2.0
-    - python: "3.5"
-      env: TWISTED_VERSION=12.0.0
-    - python: "3.5"
-      env: TWISTED_VERSION=12.2.0
-    - python: "3.5"
-      env: TWISTED_VERSION=13.2.0
-    - python: "3.5"
-      env: TWISTED_VERSION=14.0.2
-    - python: "3.5"
-      env: TWISTED_VERSION=16.0.0
-    - python: "3.5"
-      env: TWISTED_VERSION=16.2.0
-    - python: "3.6"
-      env: TWISTED_VERSION=12.0.0
-    - python: "3.6"
-      env: TWISTED_VERSION=12.2.0
-    - python: "3.6"
-      env: TWISTED_VERSION=13.2.0
-    - python: "3.6"
-      env: TWISTED_VERSION=14.0.2
-    - python: "3.6"
-      env: TWISTED_VERSION=16.0.0
-    - python: "3.6"
-      env: TWISTED_VERSION=16.2.0
+  # Debian Buster, Debian Sid
+  - TWISTED_VERSION=18.9.0
+  # latest upstream
+  - TWISTED_VERSION=20.3.0
 # command to install dependencies
 install:
   - pip install tox-travis
