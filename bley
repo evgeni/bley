@@ -218,14 +218,8 @@ def bley_start():
 
     defaults = {
         'listen_addr': '127.0.0.1',
-        'log_file': None,
-        'pid_file': None,
-        'exim_workaround': False,
-        'dbhost': None,
-        'dbname': None,
+        'exim_workaround': 'false',
         'dbpath': '',
-        'dbuser': None,
-        'dbpass': None,
         'dbport': '0',
         'cache_valid': '60',
     }

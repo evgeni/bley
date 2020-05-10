@@ -59,10 +59,6 @@ if not settings.conffile:
         sys.exit(1)
 
 defaults = {
-    'dbhost': None,
-    'dbname': None,
-    'dbuser': None,
-    'dbpass': None,
     'dbport': '0',
 }
 config = SafeConfigParser(defaults)
