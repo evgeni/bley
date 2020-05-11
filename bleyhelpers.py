@@ -74,7 +74,7 @@ def domain_from_host(host):
         global publicsuffixlist
         if publicsuffixlist is None:
             publicsuffixlist = publicsuffix2.PublicSuffixList()
-        domain = publicsuffixlist2.get_public_suffix(host)
+        domain = publicsuffixlist.get_public_suffix(host)
     else:
         d = host.split('.')
         if len(d) > 1:
