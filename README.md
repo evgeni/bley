@@ -16,7 +16,7 @@ DEPENDENCIES
 `bley` is written in [Python](http://python.org) using the
 [Twisted](http://twistedmatrix.com/) framework. It uses
 [pyspf](http://pypi.python.org/pypi/pyspf) for SPF validation and
-[publicsuffix](https://pypi.python.org/pypi/publicsuffix) for checking
+[publicsuffix2](https://pypi.python.org/pypi/publicsuffix2) for checking
 of domains against the [PublicSuffix.org](http://publicsuffix.org)
 database. Database interaction is implemented via
 [sqlite3](http://docs.python.org/2/library/sqlite3.html) for SQLite,

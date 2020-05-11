@@ -32,9 +32,9 @@ import re
 import ipaddress
 import six
 try:
-    import publicsuffix
+    import publicsuffix2
 except ImportError:
-    publicsuffix = None
+    publicsuffix2 = None
 
 publicsuffixlist = None
 
@@ -70,11 +70,11 @@ def domain_from_host(host):
     @return:     the extracted domain
     '''
 
-    if publicsuffix:
+    if publicsuffix2:
         global publicsuffixlist
         if publicsuffixlist is None:
-            publicsuffixlist = publicsuffix.PublicSuffixList()
-        domain = publicsuffixlist.get_public_suffix(host)
+            publicsuffixlist = publicsuffix2.PublicSuffixList()
+        domain = publicsuffixlist2.get_public_suffix(host)
     else:
         d = host.split('.')
         if len(d) > 1:

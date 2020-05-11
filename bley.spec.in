@@ -17,7 +17,7 @@ Requires:       python-ipaddr
 Requires:       python-pydns
 Requires:       python-pyspf
 Requires:       python-psycopg2
-#Requires:       python-publicsuffix      # Not in Fedora
+#Requires:       python-publicsuffix2      # Not in Fedora
 Requires:       python-twisted
 
 Requires(post):   systemd
@@ -63,7 +63,7 @@ done
 %systemd_preun %{name}.service
 
 %postun
-%systemd_postun_with_restart %{name}.service 
+%systemd_postun_with_restart %{name}.service
 
 
 %files

@@ -43,8 +43,8 @@ class BleyHelpersTestCase(unittest.TestCase):
             self.assertEquals(bleyhelpers.reverse_ip(ip[0]), ip[1])
 
     def test_domain_from_host(self):
-        if not bleyhelpers.publicsuffix:
-            raise unittest.SkipTest("publicsuffix module not available, "
+        if not bleyhelpers.publicsuffix2:
+            raise unittest.SkipTest("publicsuffix2 module not available, "
                                     "domain tests skipped")
         domains = [
             ("example.com", "example.com"),
