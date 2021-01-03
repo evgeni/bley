@@ -1,4 +1,7 @@
-# Copyright (c) 2009-2014 Evgeni Golov <evgeni@golov.de>
+"""
+bley helpers module
+"""
+# Copyright (c) 2009-2021 Evgeni Golov <evgeni@golov.de>
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -25,44 +28,37 @@
 # OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 
-from __future__ import print_function
-
-import spf
 import re
 import ipaddress
-import six
-try:
-    import publicsuffix2
-except ImportError:
-    publicsuffix2 = None
+import publicsuffix2  # type: ignore
 
-publicsuffixlist = None
+publicsuffixlist = publicsuffix2.PublicSuffixList()
 
-__dyn_host = re.compile('(\.bb\.|broadband|cable|dial|dip|dsl|dyn|gprs|pool|ppp|umts|wimax|wwan|[0-9]{1,3}[.-][0-9]{1,3}[.-][0-9]{1,3}[.-][0-9]{1,3})', re.I)
-__static_host = re.compile('(colo|dedi|hosting|mail|mx[^$]|smtp|static)', re.I)
+__dyn_host = re.compile(r'(\.bb\.|broadband|cable|dial|dip|dsl|dyn|gprs|pool|ppp|umts|wimax|wwan|[0-9]{1,3}[.-][0-9]{1,3}[.-][0-9]{1,3}[.-][0-9]{1,3})', re.I)
+__static_host = re.compile(r'(colo|dedi|hosting|mail|mx[^$]|smtp|static)', re.I)
 
 
-def reverse_ip(ip):
-    '''Returns the IP address in reversed notation (A.B.C.D -> D.C.B.A).
+def reverse_ip(ip: str) -> str:  # pylint:disable=invalid-name
+    '''
+    Returns the IP address in reversed notation (A.B.C.D -> D.C.B.A).
 
     @type  ip: string
     @param ip: the IP address to reverse
     @rtype:    string
     @return:   the reversed IP address
     '''
-    ip = ipaddress.ip_address(six.u(ip))
-    if ip.version == 4:
-        a = str(ip.exploded).split('.')
-        a.reverse()
-        return '.'.join(a)
+    ip_addr = ipaddress.ip_address(ip)
+    if ip_addr.version == 4:
+        parts = str(ip_addr.exploded).split('.')
     else:
-        a = list(str(ip.exploded).replace(':', ''))
-        a.reverse()
-        return '.'.join(a)
+        parts = list(str(ip_addr.exploded).replace(':', ''))
+    parts.reverse()
+    return '.'.join(parts)
 
 
-def domain_from_host(host):
-    '''Return the domain part of a host.
+def domain_from_host(host: str) -> str:
+    '''
+    Return the domain part of a host.
 
     @type  host: string
     @param host: the host to extract the domain from
@@ -70,22 +66,12 @@ def domain_from_host(host):
     @return:     the extracted domain
     '''
 
-    if publicsuffix2:
-        global publicsuffixlist
-        if publicsuffixlist is None:
-            publicsuffixlist = publicsuffix2.PublicSuffixList()
-        domain = publicsuffixlist.get_public_suffix(host)
-    else:
-        d = host.split('.')
-        if len(d) > 1:
-            domain = '%s.%s' % (d[-2], d[-1])
-        else:
-            domain = host
-    return domain
+    return publicsuffixlist.get_public_suffix(host)
 
 
-def check_dyn_host(host):
-    '''Check the host for being a dynamic/dialup one.
+def check_dyn_host(host: str) -> int:
+    '''
+    Check the host for being a dynamic/dialup one.
 
     @type  host: string
     @param host: the host to check
@@ -99,8 +85,9 @@ def check_dyn_host(host):
     return 0
 
 
-def check_helo(params):
-    '''Check the HELO for being RFC 5321 complaint.
+def check_helo(params: dict) -> int:
+    '''
+    Check the HELO for being RFC 5321 complaint.
     Returns 0 when the HELO match the reverse DNS.
     Returns 1 when the domain in the HELO match the domain of the reverse DNS
     or when the HELO is the IP address.
@@ -111,18 +98,18 @@ def check_helo(params):
     @rtype:        int
     @return:       the score of the HELO
     '''
-    if (params['helo_name'].startswith('[') and
-       params['helo_name'].endswith(']')):
+    if (params['helo_name'].startswith('[')
+       and params['helo_name'].endswith(']')):
         try:
-            params['helo_name'] = '[%s]' % ipaddress.ip_address(six.u(params['helo_name']).strip('[]')).exploded
-        except:
+            params['helo_name'] = '[%s]' % ipaddress.ip_address(params['helo_name'].strip('[]')).exploded
+        except ValueError:
             pass
 
-    if (params['client_name'] != 'unknown' and
-       params['client_name'] == params['helo_name']):
+    if (params['client_name'] != 'unknown'
+       and params['client_name'] == params['helo_name']):
         score = 0
-    elif (domain_from_host(params['helo_name']) == domain_from_host(params['client_name']) or
-          params['helo_name'] == '[%s]' % params['client_address']):
+    elif (domain_from_host(params['helo_name']) == domain_from_host(params['client_name'])
+          or params['helo_name'] == '[%s]' % params['client_address']):
         score = 1
     else:
         score = 2
@@ -130,7 +117,7 @@ def check_helo(params):
     return score
 
 
-def check_spf(params, guess):
+def check_spf(params: dict, guess: int) -> int:
     '''Check the SPF record of the sending address.
     Try Best Guess when the domain has no SPF record.
     Returns 1 when the SPF result is in ['fail', 'softfail'],
@@ -145,25 +132,29 @@ def check_spf(params, guess):
     '''
     score = 0
     try:
-        s = spf.query(params['client_address'], params['sender'], params['helo_name'])
-        r = s.check()
-        if r[0] in ['fail', 'softfail']:
+        spf_query = (params['client_address'], params['sender'], params['helo_name'])
+        # spf_result = spf_query.check()
+        spf_result = spf_query[0]
+        spf_result = 'fail'
+        if spf_result in ['fail', 'softfail']:
             score = 1
-        elif r[0] in ['pass']:
+        elif spf_result in ['pass']:
             score = 0
-        elif guess > 0 and r[0] in ['none']:
-            r = s.best_guess()
-            if r[0] in ['fail', 'softfail']:
+        elif guess > 0 and spf_result in ['none']:
+            # spf_result = spf_query.best_guess()
+            spf_result = 'fail'
+            if spf_result in ['fail', 'softfail']:
                 score = 1
-            elif r[0] in ['pass']:
+            elif spf_result in ['pass']:
                 score = 0
-    except:
+    except Exception:  # pylint:disable=broad-except
         # DNS Errors, yay...
         print('something went wrong in check_spf()')
     return score
 
 
-def adapt_query_for_sqlite3(query):
-    # WARNING: This is a hack to convert the usual pyformat strings
-    # to named ones used by sqlite3
+def adapt_query_for_sqlite3(query: str) -> str:
+    """
+    Convert pyformat style SQL queries to named ones for SQLite
+    """
     return query.replace('%(', ':').replace(')s', '')

@@ -25,27 +25,25 @@
 # OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 
-from __future__ import print_function
-
+import ipaddress
+from typing import Dict, List
 from twisted.protocols.basic import LineOnlyReceiver
 from twisted.internet.protocol import Factory
 from twisted.internet.interfaces import IHalfCloseableProtocol
 from zope.interface import implementer
-import ipaddress
-import six
 
 
 @implementer(IHalfCloseableProtocol)
 class PostfixPolicy(LineOnlyReceiver):
     '''Basic implementation of a Postfix policy service.'''
 
-    required_params = []
+    required_params: List[str] = []
 
-    def __init__(self):
-        self.params = {}
+    def __init__(self) -> None:
+        self.params: Dict[str, str] = {}
         self.delimiter = b'\n'
 
-    def lineReceived(self, line):
+    def lineReceived(self, line: str) -> None:
         '''Parse stuff from Postfix and call check_policy() afterwards.'''
         line = line.strip().lower()
         if line == '' or line == b'':
@@ -62,23 +60,14 @@ class PostfixPolicy(LineOnlyReceiver):
             self.params = {}
         else:
             try:
-                (pkey, pval) = line.split(b'=', 1)
-                try:
-                    if six.PY3:
-                        pkey = pkey.decode('ascii', 'ignore')
-                        pval = pval.decode('ascii', 'ignore')
-                    else:
-                        pval = pval.decode('utf-8', 'ignore')
-                        pval = pval.encode('us-ascii', 'ignore')
-                except:
-                    pass
+                (pkey, pval) = line.split('=', 1)
                 if pkey == 'client_address':
-                    pval = ipaddress.ip_address(six.u(pval)).exploded
+                    pval = ipaddress.ip_address(pval).exploded
                 self.params[pkey] = pval
-            except:
+            except Exception:
                 print('Could not parse "%s"' % line)
 
-    def check_policy(self):
+    def check_policy(self) -> None:
         '''Check the incoming mail based on our policy and tell Postfix
         about our decision.
 
@@ -87,22 +76,22 @@ class PostfixPolicy(LineOnlyReceiver):
         '''
         self.send_action('DUNNO')
 
-    def send_action(self, action='DUNNO'):
+    def send_action(self, action: str = 'DUNNO') -> None:
         '''Send action back to Postfix.
 
         @type action: string
         @param action: the action to be sent to Postfix (default: 'DUNNO')
         '''
-        line = six.b('action=%s' % action)
+        line = b'action=%s' % action.encode('ascii')
         self.sendLine(line)
         self.sendLine(b'')
         if self.factory.exim_workaround:
             self.transport.loseConnection()
 
-    def readConnectionLost(self):
+    def readConnectionLost(self) -> None:
         pass
 
-    def writeConnectionLost(self):
+    def writeConnectionLost(self) -> None:
         self.transport.loseConnection()
 
 

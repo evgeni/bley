@@ -9,3 +9,6 @@ dist/
 _trial_temp/
 bley.spec
 .tox
+.coverage
+coverage.xml
+htmlcov

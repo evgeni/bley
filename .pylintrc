@@ -1,0 +1,4 @@
+[MASTER]
+ignore=docs,tests
+min-similarity-lines=10
+max-line-length=500
