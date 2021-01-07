@@ -25,16 +25,26 @@
 # OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 
+import asyncio
 import ipaddress
 from typing import Dict, List
-from twisted.protocols.basic import LineOnlyReceiver
-from twisted.internet.protocol import Factory
-from twisted.internet.interfaces import IHalfCloseableProtocol
-from zope.interface import implementer
 
 
-@implementer(IHalfCloseableProtocol)
-class PostfixPolicy(LineOnlyReceiver):
+async def handle_echo(reader, writer):
+    data = await reader.read(100)
+    writer.write(data)
+    await writer.drain()
+    writer.close()
+
+
+async def main(host: str = '127.0.0.1', port: int = 8888):
+    server = await asyncio.start_server(handle_echo, host, port)
+
+    async with server:
+        await server.serve_forever()
+
+
+class PostfixPolicy():
     '''Basic implementation of a Postfix policy service.'''
 
     required_params: List[str] = []
@@ -95,6 +105,6 @@ class PostfixPolicy(LineOnlyReceiver):
         self.transport.loseConnection()
 
 
-class PostfixPolicyFactory(Factory):
+class PostfixPolicyFactory():
     protocol = PostfixPolicy
     exim_workaround = False
