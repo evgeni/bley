@@ -6,7 +6,7 @@ from bley.postfix import PostfixPolicy
 @pytest.fixture()
 def server(event_loop, unused_tcp_port):
     policy = PostfixPolicy()
-    cancel_handle = asyncio.ensure_future(policy.postfix_policy(port=unused_tcp_port), loop=event_loop)
+    cancel_handle = asyncio.ensure_future(policy.run(port=unused_tcp_port), loop=event_loop)
     event_loop.run_until_complete(asyncio.sleep(0.01))
 
     try:

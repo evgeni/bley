@@ -70,7 +70,7 @@ class PostfixPolicy:
         await writer.drain()
         writer.close()
 
-    async def postfix_policy(self, host: str = '127.0.0.1', port: int = 8888) -> None:
+    async def run(self, host: str = '127.0.0.1', port: int = 8888) -> None:
         '''
         Basic implementation of a Postfix policy service.
         '''
