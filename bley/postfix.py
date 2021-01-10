@@ -70,14 +70,13 @@ class PostfixPolicy:
         await writer.drain()
         writer.close()
 
+    async def postfix_policy(self, host: str = '127.0.0.1', port: int = 8888) -> None:
+        '''
+        Basic implementation of a Postfix policy service.
+        '''
 
-async def postfix_policy(host: str = '127.0.0.1', port: int = 8888) -> None:
-    '''
-    Basic implementation of a Postfix policy service.
-    '''
+        policy = PostfixPolicy()
+        server = await asyncio.start_server(policy.handle_postfix_policy, host, port)
 
-    policy = PostfixPolicy()
-    server = await asyncio.start_server(policy.handle_postfix_policy, host, port)
-
-    async with server:
-        await server.serve_forever()
+        async with server:
+            await server.serve_forever()
