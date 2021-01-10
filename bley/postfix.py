@@ -33,37 +33,42 @@ import ipaddress
 from typing import Dict
 
 
-async def check_policy(params: Dict[str, str]) -> str:  # pylint:disable=unused-argument
+class PostfixPolicy:
     '''
-    Check the incoming mail based on our policy and tell Postfix
-    about our decision.
-
-    You probably want to override this one with a function that does
-    something useful.
-    '''
-    return 'DUNNO'
-
-
-async def handle_postfix_policy(reader: asyncio.StreamReader, writer: asyncio.StreamWriter) -> None:
-    '''
-    Parse stuff from Postfix and call check_policy() afterwards.
+    Basic implementation of a Postfix policy service.
     '''
 
-    params: Dict[str, str] = {}
+    async def check_policy(self, params: Dict[str, str]) -> str:  # pylint:disable=unused-argument
+        '''
+        Check the incoming mail based on our policy and tell Postfix
+        about our decision.
 
-    while (line := await reader.readline()):
-        decoded_line = line.decode().strip().lower()
-        if decoded_line == '':
-            break
-        (pkey, pval) = decoded_line.split('=', 1)
-        if pkey == 'client_address':
-            pval = ipaddress.ip_address(pval).exploded
-        params[pkey] = pval
+        You probably want to override this one with a function that does
+        something useful.
+        '''
 
-    result = await check_policy(params)
-    writer.write(f'action={result}\n\n'.encode('ascii'))
-    await writer.drain()
-    writer.close()
+        return 'DUNNO'
+
+    async def handle_postfix_policy(self, reader: asyncio.StreamReader, writer: asyncio.StreamWriter) -> None:
+        '''
+        Parse stuff from Postfix and call check_policy() afterwards.
+        '''
+
+        params: Dict[str, str] = {}
+
+        while (line := await reader.readline()):
+            decoded_line = line.decode().strip().lower()
+            if decoded_line == '':
+                break
+            (pkey, pval) = decoded_line.split('=', 1)
+            if pkey == 'client_address':
+                pval = ipaddress.ip_address(pval).exploded
+            params[pkey] = pval
+
+        result = await self.check_policy(params)
+        writer.write(f'action={result}\n\n'.encode('ascii'))
+        await writer.drain()
+        writer.close()
 
 
 async def postfix_policy(host: str = '127.0.0.1', port: int = 8888) -> None:
@@ -71,7 +76,8 @@ async def postfix_policy(host: str = '127.0.0.1', port: int = 8888) -> None:
     Basic implementation of a Postfix policy service.
     '''
 
-    server = await asyncio.start_server(handle_postfix_policy, host, port)
+    policy = PostfixPolicy()
+    server = await asyncio.start_server(policy.handle_postfix_policy, host, port)
 
     async with server:
         await server.serve_forever()
