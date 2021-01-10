@@ -1,11 +1,11 @@
 import asyncio
 import pytest
-from bley.postfix import main
+from bley.postfix import postfix_policy
 
 
 @pytest.fixture()
 def server(event_loop, unused_tcp_port):
-    cancel_handle = asyncio.ensure_future(main(port=unused_tcp_port), loop=event_loop)
+    cancel_handle = asyncio.ensure_future(postfix_policy(port=unused_tcp_port), loop=event_loop)
     event_loop.run_until_complete(asyncio.sleep(0.01))
 
     try:
@@ -15,15 +15,14 @@ def server(event_loop, unused_tcp_port):
 
 
 @pytest.mark.asyncio
-async def test_something(server):
-    message = "Foobar!"
+async def test_DUNNO(server):
     reader, writer = await asyncio.open_connection('localhost', server)
-
-    writer.write(message.encode())
+    writer.write(b"sender=root@example.com\n")
+    writer.write(b"recipient=user@example.com\n")
+    writer.write(b"client_address=192.0.2.1\n")
+    writer.write(b"\n")
     await writer.drain()
-
-    data = await reader.read(100)
-    assert message == data.decode()
-    writer.close()
-    await writer.wait_closed()
-
+    line_1 = await reader.readline()
+    line_2 = await reader.readline()
+    assert "action=DUNNO\n" == line_1.decode()
+    assert "\n" == line_2.decode()
