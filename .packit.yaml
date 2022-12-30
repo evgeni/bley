@@ -14,3 +14,17 @@ upstream_package_name: bley
 downstream_package_name: bley
 
 upstream_tag_template: bley/{version}
+
+jobs:
+  - job: copr_build
+    trigger: pull_request
+    targets:
+      - fedora-stable
+      - epel-8
+      - epel-9
+
+  - job: tests
+    trigger: pull_request
+    targets:
+      - fedora-stable
+      - epel-8
