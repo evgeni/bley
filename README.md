@@ -85,7 +85,7 @@ the message sent via
 
 The DNSWLs and DNSBLs `bley` uses for its tests can be set via
 
-    dnsbls = ix.dnsbl.manitu.net, dnsbl.ahbl.org, dnsbl.sorbs.net
+    dnsbls = ix.dnsbl.manitu.net, dnsbl.sorbs.net
     dnswls = list.dnswl.org
 
 Thresholds define how many sub-checks have to hit, to trigger a feature
