@@ -249,7 +249,3 @@ On a Debian system using split configuration for Exim, this can be placed in a f
 # /etc/exim4/conf.d/main/01_local-variables
 CHECK_RCPT_LOCAL_ACL_FILE = /etc/exim4/greylist.bley.conf
 ```
-
-BUILD STATUS
-============
-[![Build Status](https://travis-ci.org/evgeni/bley.png?branch=master)](https://travis-ci.org/evgeni/bley)
