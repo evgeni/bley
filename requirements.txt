@@ -1,8 +1,6 @@
 # We actually just need Twisted-Core>=8.1.0 and Twisted-Names>=8.1.0,
 # but pip is stupid and fails to do so. Let's install Twisted instead.
 Twisted>=8.1.0
-pydns; python_version == '2.6' or python_version == '2.7'
-py3dns; python_version == '3.4' or python_version == '3.5'
+py3dns
 pyspf
 publicsuffix2
-ipaddress; python_version == '2.6' or python_version == '2.7'
