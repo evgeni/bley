@@ -1,7 +1,6 @@
 from twisted.trial import unittest
 import bleyhelpers
 import ipaddress
-import six
 
 
 class BleyHelpersTestCase(unittest.TestCase):
@@ -86,7 +85,7 @@ class BleyHelpersTestCase(unittest.TestCase):
         for ip in self.ips:
             params = {
                 'client_name': '%s.dyn.example.com' % ip[1],
-                'client_address': ipaddress.ip_address(six.u(ip[0])).exploded,
+                'client_address': ipaddress.ip_address(ip[0]).exploded,
                 'helo_name': '[%s]' % ip[0],
             }
             self.assertEquals(bleyhelpers.check_helo(params), 1)
@@ -95,7 +94,7 @@ class BleyHelpersTestCase(unittest.TestCase):
         for ip in self.ips:
             params = {
                 'client_name': '%s.dyn.example.com' % ip[1],
-                'client_address': ipaddress.ip_address(six.u(ip[0])).exploded,
+                'client_address': ipaddress.ip_address(ip[0]).exploded,
                 'helo_name': 'windowsxp.local',
             }
             self.assertEquals(bleyhelpers.check_helo(params), 2)

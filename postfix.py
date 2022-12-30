@@ -32,7 +32,6 @@ from twisted.internet.protocol import Factory
 from twisted.internet.interfaces import IHalfCloseableProtocol
 from zope.interface import implementer
 import ipaddress
-import six
 
 
 @implementer(IHalfCloseableProtocol)
@@ -64,16 +63,12 @@ class PostfixPolicy(LineOnlyReceiver):
             try:
                 (pkey, pval) = line.split(b'=', 1)
                 try:
-                    if six.PY3:
-                        pkey = pkey.decode('ascii', 'ignore')
-                        pval = pval.decode('ascii', 'ignore')
-                    else:
-                        pval = pval.decode('utf-8', 'ignore')
-                        pval = pval.encode('us-ascii', 'ignore')
+                    pkey = pkey.decode('ascii', 'ignore')
+                    pval = pval.decode('ascii', 'ignore')
                 except:
                     pass
                 if pkey == 'client_address':
-                    pval = ipaddress.ip_address(six.u(pval)).exploded
+                    pval = ipaddress.ip_address(pval).exploded
                 self.params[pkey] = pval
             except:
                 print('Could not parse "%s"' % line)
@@ -93,8 +88,8 @@ class PostfixPolicy(LineOnlyReceiver):
         @type action: string
         @param action: the action to be sent to Postfix (default: 'DUNNO')
         '''
-        line = six.b('action=%s' % action)
-        self.sendLine(line)
+        line = 'action=%s' % action
+        self.sendLine(line.encode('ascii'))
         self.sendLine(b'')
         if self.factory.exim_workaround:
             self.transport.loseConnection()

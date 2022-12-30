@@ -30,7 +30,6 @@ from __future__ import print_function
 import spf
 import re
 import ipaddress
-import six
 try:
     import publicsuffix2
 except ImportError:
@@ -50,7 +49,7 @@ def reverse_ip(ip):
     @rtype:    string
     @return:   the reversed IP address
     '''
-    ip = ipaddress.ip_address(six.u(ip))
+    ip = ipaddress.ip_address(ip)
     if ip.version == 4:
         a = str(ip.exploded).split('.')
         a.reverse()
@@ -114,7 +113,7 @@ def check_helo(params):
     if (params['helo_name'].startswith('[') and
        params['helo_name'].endswith(']')):
         try:
-            params['helo_name'] = '[%s]' % ipaddress.ip_address(six.u(params['helo_name']).strip('[]')).exploded
+            params['helo_name'] = '[%s]' % ipaddress.ip_address(params['helo_name'].strip('[]')).exploded
         except:
             pass
 
