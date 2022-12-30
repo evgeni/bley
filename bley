@@ -35,10 +35,7 @@ import datetime
 import logging
 
 from optparse import OptionParser
-try:
-    from ConfigParser import SafeConfigParser
-except:
-    from configparser import ConfigParser as SafeConfigParser
+from configparser import ConfigParser
 
 import ipaddress
 import re
@@ -223,7 +220,7 @@ def bley_start():
         'dbport': '0',
         'cache_valid': '60',
     }
-    config = SafeConfigParser(defaults)
+    config = ConfigParser(defaults)
     config.read(settings.conffile)
 
     settings.listen_addr = config.get('bley', 'listen_addr')

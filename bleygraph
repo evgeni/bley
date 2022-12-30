@@ -34,10 +34,7 @@ import sys
 import os
 
 from optparse import OptionParser
-try:
-    from ConfigParser import SafeConfigParser
-except:
-    from configparser import ConfigParser as SafeConfigParser
+from configparser import ConfigParser
 
 parser = OptionParser(version='2.0.0')
 parser.add_option("-d", "--destdir", dest="destdir",
@@ -61,7 +58,7 @@ if not settings.conffile:
 defaults = {
     'dbport': '0',
 }
-config = SafeConfigParser(defaults)
+config = ConfigParser(defaults)
 config.read(settings.conffile)
 
 settings.destdir = settings.destdir or config.get('bleygraph', 'destdir')
