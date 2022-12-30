@@ -4,7 +4,6 @@ from twisted.internet.protocol import ClientFactory
 from twisted.internet.defer import Deferred, DeferredList
 from twisted.internet import task
 from twisted.internet import reactor
-import six
 
 
 class PostfixPolicyClient(PostfixPolicy):
@@ -15,7 +14,7 @@ class PostfixPolicyClient(PostfixPolicy):
     def connectionMade(self):
         for x in self.factory.data:
             line = "%s=%s" % (x, self.factory.data[x])
-            self.sendLine(six.b(line))
+            self.sendLine(line.encode('ascii'))
         self.sendLine(b'')
 
     def lineReceived(self, line):

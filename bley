@@ -39,7 +39,6 @@ from configparser import ConfigParser
 
 import ipaddress
 import re
-import six
 
 from twisted.internet import reactor
 
@@ -433,7 +432,7 @@ def read_whitelist(whitelist_filename):
             whitelist.append(re.compile(line[1:-1]))
             continue
         try:
-            line_ipaddr = ipaddress.ip_network(six.u(line))
+            line_ipaddr = ipaddress.ip_network(line)
             # line is IP address
             whitelist_ip.append(line_ipaddr)
         except (ValueError):
