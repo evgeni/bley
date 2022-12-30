@@ -21,6 +21,11 @@ jobs:
           - "16.6.0"
           - "18.9.0"
           - "20.3.0"
+          - "22.4.0"
+          - "22.10.0"
+        exclude:
+          - python: "3.6"
+            twisted: "22.10.0"
     env:
       PYTHON: ${{ matrix.python }}
       TWISTED_VERSION: ${{ matrix.twisted }}
