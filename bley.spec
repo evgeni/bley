@@ -15,7 +15,9 @@ Requires:       python3-mysql
 Requires:       python3-py3dns
 Requires:       python3-pyspf
 Requires:       python3-psycopg2
+%if 0%{?fedora} > 0
 Requires:       python3-publicsuffix2
+%endif
 Requires:       python3-twisted
 
 Requires(post):   systemd
