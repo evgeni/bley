@@ -36,7 +36,6 @@ import logging
 import socket
 
 from optparse import OptionParser
-from configparser import ConfigParser
 
 import ipaddress
 import re
@@ -50,7 +49,7 @@ except:
     sys.exit(1)
 
 from twisted.application import internet, service
-from bley import BleyPolicyFactory
+from bley import BleyPolicyFactory, parse_config
 
 logger = logging.getLogger('bley')
 
@@ -210,22 +209,13 @@ def bley_start():
             settings.conffile = ['/etc/bley/bley.conf']
         elif os.path.isfile('bley.conf'):
             settings.conffile = ['bley.conf']
-        else:
-            print("Could not find a configuration file, exiting.")
-            sys.exit(1)
 
-    settings.confdir = os.path.dirname(settings.conffile[0])
+    if settings.conffile:
+        settings.confdir = os.path.dirname(settings.conffile[0])
+    else:
+        settings.confdir = './'
 
-    defaults = {
-        'listen_addr': '127.0.0.1',
-        'exim_workaround': 'false',
-        'dbpath': '',
-        'dbport': '0',
-        'cache_valid': '60',
-        'greylist_header': 'X-Greylist: delayed %(delta)s seconds by bley-%(version)s at %(hostname)s; %(date)s',
-    }
-    config = ConfigParser(defaults)
-    config.read(settings.conffile)
+    config = parse_config(settings.conffile)
 
     settings.listen_addr = config.get('bley', 'listen_addr')
     settings.listen_port = config.getint('bley', 'listen_port')

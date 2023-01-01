@@ -34,7 +34,8 @@ import sys
 import os
 
 from optparse import OptionParser
-from configparser import ConfigParser
+
+from bley import parse_config
 
 parser = OptionParser(version='2.0.0')
 parser.add_option("-d", "--destdir", dest="destdir",
@@ -51,15 +52,8 @@ if not settings.conffile:
         settings.conffile = '/etc/bley/bley.conf'
     elif os.path.isfile('bley.conf'):
         settings.conffile = 'bley.conf'
-    else:
-        print("Could not find a configuration file, exiting.")
-        sys.exit(1)
 
-defaults = {
-    'dbport': '0',
-}
-config = ConfigParser(defaults)
-config.read(settings.conffile)
+config = parse_config(settings.conffile)
 
 settings.destdir = settings.destdir or config.get('bleygraph', 'destdir')
 if not os.path.exists(settings.destdir):
