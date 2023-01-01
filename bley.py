@@ -37,12 +37,57 @@ import re
 import bleyhelpers
 from postfix import PostfixPolicy
 
+from configparser import ConfigParser
 from time import sleep
 
 import ipaddress
 
 logger = logging.getLogger('bley')
 regexp_type = type(re.compile(''))
+
+
+DEFAULT_CONFIG = {
+    'listen_addr': '127.0.0.1',
+    'listen_port': '1337',
+    'pid_file': 'bley.pid',
+    'log_file': 'bley.log',
+    'reject_msg': 'greylisted, try again later',
+    'dbtype': 'sqlite3',
+    'dbhost': 'localhost',
+    'dbuser': 'bley',
+    'dbpass': 'bley',
+    'dbpath': '',
+    'dbname': 'bley.db',
+    'dbport': '0',
+    'whitelist_recipients_file': './whitelist_recipients',
+    'whitelist_clients_file': './whitelist_clients',
+    'dnsbls': 'ix.dnsbl.manitu.net, dnsbl.sorbs.net',
+    'dnswls': 'list.dnswl.org',
+    'dnswl_threshold': '1',
+    'dnsbl_threshold': '1',
+    'rfc_threshold': '2',
+    'greylist_period': '29',
+    'greylist_max': '720',
+    'greylist_penalty': '10',
+    'purge_days': '40',
+    'purge_bad_days': '10',
+    'use_spf': '1',
+    'use_spf_guess': '0',
+    'exim_workaround': 'false',
+    'cache_valid': '60',
+    'greylist_header': 'X-Greylist: delayed %(delta)s seconds by bley-%(version)s at %(hostname)s; %(date)s',
+    'destdir': 'stats',
+}
+
+
+def parse_config(conffile):
+    config = ConfigParser(DEFAULT_CONFIG)
+    if conffile:
+        config.read(conffile)
+    for section in ('bley', 'bleygraph'):
+        if section not in config.sections():
+            config[section] = {}
+    return config
 
 
 class BleyPolicy(PostfixPolicy):
