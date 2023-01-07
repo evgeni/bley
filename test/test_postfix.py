@@ -1,4 +1,4 @@
-from postfix import PostfixPolicyFactory
+from bley.postfix import PostfixPolicyFactory
 from twisted.trial import unittest
 from twisted.test import proto_helpers
 

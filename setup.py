@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 import subprocess
 
 
@@ -10,6 +10,7 @@ def systemd_unit_path():
     except (subprocess.CalledProcessError, OSError):
         return "/lib/systemd/system"
 
+
 setup(
     name="bley",
     version="2.0.0",
@@ -18,9 +19,14 @@ setup(
     author_email="evgeni@golov.de",
     url="http://bley.mx",
     license="BSD",
-    py_modules=['bley', 'bleyhelpers', 'postfix'],
-    scripts=['bley', 'bleygraph'],
+    packages=find_packages(exclude=['contrib', 'docs', 'test']),
     zip_safe=False,
+    entry_points={
+        'console_scripts': [
+            'bley = bley.cli:bley_start',
+            'bleygraph = bley.graph:main'
+        ]
+    },
     install_requires=['Twisted>=8.1.0', 'pyspf'],
     extras_require={
         'PostgreSQL backend': ['psycopg2'],

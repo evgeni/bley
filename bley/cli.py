@@ -49,7 +49,7 @@ except:
     sys.exit(1)
 
 from twisted.application import internet, service
-from bley import BleyPolicyFactory, parse_config
+from .bley import BleyPolicyFactory, parse_config
 
 logger = logging.getLogger('bley')
 
@@ -436,4 +436,5 @@ def read_whitelist(whitelist_filename):
             whitelist.append(line)
     return (whitelist, whitelist_ip)
 
-bley_start()
+if __name__ == '__main__':
+    bley_start()

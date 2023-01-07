@@ -29,7 +29,7 @@ INSTALLATION
 Quick and dirty
 ---------------
 Unpack the tarball (or clone the git tree), adjust `bley.conf.example`,
-rename it to `bley.conf` and run `./bley`.
+rename it to `bley.conf` and run `python -m bley.cli`.
 
 Still quick, but not dirty
 --------------------------
