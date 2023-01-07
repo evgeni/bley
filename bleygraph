@@ -37,6 +37,10 @@ from optparse import OptionParser
 
 from bley import parse_config
 
+import matplotlib
+import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
+
 parser = OptionParser(version='2.0.0')
 parser.add_option("-d", "--destdir", dest="destdir",
                   help="write to DESTDIR")
@@ -81,54 +85,51 @@ if config.has_option('bley', 'dbport') and config.getint('bley', 'dbport') != 0:
 
 exec("import %s as database" % database)
 
-import matplotlib
 matplotlib.use('Agg')
-import matplotlib.pyplot as plt
-import matplotlib.dates as mdates
 
-dnswl_threshold  = config.getint('bley', 'dnswl_threshold')
-dnsbl_threshold  = config.getint('bley', 'dnsbl_threshold')
-rfc_threshold    = config.getint('bley', 'rfc_threshold')
+dnswl_threshold = config.getint('bley', 'dnswl_threshold')
+dnsbl_threshold = config.getint('bley', 'dnsbl_threshold')
+rfc_threshold = config.getint('bley', 'rfc_threshold')
 
 now = datetime.datetime.now()
 
 db = database.connect(**dbsettings)
 dbc = db.cursor()
 
-years    = mdates.YearLocator()   # every year
-months   = mdates.MonthLocator()  # every month
-hours    = mdates.HourLocator()
+years = mdates.YearLocator()   # every year
+months = mdates.MonthLocator()  # every month
+hours = mdates.HourLocator()
 twohours = mdates.HourLocator(interval=2)
 fourhours = mdates.HourLocator(interval=4)
-halfday  = mdates.HourLocator(interval=12)
-oneday   = mdates.DayLocator()
-twoday   = mdates.DayLocator(interval=2)
-fourday  = mdates.DayLocator(interval=4)
-teday    = mdates.DayLocator(interval=28)
+halfday = mdates.HourLocator(interval=12)
+oneday = mdates.DayLocator()
+twoday = mdates.DayLocator(interval=2)
+fourday = mdates.DayLocator(interval=4)
+teday = mdates.DayLocator(interval=28)
 hoursFmt = mdates.DateFormatter('%Y/%m/%d %H:%M')
-daysFmt  = mdates.DateFormatter('%Y/%m/%d')
+daysFmt = mdates.DateFormatter('%Y/%m/%d')
 
 __TIMESLOTS = [
-    {'title':  '12h', 'slot':       60, 'major_locator': twohours,
-     'minor_locator':    hours, 'formatter': hoursFmt, 'slotname':  '1h'},
-    {'title':  '24h', 'slot':     2*60, 'major_locator': fourhours,
-     'minor_locator': twohours, 'formatter': hoursFmt, 'slotname':  '2h'},
-    {'title':   '7d', 'slot':    12*60, 'major_locator': oneday,
-     'minor_locator':  halfday, 'formatter':  daysFmt, 'slotname': '12h'},
-    {'title':  '28d', 'slot':  2*24*60, 'major_locator': fourday,
-     'minor_locator':   twoday, 'formatter':  daysFmt, 'slotname':  '2d'},
-    {'title': '365d', 'slot': 28*24*60, 'major_locator': teday,
-     'minor_locator':    teday, 'formatter':  daysFmt, 'slotname': '28d'},
-                ]
+    {'title': '12h', 'slot': 60, 'major_locator': twohours,
+     'minor_locator': hours, 'formatter': hoursFmt, 'slotname': '1h'},
+    {'title': '24h', 'slot': 2 * 60, 'major_locator': fourhours,
+     'minor_locator': twohours, 'formatter': hoursFmt, 'slotname': '2h'},
+    {'title': '7d', 'slot': 12 * 60, 'major_locator': oneday,
+     'minor_locator': halfday, 'formatter': daysFmt, 'slotname': '12h'},
+    {'title': '28d', 'slot': 2 * 24 * 60, 'major_locator': fourday,
+     'minor_locator': twoday, 'formatter': daysFmt, 'slotname': '2d'},
+    {'title': '365d', 'slot': 28 * 24 * 60, 'major_locator': teday,
+     'minor_locator': teday, 'formatter': daysFmt, 'slotname': '28d'},
+]
 __QUERY_BASE = "SELECT COUNT(action) FROM bley_log WHERE action=%s AND logtime<'%s' AND logtime>='%s'"
 
 __badcheck_queries = {
     'in DNSBL': {'query': 'check_db=-1 and check_cache=0 and check_dnsbl>=%i' % (dnsbl_threshold), 'color': 'black'},
-    'bad HELO':  {'query': 'check_db=-1 and check_cache=0 and check_helo>=%i and check_dnsbl<%i' % (rfc_threshold, dnsbl_threshold), 'color': 'red'},
+    'bad HELO': {'query': 'check_db=-1 and check_cache=0 and check_helo>=%i and check_dnsbl<%i' % (rfc_threshold, dnsbl_threshold), 'color': 'red'},
     'bad grey': {'query': 'check_db=2 and check_cache=0 and check_dnsbl<%i' % (dnsbl_threshold), 'color': 'blue'},
     'from DynIP': {'query': 'check_db=-1 and check_cache=0 and (check_helo+check_dyn)>=%i and check_helo<%i and check_dnsbl<%i' % (rfc_threshold, rfc_threshold, dnsbl_threshold), 'color': 'orange'},
-    'bad SPF':  {'query': 'check_db=-1 and check_cache=0 and (check_helo+check_dyn+check_spf)>=%i and (check_helo+check_dyn)<%i and check_dnsbl<%i' % (rfc_threshold, rfc_threshold, dnsbl_threshold), 'color': 'yellow'},
-    'sender==recipient':  {'query': 'check_db=-1 and check_cache=0 and (check_helo+check_dyn+check_spf+check_s_eq_r)>=%i and (check_helo+check_dyn+check_spf)<%i and check_dnsbl<%i' % (rfc_threshold, rfc_threshold, dnsbl_threshold), 'color': 'orange'},
+    'bad SPF': {'query': 'check_db=-1 and check_cache=0 and (check_helo+check_dyn+check_spf)>=%i and (check_helo+check_dyn)<%i and check_dnsbl<%i' % (rfc_threshold, rfc_threshold, dnsbl_threshold), 'color': 'yellow'},
+    'sender==recipient': {'query': 'check_db=-1 and check_cache=0 and (check_helo+check_dyn+check_spf+check_s_eq_r)>=%i and (check_helo+check_dyn+check_spf)<%i and check_dnsbl<%i' % (rfc_threshold, rfc_threshold, dnsbl_threshold), 'color': 'orange'},
     'bad cache': {'query': 'check_db=-1 and check_cache=1 and check_dnsbl<%i' % (dnsbl_threshold), 'color': 'pink'},
 }
 __goodcheck_queries = {
@@ -153,8 +154,8 @@ __ar_files = []
 __ch_files = []
 
 for s in __TIMESLOTS:
-    d = datetime.timedelta(0, s['slot']*60, 0)
-    n = now-datetime.timedelta(0,30*60,0)
+    d = datetime.timedelta(0, s['slot'] * 60, 0)
+    n = now - datetime.timedelta(0, 30 * 60, 0)
     i = 12
     a = {'dates': [], 'mails': []}
     r = {'dates': [], 'mails': []}
@@ -164,14 +165,15 @@ for s in __TIMESLOTS:
     for check in __goodcheck_queries:
         checks[check] = {'dates': [], 'mails': [], 'color': __goodcheck_queries[check]['color']}
 
-    if not settings.quiet: print("plotting %s:" % (s['title']))
+    if not settings.quiet:
+        print("plotting %s:" % (s['title']))
     fig = plt.figure()
     ax = fig.add_subplot(111)
     fig2 = plt.figure()
     ax2 = fig2.add_subplot(111)
     while i:
-        q1 = __QUERY_BASE % ("'DUNNO'", str(n), str(n-d))
-        q2 = __QUERY_BASE % ("'DEFER_IF_PERMIT'", str(n), str(n-d))
+        q1 = __QUERY_BASE % ("'DUNNO'", str(n), str(n - d))
+        q2 = __QUERY_BASE % ("'DEFER_IF_PERMIT'", str(n), str(n - d))
         if dbtype == 'sqlite3':
             q1 = q1.replace('%s', '?')
             q2 = q2.replace('%s', '?')
@@ -201,7 +203,7 @@ for s in __TIMESLOTS:
             res = dbc.fetchone()
             checks[check]['dates'].append(numdate)
             checks[check]['mails'].append(res[0])
-        n = n-d
+        n = n - d
         i -= 1
 
     ax.plot(a['dates'], a['mails'], label="ham", color='green')
@@ -213,8 +215,8 @@ for s in __TIMESLOTS:
     ax2.legend(loc=2)
 
     fig.text(0.125, 0, "ham [ max: %s, avg: %s, min: %s  ]\nspam [ max: %s, avg: %s, min: %s  ]" %
-                        (max(a['mails']), round(float(sum(a['mails']))/len(a['mails']),2), min(a['mails']),
-                         max(r['mails']), round(float(sum(r['mails']))/len(r['mails']),2), min(r['mails'])))
+             (max(a['mails']), round(float(sum(a['mails'])) / len(a['mails']), 2), min(a['mails']),
+              max(r['mails']), round(float(sum(r['mails'])) / len(r['mails']), 2), min(r['mails'])))
 
     ax.xaxis.set_major_formatter(s['formatter'])
     ax.xaxis.set_major_locator(s['major_locator'])
