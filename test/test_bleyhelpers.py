@@ -1,5 +1,5 @@
 from twisted.trial import unittest
-import bleyhelpers
+import bley.helpers
 import ipaddress
 
 
@@ -39,10 +39,10 @@ class BleyHelpersTestCase(unittest.TestCase):
 
     def test_reverse_ip(self):
         for ip in self.ips:
-            self.assertEquals(bleyhelpers.reverse_ip(ip[0]), ip[1])
+            self.assertEquals(bley.helpers.reverse_ip(ip[0]), ip[1])
 
     def test_domain_from_host(self):
-        if not bleyhelpers.publicsuffix2:
+        if not bley.helpers.publicsuffix2:
             raise unittest.SkipTest("publicsuffix2 module not available, "
                                     "domain tests skipped")
         domains = [
@@ -54,16 +54,16 @@ class BleyHelpersTestCase(unittest.TestCase):
             ("A.really.BIG.example.museum", "example.museum"),
         ]
         for domain in domains:
-            self.assertEquals(bleyhelpers.domain_from_host(domain[0]),
+            self.assertEquals(bley.helpers.domain_from_host(domain[0]),
                               domain[1])
 
     def test_check_dyn_host_dynamic(self):
         for host in self.dynamic_hosts:
-            self.assertEquals(bleyhelpers.check_dyn_host(host), 1)
+            self.assertEquals(bley.helpers.check_dyn_host(host), 1)
 
     def test_check_dyn_host_static(self):
         for host in self.static_hosts:
-            self.assertEquals(bleyhelpers.check_dyn_host(host), 0)
+            self.assertEquals(bley.helpers.check_dyn_host(host), 0)
 
     def test_check_helo_good(self):
         for host in self.dynamic_hosts + self.static_hosts:
@@ -71,7 +71,7 @@ class BleyHelpersTestCase(unittest.TestCase):
                 'client_name': host,
                 'helo_name': host,
             }
-            self.assertEquals(bleyhelpers.check_helo(params), 0)
+            self.assertEquals(bley.helpers.check_helo(params), 0)
 
     def test_check_helo_domain(self):
         for host in self.dynamic_hosts + self.static_hosts:
@@ -79,7 +79,7 @@ class BleyHelpersTestCase(unittest.TestCase):
                 'client_name': host,
                 'helo_name': 'mail.%s' % host,
             }
-            self.assertEquals(bleyhelpers.check_helo(params), 1)
+            self.assertEquals(bley.helpers.check_helo(params), 1)
 
     def test_check_helo_ip(self):
         for ip in self.ips:
@@ -88,7 +88,7 @@ class BleyHelpersTestCase(unittest.TestCase):
                 'client_address': ipaddress.ip_address(ip[0]).exploded,
                 'helo_name': '[%s]' % ip[0],
             }
-            self.assertEquals(bleyhelpers.check_helo(params), 1)
+            self.assertEquals(bley.helpers.check_helo(params), 1)
 
     def test_check_helo_bad(self):
         for ip in self.ips:
@@ -97,7 +97,7 @@ class BleyHelpersTestCase(unittest.TestCase):
                 'client_address': ipaddress.ip_address(ip[0]).exploded,
                 'helo_name': 'windowsxp.local',
             }
-            self.assertEquals(bleyhelpers.check_helo(params), 2)
+            self.assertEquals(bley.helpers.check_helo(params), 2)
 
     def test_check_spf(self):
         raise unittest.SkipTest("SPF checks need a working network")

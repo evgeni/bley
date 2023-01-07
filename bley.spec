@@ -71,9 +71,8 @@ done
 %config(noreplace) %{_sysconfdir}/%{name}
 %{_bindir}/%{name}
 %{_bindir}/%{name}graph
-%{python3_sitelib}/bley*
-%{python3_sitelib}/postfix.py*
-%{python3_sitelib}/__pycache__/*
+%{python3_sitelib}/%{name}
+%{python3_sitelib}/%{name}-%{version}-py%{python3_version}.egg-info
 %{_mandir}/man1/%{name}.1.gz
 %{_mandir}/man1/%{name}graph.1.gz
 %{_unitdir}/%{name}.service
