@@ -6,6 +6,7 @@ include bley.spec
 include bley.logcheck
 include CHANGELOG.md
 include README.md
+include LICENSE
 include requirements.txt
 include Makefile
 include test/*.py

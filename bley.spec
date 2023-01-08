@@ -68,6 +68,7 @@ done
 
 %files
 %doc CHANGELOG.md README.md
+%license LICENSE
 %config(noreplace) %{_sysconfdir}/%{name}
 %{_bindir}/%{name}
 %{_bindir}/%{name}graph
