@@ -30,7 +30,7 @@ setup(
     install_requires=['Twisted>=8.1.0', 'pyspf'],
     extras_require={
         'PostgreSQL backend': ['psycopg2'],
-        'MySQL backend': ['MySQL-python'],
+        'MySQL backend': ['mysqlclient'],
         'publicsuffix.org support': ['publicsuffix2'],
     },
     data_files=[
