@@ -229,7 +229,7 @@ class BleyPolicy(PostfixPolicy):
             delta = datetime.datetime.now() - status[1]
             if delta > self.factory.settings.greylist_period + status[2] * self.factory.settings.greylist_penalty or delta > self.factory.settings.greylist_max:
                 if self.factory.settings.greylist_header:
-                    data = {'delta': delta.total_seconds(), 'version': self.factory.settings.version, 'hostname': self.factory.settings.hostname, 'date': datetime.datetime.now()}
+                    data = {'delta': int(delta.total_seconds()), 'version': self.factory.settings.version, 'hostname': self.factory.settings.hostname, 'date': datetime.datetime.now()}
                     header = self.factory.settings.greylist_header % data
                     action = 'PREPEND %s' % header
                 else:
