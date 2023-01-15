@@ -24,7 +24,7 @@ dbname = DBNAME
 #whitelist_clients_file = ./whitelist_clients
 
 # Which DNSBLs and DNSWLs to use?
-dnsbls =
+dnsbls = testlist.bley.mx, badtestlist.bley.mx
 dnswls =
 
 # Whitelist after dnswl_threshold hits.

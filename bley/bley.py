@@ -397,7 +397,8 @@ class BleyPolicy(PostfixPolicy):
         for l in self.factory.settings.dnsbls:
             try:
                 d = yield self.check_dnsl(l, ip)
-                result += 1
+                if len(d[0]) > 0:
+                    result += 1
             except Exception:
                 pass
             if result >= max_listed:
