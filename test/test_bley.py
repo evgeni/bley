@@ -435,6 +435,34 @@ class BleyTestCase(unittest.TestCase):
         ip = '2001:DB8::123:456'
         return self._test_whitelist_client_ip(ip)
 
+    def test_dnsbl_client(self):
+        data = {
+            'sender': 'root@example.com',
+            'recipient': 'user@example.com',
+            'client_address': '203.0.113.1',  # 1.113.0.203.testlist.bley.mx IN A 127.0.0.2
+            'client_name': 'localhost',
+            'helo_name': 'localhost',
+        }
+        d = get_action("127.0.0.1", 1337, data)
+
+        d.addCallback(self._assert_defer_action)
+
+        return d
+
+    def test_dnsbl_rfc_client(self):
+        data = {
+            'sender': 'root@example.com',
+            'recipient': 'user@example.com',
+            'client_address': '203.0.113.2',  # 2.113.0.203.badtestlist.bley.mx IN TXT broken
+            'client_name': 'localhost',
+            'helo_name': 'localhost',
+        }
+        d = get_action("127.0.0.1", 1337, data)
+
+        d.addCallback(self._assert_dunno_action)
+
+        return d
+
 
 def get_action(host, port, data):
     factory = PostfixPolicyClientFactory(data)
