@@ -86,6 +86,21 @@ class BleyTestCase(unittest.TestCase):
 
         return d
 
+    def test_invalid_sender(self):
+        ip = self._get_next_ipv4()
+        data = {
+            'sender': '{mta365@enggjournal.test|mta365@enggjournal.test|mta365@enggpublication.test|mta365@enggpublication.test|mta@enggjournal.test|mta@enggjournal.test|mta@enggpublication.test|mta@enggpublication.test|server@enggjournal.test|server@enggjournal.test|server@enggpublication.test|server@enggpublication.test',
+            'recipient': 'user@example.com',
+            'client_address': ip,
+            'client_name': 'localhost',
+            'helo_name': 'localhost',
+        }
+        d = get_action("127.0.0.1", 1337, data)
+
+        d.addCallback(self._assert_dunno_action)
+
+        return d
+
     def _test_good_client(self, ip):
         data = {
             'sender': 'root@example.com',
