@@ -134,6 +134,11 @@ class BleyPolicy(PostfixPolicy):
         self.params['now'] = datetime.datetime.now()
         postfix_params = self.params
 
+        # sanitize sender and recipient parameters
+        for param in ('sender', 'recipient'):
+            if len(postfix_params[param]) > 254:
+                postfix_params[param] = postfix_params[param][:254]
+
         # Strip everything after a + in the localpart,
         # usefull for mailinglists etc
         if postfix_params['sender'].find('+') != -1:
