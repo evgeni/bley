@@ -136,15 +136,14 @@ class BleyPolicy(PostfixPolicy):
 
         # sanitize sender and recipient parameters
         for param in ('sender', 'recipient'):
+            # Strip everything after a + in the localpart,
+            # usefull for mailinglists etc
+            if postfix_params[param].find('+') != -1:
+                postfix_params[param] = postfix_params[param][:postfix_params[param].find('+')] + postfix_params[param][postfix_params[param].find('@'):]
+
+            # shorten to a max length of 254
             if len(postfix_params[param]) > 254:
                 postfix_params[param] = postfix_params[param][:254]
-
-        # Strip everything after a + in the localpart,
-        # usefull for mailinglists etc
-        if postfix_params['sender'].find('+') != -1:
-            postfix_params['sender'] = postfix_params['sender'][:postfix_params['sender'].find('+')] + postfix_params['sender'][postfix_params['sender'].find('@'):]
-        if postfix_params['recipient'].find('+') != -1:
-            postfix_params['recipient'] = postfix_params['recipient'][:postfix_params['recipient'].find('+')] + postfix_params['recipient'][postfix_params['recipient'].find('@'):]
 
         if postfix_params['client_address'] in self.factory.bad_cache.keys():
             delta = datetime.datetime.now() - self.factory.bad_cache[postfix_params['client_address']]
