@@ -1,0 +1,100 @@
+name: Debian
+
+on:
+  push:
+    branches:
+      - devel
+    tags:
+      - '**'
+  pull_request:
+
+concurrency:
+  group: ${{ github.ref_name }}-${{ github.workflow }}
+  cancel-in-progress: true
+
+jobs:
+  source:
+    runs-on: ubuntu-latest
+    outputs:
+      project-name: ${{ steps.project-details.outputs.project-name }}
+      project-version: ${{ steps.project-details.outputs.project-version }}
+      project-source: ${{ steps.project-details.outputs.project-source }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+      - run: make sdist
+      - uses: actions/upload-artifact@v3
+        with:
+          name: upstream-source
+          path: dist/
+      - uses: actions/checkout@v3
+        with:
+          ref: debian
+          path: debian
+      - uses: actions/upload-artifact@v3
+        with:
+          name: upstream-debian-source
+          path: debian/debian/
+      - id: project-details
+        run: |
+          echo project-name=bley >> $GITHUB_OUTPUT
+          echo project-version=$(python3 setup.py --version) >> $GITHUB_OUTPUT
+          echo project-source=bley-$(python3 setup.py --version).tar.gz >> $GITHUB_OUTPUT
+
+  debian-source:
+    needs: source
+    runs-on: ubuntu-latest
+    container: debian/buildd:bullseye
+    outputs:
+      project-name: ${{ needs.source.outputs.project-name }}
+      project-version: ${{ needs.source.outputs.project-version }}
+    steps:
+      - uses: actions/download-artifact@v3
+        with:
+          name: upstream-source
+      - run: echo PROJECT_ORIG_TAR=${{ needs.source.outputs.project-name }}_${{ needs.source.outputs.project-version }}.orig.tar.$(echo '${{ needs.source.outputs.project-source }}' | sed -E 's/.*\.tar\.([^.]+)$/\1/') >> $GITHUB_ENV
+      - run: mv ${{ needs.source.outputs.project-source }} ${{ env.PROJECT_ORIG_TAR }}
+      - run: tar --strip-components=1 --one-top-level=source -xf ${{ env.PROJECT_ORIG_TAR }}
+      - uses: actions/download-artifact@v3
+        with:
+          name: upstream-debian-source
+          path: source/debian/
+      - run: apt-get update
+      - run: apt-get install -y --no-install-recommends devscripts
+      - run: apt-get build-dep -y .
+        working-directory: source
+      - run: dch --newversion ${{ needs.source.outputs.project-version }}-1+gha+$(date +"%Y%m%d") --preserve --force-bad-version "GitHub Actions build"
+        working-directory: source
+        env:
+          DEBEMAIL: github-actions@github.com
+          DEBFULLNAME: GitHub Actions
+      - run: dpkg-buildpackage -us -uc -S
+        working-directory: source
+      - uses: actions/upload-artifact@v3
+        with:
+          name: debian-source
+          path: ${{ needs.source.outputs.project-name }}_${{ needs.source.outputs.project-version }}*
+
+  debian-binary:
+    needs: debian-source
+    runs-on: ubuntu-latest
+    container: debian/buildd:bullseye
+    steps:
+      - uses: actions/download-artifact@v3
+        with:
+          name: debian-source
+      - run: apt-get update
+      - run: dpkg-source -x *.dsc source
+      - run: apt-get build-dep -y .
+        working-directory: source
+      - run: dpkg-buildpackage -us -uc
+        working-directory: source
+      - uses: actions/upload-artifact@v3
+        with:
+          name: debian-binary
+          path: |
+            ${{ needs.debian-source.outputs.project-name }}_${{ needs.debian-source.outputs.project-version }}*
+            *.deb
+            !*_source.*
