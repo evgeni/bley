@@ -9,6 +9,7 @@ Homepage: http://bley.mx
 
 Package: bley
 Architecture: all
+Pre-Depends: ${misc:Pre-Depends}
 Depends: ${misc:Depends}, ${python:Depends},
  dbconfig-common, adduser
 Recommends: postgresql-client | mysql-client | sqlite3, python-psycopg2 | python-mysqldb, postfix | exim4
