@@ -98,3 +98,15 @@ jobs:
             ${{ needs.debian-source.outputs.project-name }}_${{ needs.debian-source.outputs.project-version }}*
             *.deb
             !*_source.*
+
+  lintian:
+    runs-on: ubuntu-latest
+    needs: debian-binary
+    container: debian:sid
+    steps:
+      - run: apt-get update
+      - run: apt-get install -y --no-install-recommends lintian
+      - uses: actions/download-artifact@v3
+        with:
+          name: debian-binary
+      - run: lintian --info --display-info *.changes
