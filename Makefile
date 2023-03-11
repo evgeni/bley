@@ -1,6 +1,3 @@
-BLEY_VERSION := $(shell python setup.py -V)
-TRIAL_VERSION := $(shell trial --version |sed "s/[^0-9]//g")
-#TRIAL_FLAGS ?= $(shell test $(TRIAL_VERSION) -ge 1230 && echo "-j2")
 TRIAL ?= trial
 
 sdist:
