@@ -8,13 +8,13 @@ Last-Update: 2014-07-31
 +++ b/bley.conf.example
 @@ -6,7 +6,7 @@ listen_port = 1337
  # Where to save the PID file?
- pid_file = bley.pid
+ #pid_file = bley.pid
  # Where to save the log file?
--log_file = bley.log
+-#log_file = bley.log
 +log_file = syslog
- 
- reject_msg = greylisted, try again later
- 
+
+ #reject_msg = greylisted, try again later
+
 --- a/bley.service
 +++ b/bley.service
 @@ -7,7 +7,7 @@ After=network.target remote-fs.target nss-lookup.target postgresql.service mysql
