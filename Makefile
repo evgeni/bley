@@ -1,7 +1,7 @@
 TRIAL ?= trial
 
 sdist:
-	python setup.py sdist
+	python3 setup.py sdist
 
 test: test-psql test-sqlite
 	pep8 --ignore=E501 ./bley .
