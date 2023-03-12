@@ -4,7 +4,7 @@ Depends: postgresql, python-psycopg2, bley
 
 Test-Command: ./debian/tests/runtests.sh
 Restrictions: needs-root allow-stderr
-Depends: mysql-server, python-mysqldb, bley
+Depends: default-mysql-server, python-mysqldb, bley
 
 Test-Command: ./debian/tests/runtests.sh
 Restrictions: needs-root allow-stderr
