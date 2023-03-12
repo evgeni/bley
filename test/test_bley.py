@@ -1,3 +1,4 @@
+import os
 from bley.postfix import PostfixPolicy
 from twisted.trial import unittest
 from twisted.internet.protocol import ClientFactory
@@ -436,6 +437,9 @@ class BleyTestCase(unittest.TestCase):
         return self._test_whitelist_client_ip(ip)
 
     def test_dnsbl_client(self):
+        if os.environ.get('BLEY_TEST_ALLOW_NETWORK', 'false') != 'true':
+            raise unittest.SkipTest('test requires network access')
+
         data = {
             'sender': 'root@example.com',
             'recipient': 'user@example.com',
@@ -450,6 +454,9 @@ class BleyTestCase(unittest.TestCase):
         return d
 
     def test_dnsbl_rfc_client(self):
+        if os.environ.get('BLEY_TEST_ALLOW_NETWORK', 'false') != 'true':
+            raise unittest.SkipTest('test requires network access')
+
         data = {
             'sender': 'root@example.com',
             'recipient': 'user@example.com',
