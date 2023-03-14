@@ -5,7 +5,7 @@
 #export DH_VERBOSE=1
 
 %:
-	dh  $@ --buildsystem=python_distutils --with python2 --with systemd
+	dh $@ --buildsystem=pybuild --with python3
 
 override_dh_install:
 	dh_install
@@ -21,5 +21,5 @@ override_dh_auto_clean:
 override_dh_auto_test:
 	# skip for now
 
-override_dh_python2:
-	dh_python2 --requires=requirements.txt --depends=Twisted-Names
+override_dh_python3:
+	dh_python3 --requires=requirements.txt
