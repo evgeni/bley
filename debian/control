@@ -12,7 +12,7 @@ Architecture: all
 Pre-Depends: ${misc:Pre-Depends}
 Depends: ${misc:Depends}, ${python:Depends},
  dbconfig-common, adduser
-Recommends: postgresql-client | mysql-client | sqlite3, python-psycopg2 | python-mysqldb, postfix | exim4
+Recommends: postgresql-client | default-mysql-client | sqlite3, python-psycopg2 | python-mysqldb, postfix | exim4
 XB-Python-Version: ${python:Versions}
 Description: intelligent greylisting daemon for Postfix and Exim
  bley uses various tests (incl. RBL and SPF) to decide whether a sender
