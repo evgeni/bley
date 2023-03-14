@@ -1,0 +1,14 @@
+#!/bin/sh
+
+set -e
+#set -x
+
+. /usr/share/debconf/confmodule
+
+if [ -f /usr/share/dbconfig-common/dpkg/config ]; then
+	dbc_dbtypes="mysql, pgsql, sqlite3"
+	dbc_basepath="/var/lib/bley"
+	dbc_authmethod_user="password"
+	. /usr/share/dbconfig-common/dpkg/config
+	dbc_go bley $@
+fi
