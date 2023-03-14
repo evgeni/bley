@@ -1,1 +1,1 @@
-extend-diff-ignore = "^(.travis.yml|.github/.*|tox.ini)$"
+extend-diff-ignore = "^(.packit.yaml|.github/.*|tox.ini)$"
