@@ -1,1 +1,1 @@
-extend-diff-ignore = "^(.packit.yaml|.github/.*|tox.ini)$"
+extend-diff-ignore = "^(.packit.yaml|.github/.*|tox.ini|bley.spec)$"
