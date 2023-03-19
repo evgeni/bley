@@ -1,11 +1,14 @@
 Test-Command: bash debian/tests/runtests.sh
 Restrictions: needs-root allow-stderr
+Features: test-name=postgresql
 Depends: postgresql, python3-psycopg2, bley
 
 Test-Command: bash debian/tests/runtests.sh
 Restrictions: needs-root allow-stderr
+Features: test-name=mysql
 Depends: default-mysql-server, python3-mysqldb, bley
 
 Test-Command: bash debian/tests/runtests.sh
 Restrictions: needs-root allow-stderr
+Features: test-name=sqlite
 Depends: sqlite3, bley
