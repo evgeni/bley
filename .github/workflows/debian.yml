@@ -140,4 +140,4 @@ jobs:
       - uses: actions/download-artifact@v3
         with:
           name: debian-binary
-      - run: piuparts *.changes --docker-image debian:sid
+      - run: piuparts *.changes --docker-image debian:sid --fake-essential-packages dbconfig-no-thanks
