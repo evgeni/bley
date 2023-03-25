@@ -29,14 +29,10 @@ jobs:
         with:
           name: upstream-source
           path: dist/
-      - uses: actions/checkout@v3
-        with:
-          ref: debian
-          path: debian
       - uses: actions/upload-artifact@v3
         with:
           name: upstream-debian-source
-          path: debian/debian/
+          path: debian/
       - id: project-details
         run: |
           echo project-name=bley >> $GITHUB_OUTPUT
