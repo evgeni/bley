@@ -1,0 +1,5 @@
+pyspf python3-spf
+Twisted-Core python3-twisted
+Twisted-Names python3-twisted
+Twisted python3-twisted
+publicsuffix2 python3-publicsuffix2

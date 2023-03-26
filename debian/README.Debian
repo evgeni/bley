@@ -1,0 +1,32 @@
+README.Debian for bley
+======================
+
+bley is autoconfigured with dbconfig-common in Debian. When, for some reason,
+you want to do it by hand, you have to execute the following steps:
+
+1. Create a database and an user who can write to it.
+   For PostgreSQL, you can do this with:
+    CREATE USER bley WITH PASSWORD 'bley';
+    CREATE DATABASE bley;
+    GRANT ALL ON DATABASE bley TO bley;
+   For MySQL, it should be something like:
+    CREATE USER 'bley'@'localhost' IDENTIFIED BY 'bley';
+    CREATE DATABASE bley;
+    GRANT ALL ON bley.* TO 'bley'@'localhost';
+
+2. Tell bley to use these settings for accessing the database:
+   Edit /etc/bley/dbconfig-common.conf and set
+   dbtype=pgsql (or mysql if you are using MySQL)
+   and dbhost, dbname, dbuser, dbpass to the appropriate values.
+   (Yes, really no quotes, this is a Python ConfigParser config.)
+
+3. Restart bley.
+
+Now bley is running and you can configure Postfix to use it as a policy server
+by editing /etc/postfix/main.cf and setting smtpd_recipient_restrictions to
+ smtpd_recipient_restrictions = ..., check_policy_service inet:127.0.0.1:1337
+
+After reloading the Postfix configuration, it will use bley for filtering spam.
+
+ -- Evgeni Golov <evgeni@debian.org>  Mon, 26 Apr 2010 11:30:50 +0200
+

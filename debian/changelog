@@ -1,0 +1,95 @@
+bley (2.0.0-2) unstable; urgency=medium
+
+  * drop dnsbl.ahbl.org from the config, it was shut down and produces
+    false positives.
+
+ -- Evgeni Golov <evgeni@debian.org>  Thu, 08 Jan 2015 09:47:58 +0100
+
+bley (2.0.0-1) unstable; urgency=medium
+
+  * Imported Upstream version 2.0.0
+  * Standards-Version: 3.9.6
+  * X-Python-Version: >= 2.6
+
+ -- Evgeni Golov <evgeni@debian.org>  Tue, 21 Oct 2014 08:33:50 +0200
+
+bley (2.0.0~beta.2-1) unstable; urgency=medium
+
+  * Imported Upstream version 2.0.0~beta.2
+
+ -- Evgeni Golov <evgeni@debian.org>  Sat, 20 Sep 2014 14:10:49 +0200
+
+bley (2.0.0~beta.1-1) unstable; urgency=medium
+
+  * Imported Upstream version 2.0.0~beta.1
+    + Does not use SPF Best Guess by default (Closes: #656612)
+  * fix config file permissions (Closes: #731123)
+  * drop 02-drop-dnsbl.njabl.org-it-s-not-maintained-anymore.patch
+  * refresh and simplify debian_config_and_paths.patch
+  * drop manpage, it's upstream now
+  * Standards-Version: 3.9.5
+  * fix a typo in debian/control
+  * enable SQLite3 support
+  * use dh-systemd and create /run/bley using a tmpfiles.d snipet
+  * start the daemon with
+     -c /etc/bley/bley.conf -c /etc/bley/dbconfig-common.conf
+  * add MySQL and PostgreSQL to Should-Start/Stop (Closes: #630905)
+  * mention Exim support in Recommends and Description
+  * update d/copyright for copyright-format/1.0
+  * use dh-python instead of hardcoding all the pythonic deps
+
+ -- Evgeni Golov <evgeni@debian.org>  Sun, 03 Aug 2014 10:02:17 +0200
+
+bley (0.1.5-2) unstable; urgency=low
+
+  * cherry-pick patch from upstream to disable njabl.org
+
+ -- Evgeni Golov <evgeni@debian.org>  Wed, 13 Mar 2013 11:15:58 +0100
+
+bley (0.1.5-1) unstable; urgency=low
+
+  * New upstream release
+    + Includes fixes for MySQL problems.
+      Closes: #618252
+    + Does not import psycopg2 when running with mysql anymore.
+      Closes: #599729
+  * Switch to dh_python2.
+  * Set X-Python-Version >= 2.5, not only "2.5, 2.6".
+    Closes: #606363
+  * Standards-Version: 3.9.2
+
+ -- Evgeni Golov <evgeni@debian.org>  Sat, 04 Jun 2011 14:53:21 +0200
+
+bley (0.1.4-1) unstable; urgency=low
+
+  * New upstream release
+
+ -- Evgeni Golov <evgeni@debian.org>  Sun, 15 Aug 2010 17:20:25 +0200
+
+bley (0.1.3-1) unstable; urgency=low
+
+  * New upstream release
+  * debian/control:
+    + Standards-Version: 3.9.1
+    + Fix typo in description (Closes: #591214)
+  * debian/copyright:
+    + Quote BSD license, thanks lintian.
+
+ -- Evgeni Golov <evgeni@debian.org>  Sun, 15 Aug 2010 13:47:43 +0200
+
+bley (0.1.2-1) unstable; urgency=low
+
+  * New upstream release
+  * debian/bley.{init,postinst}:
+    + Create /var/run/bley in init, /var/run is cleaned on reboot on
+      some systems.
+  * debian/control:
+    + Add depends on python-twisted-names.
+
+ -- Evgeni Golov <evgeni@debian.org>  Thu, 27 May 2010 09:27:37 +0200
+
+bley (0.1.1-1) unstable; urgency=low
+
+  * Initial release (Closes: #578491)
+
+ -- Evgeni Golov <evgeni@debian.org>  Tue, 27 Apr 2010 18:47:41 +0200

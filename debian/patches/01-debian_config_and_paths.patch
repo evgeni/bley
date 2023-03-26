@@ -1,0 +1,28 @@
+Description: Use Debian paths and a Debian specific config
+ Needed for dbconfig-common usage.
+Author: Evgeni Golov <evgeni@debian.org>
+Forwarded: not-needed
+Last-Update: 2014-07-31
+
+--- a/bley.conf.example
++++ b/bley.conf.example
+@@ -6,7 +6,7 @@ listen_port = 1337
+ # Where to save the PID file?
+ #pid_file = bley.pid
+ # Where to save the log file?
+-#log_file = bley.log
++log_file = syslog
+
+ #reject_msg = greylisted, try again later
+
+--- a/bley.service
++++ b/bley.service
+@@ -7,7 +7,7 @@ After=network.target remote-fs.target nss-lookup.target postgresql.service mysql
+ Type=forking
+ User=bley
+ RuntimeDirectory=bley
+-ExecStart=/usr/bin/bley -c /etc/bley/bley.conf -p /run/bley/bley.pid
++ExecStart=/usr/bin/bley -c /etc/bley/bley.conf -c /etc/bley/dbconfig-common.conf -p /run/bley/bley.pid
+ PIDFile=/run/bley/bley.pid
+ 
+ [Install]
