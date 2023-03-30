@@ -8,8 +8,23 @@ greylisting delay while still filtering most of the spam.
 
 PACKAGES
 ========
- * [Debian](http://packages.debian.org/bley)
- * [Ubuntu](http://packages.ubuntu.com/bley)
+
+## [devel builds](https://cloudsmith.io/~bley/repos/bley/packages/)
+
+[![Hosted By: Cloudsmith](https://img.shields.io/badge/OSS%20hosting%20by-cloudsmith-blue?logo=cloudsmith&style=flat-square)](https://cloudsmith.com)
+
+Package repository hosting is graciously provided by [Cloudsmith](https://cloudsmith.com)
+
+```console
+# mkdir -p /etc/apt/keyrings/
+# curl 'https://dl.cloudsmith.io/public/bley/bley/gpg.31A9C34356A3F75F.key' -o /etc/apt/keyrings/bley.asc
+# echo 'deb [signed-by=/etc/apt/keyrings/bley.asc] https://dl.cloudsmith.io/public/bley/bley/deb/debian sid main' > /etc/apt/sources.list.d/bley.list
+```
+
+## stable builds
+
+ * [Debian](http://packages.debian.org/bley) (stretch and buster)
+ * [Ubuntu](http://packages.ubuntu.com/bley) (bionic)
 
 DEPENDENCIES
 ============
