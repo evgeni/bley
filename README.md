@@ -23,8 +23,8 @@ Package repository hosting is graciously provided by [Cloudsmith](https://clouds
 
 ## stable builds
 
- * [Debian](http://packages.debian.org/bley) (stretch and buster)
- * [Ubuntu](http://packages.ubuntu.com/bley) (bionic)
+ * [Debian](https://packages.debian.org/bley) (stretch and buster)
+ * [Ubuntu](https://packages.ubuntu.com/bley) (bionic)
 
 DEPENDENCIES
 ============
@@ -32,7 +32,7 @@ DEPENDENCIES
 [Twisted](https://twisted.org/) framework. It uses
 [pyspf](https://github.com/sdgathman/pyspf) for SPF validation and
 [publicsuffix2](https://github.com/nexb/python-publicsuffix2) for checking
-of domains against the [PublicSuffix.org](http://publicsuffix.org)
+of domains against the [PublicSuffix.org](https://publicsuffix.org)
 database. Database interaction is implemented via
 [sqlite3](https://docs.python.org/3/library/sqlite3.html) for SQLite,
 [psycopg2](https://www.psycopg.org/) for PostgreSQL and
@@ -67,7 +67,7 @@ Basically you just have to configure the database:
     dbpath = you can also set the path separately and load ${dbpath}/${dbname}
 
 After that you can point your Postfix to `bley` as a 
-[policy server](http://www.postfix.org/SMTPD_POLICY_README.html) by
+[policy server](https://www.postfix.org/SMTPD_POLICY_README.html) by
 adding `check_policy_service inet:127.0.0.1:1337` to your
 `smtpd_recipient_restrictions` in `main.cf`.
 
@@ -144,7 +144,7 @@ Whitelisting
 ------------
 
 In some situations, it is useful to be able to whitelist senders or recipients.
-This can be done by providing lists as files (syntax is [postgrey](http://postgrey.schweikert.ch/) compatible).
+This can be done by providing lists as files (syntax is [postgrey](https://postgrey.schweikert.ch/) compatible).
 
     whitelist_recipients_file = ./whitelist_recipients
     whitelist_clients_file = ./whitelist_clients
@@ -218,7 +218,7 @@ bleygraph
 =========
 `bley` includes a small graphing utility called `bleygraph`.
 It will analyze the `bley_log` table of the database, and plot a few graphs
-using [matplotlib](http://matplotlib.org/).
+using [matplotlib](https://matplotlib.org/).
 
 There is not much configuration possible for `bleygraph`: the database
 settings are taken from the `bley` section of `bley.conf` and the path
