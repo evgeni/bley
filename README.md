@@ -28,15 +28,15 @@ Package repository hosting is graciously provided by [Cloudsmith](https://clouds
 
 DEPENDENCIES
 ============
-`bley` is written in [Python](http://python.org) using the
-[Twisted](http://twistedmatrix.com/) framework. It uses
-[pyspf](http://pypi.python.org/pypi/pyspf) for SPF validation and
-[publicsuffix2](https://pypi.python.org/pypi/publicsuffix2) for checking
+`bley` is written in [Python](https://www.python.org/) using the
+[Twisted](https://twisted.org/) framework. It uses
+[pyspf](https://github.com/sdgathman/pyspf) for SPF validation and
+[publicsuffix2](https://github.com/nexb/python-publicsuffix2) for checking
 of domains against the [PublicSuffix.org](http://publicsuffix.org)
 database. Database interaction is implemented via
-[sqlite3](http://docs.python.org/2/library/sqlite3.html) for SQLite,
-[psycopg2](http://initd.org/psycopg/) for PostgreSQL and
-[MySQL-Python](http://mysql-python.sourceforge.net/) for MySQL.
+[sqlite3](https://docs.python.org/3/library/sqlite3.html) for SQLite,
+[psycopg2](https://www.psycopg.org/) for PostgreSQL and
+[mysqlclient](https://github.com/PyMySQL/mysqlclient) for MySQL.
 
 INSTALLATION
 ============
