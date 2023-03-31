@@ -125,8 +125,8 @@ earlier.
     purge_days = 40
     purge_bad_days = 10
 
-SPF ([Sender Policy Framework](http://www.openspf.org)) checks can be turned
-off. [SPF Best Guess](http://www.openspf.net/Best_Practices/No_Best_Guess)
+SPF ([Sender Policy Framework](http://www.open-spf.org)) checks can be turned
+off. [SPF Best Guess](http://www.open-spf.org/Best_Practices/No_Best_Guess/)
 should always be turned off.
 
     use_spf = 1
