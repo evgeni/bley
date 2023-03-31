@@ -4,6 +4,7 @@ Priority: optional
 Maintainer: Evgeni Golov <evgeni@debian.org>
 Build-Depends: debhelper-compat (= 13), dh-python, python3-setuptools, python3-all
 Standards-Version: 4.6.2
+Rules-Requires-Root: no
 X-Python-Version: >= 3.6
 Homepage: https://bley.mx
 
