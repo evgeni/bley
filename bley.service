@@ -2,6 +2,7 @@
 Description=Bley greylisting daemon
 Wants=postgresql.service mysql.service
 After=network.target remote-fs.target nss-lookup.target postgresql.service mysql.service
+Documentation=man:bley(1) https://bley.mx
 
 [Service]
 Type=forking
