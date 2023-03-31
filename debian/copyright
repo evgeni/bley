@@ -1,7 +1,7 @@
 Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: bley
 Upstream-Contact: Evgeni Golov <evgeni@debian.org>
-Source: http://bley.mx
+Source: https://bley.mx
 
 Files: *
 Copyright: 2009-2014 Evgeni Golov <evgeni@debian.org>
