@@ -98,41 +98,31 @@ jobs:
   lintian:
     runs-on: ubuntu-latest
     needs: debian-binary
-    container: debian:sid
     steps:
-      - run: apt-get update
-      - run: apt-get install -y --no-install-recommends lintian
       - uses: actions/download-artifact@v3
         with:
           name: debian-binary
-      - run: lintian --info --display-info *.changes
+      - uses: evgeni/action-lintian@v0
 
   autopkgtest:
     runs-on: ubuntu-latest
     needs: debian-binary
-    container: debian:sid
     steps:
-      - run: apt-get update
-      - run: apt-get install -y --no-install-recommends autopkgtest autodep8 docker.io
       - uses: actions/download-artifact@v3
         with:
           name: debian-binary
-      - run: autopkgtest *.changes --setup-commands="apt-get update; sed -i 's/exit 101/exit 0/' /usr/sbin/policy-rc.d" -- docker --remote debian:sid
+      - uses: evgeni/action-autopkgtest@v0
 
   piuparts:
     runs-on: ubuntu-latest
     needs: debian-binary
-    container:
-      image: debian:sid
-      volumes:
-        - /var/lib/docker:/var/lib/docker
     steps:
-      - run: apt-get update
-      - run: apt-get install -y --no-install-recommends piuparts docker.io
       - uses: actions/download-artifact@v3
         with:
           name: debian-binary
-      - run: piuparts *.changes --docker-image debian:sid --fake-essential-packages dbconfig-no-thanks
+      - uses: evgeni/action-piuparts@v0
+        with:
+          fake-essential-packages: dbconfig-no-thanks
 
   cloudsmith:
     if: github.repository_owner == 'evgeni' && github.event_name == 'push'
