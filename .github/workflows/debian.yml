@@ -61,7 +61,7 @@ jobs:
       - run: apt-get install -y --no-install-recommends devscripts
       - run: apt-get build-dep -y .
         working-directory: source
-      - run: dch --newversion ${{ needs.source.outputs.project-version }}-1+gha+$(date +"%Y%m%d%H%M%S")+$(echo ${GITHUB_HEAD_REF:-$GITHUB_REF_NAME} | tr /- .) --preserve --force-bad-version "GitHub Actions build"
+      - run: dch --newversion ${{ needs.source.outputs.project-version }}-1+gha+$(date +"%Y%m%d%H%M%S")+$(echo ${GITHUB_HEAD_REF:-$GITHUB_REF_NAME} | tr --complement '[:alnum:].' .) --preserve --force-bad-version "GitHub Actions build"
         working-directory: source
         env:
           DEBEMAIL: github-actions@github.com
