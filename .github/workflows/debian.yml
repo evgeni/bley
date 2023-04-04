@@ -110,10 +110,7 @@ jobs:
   autopkgtest:
     runs-on: ubuntu-latest
     needs: debian-binary
-    container:
-      image: debian:sid
-      volumes:
-        - /var/run/docker.sock:/var/run/docker.sock
+    container: debian:sid
     steps:
       - run: apt-get update
       - run: apt-get install -y --no-install-recommends autopkgtest autodep8 docker.io
@@ -128,7 +125,6 @@ jobs:
     container:
       image: debian:sid
       volumes:
-        - /var/run/docker.sock:/var/run/docker.sock
         - /var/lib/docker:/var/lib/docker
     steps:
       - run: apt-get update
