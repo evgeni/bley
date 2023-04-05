@@ -3,9 +3,11 @@ TRIAL ?= trial
 sdist:
 	python3 setup.py sdist
 
-test: test-psql test-mysql test-sqlite
-	pep8 --ignore=E501 ./bley .
+test: test-psql test-mysql test-sqlite lint
 	make test-clean
+
+lint:
+	pycodestyle --ignore=E501 ./bley ./setup.py
 
 test-sqlite: test-setup-sqlite
 	$(TRIAL) $(TRIAL_FLAGS) test/test_*.py
