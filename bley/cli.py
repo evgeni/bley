@@ -44,7 +44,7 @@ from twisted.internet import reactor
 
 try:
     from twisted.scripts._twistd_unix import UnixApplicationRunner
-except:
+except ImportError:
     print("Could not import _twistd_unix. Exiting...")
     sys.exit(1)
 
@@ -249,8 +249,7 @@ def bley_start():
     else:
         print("No supported database configured.")
         sys.exit(1)
-    if (config.has_option('bley', 'dbport') and
-       config.getint('bley', 'dbport') != 0):
+    if config.has_option('bley', 'dbport') and config.getint('bley', 'dbport') != 0:
         settings.dbsettings['port'] = config.getint('bley', 'dbport')
 
     settings.reject_msg = config.get('bley', 'reject_msg')
@@ -412,7 +411,7 @@ def read_whitelist(whitelist_filename):
     global logger
     try:
         whitelist_fh = open(whitelist_filename, 'r')
-    except:
+    except OSError:
         logger.warning('Could not open file: %s' % (whitelist_filename))
         return (['postmaster@'], ())
     whitelist = list()
@@ -435,6 +434,7 @@ def read_whitelist(whitelist_filename):
             # Ordinary string (domain name or username)
             whitelist.append(line)
     return (whitelist, whitelist_ip)
+
 
 if __name__ == '__main__':
     bley_start()

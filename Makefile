@@ -7,7 +7,7 @@ test: test-psql test-mysql test-sqlite lint
 	make test-clean
 
 lint:
-	pycodestyle --ignore=E501 ./bley ./setup.py
+	pycodestyle --ignore=E501,W503 ./bley ./setup.py
 
 test-sqlite: test-setup-sqlite
 	$(TRIAL) $(TRIAL_FLAGS) test/test_*.py

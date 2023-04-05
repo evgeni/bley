@@ -125,7 +125,7 @@ class BleyPolicy(PostfixPolicy):
             self.db = self.factory.settings.db
             try:
                 self.dbc = self.db.cursor()
-            except:
+            except Exception:
                 self.safe_reconnect()
 
         check_results = {'DNSWL': 0, 'DNSBL': 0, 'HELO': 0, 'DYN': 0, 'DB': -1,
@@ -224,7 +224,7 @@ class BleyPolicy(PostfixPolicy):
             postfix_params['new_status'] = new_status
             try:
                 self.safe_execute(query, postfix_params)
-            except:
+            except Exception:
                 # the other thread already commited while we checked, ignore
                 pass
 
@@ -352,7 +352,7 @@ class BleyPolicy(PostfixPolicy):
         try:
             self.safe_execute(query, postfix_params)
             result = self.dbc.fetchone()
-        except:
+        except Exception:
             result = None
             logger.info('check_local_db failed. sending unknown.')
         if not result:
@@ -372,9 +372,9 @@ class BleyPolicy(PostfixPolicy):
         @return: in how many DNSWLs did we find ip?
         '''
         result = 0
-        for l in self.factory.settings.dnswls:
+        for dnsl in self.factory.settings.dnswls:
             try:
-                d = yield self.check_dnsl(l, ip)
+                d = yield self.check_dnsl(dnsl, ip)
                 result += 1
             except Exception:
                 pass
@@ -394,9 +394,9 @@ class BleyPolicy(PostfixPolicy):
         @return: in how many DNSBLs did we find ip?
         '''
         result = 0
-        for l in self.factory.settings.dnsbls:
+        for dnsl in self.factory.settings.dnsbls:
             try:
-                d = yield self.check_dnsl(l, ip)
+                d = yield self.check_dnsl(dnsl, ip)
                 if len(d[0]) > 0:
                     result += 1
             except Exception:
@@ -440,7 +440,7 @@ class BleyPolicy(PostfixPolicy):
         logger.info('Reconnecting to the database after an error.')
         try:
             self.db.close()
-        except:
+        except Exception:
             pass
         self.db = None
         retries = 0
