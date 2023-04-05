@@ -37,8 +37,8 @@ except ImportError:
 
 publicsuffixlist = None
 
-__dyn_host = re.compile('(\.bb\.|broadband|cable|dial|dip|dsl|dyn|gprs|pool|ppp|umts|wimax|wwan|[0-9]{1,3}[.-][0-9]{1,3}[.-][0-9]{1,3}[.-][0-9]{1,3})', re.I)
-__static_host = re.compile('(colo|dedi|hosting|mail|mx[^$]|smtp|static)', re.I)
+__dyn_host = re.compile(r'(\.bb\.|broadband|cable|dial|dip|dsl|dyn|gprs|pool|ppp|umts|wimax|wwan|[0-9]{1,3}[.-][0-9]{1,3}[.-][0-9]{1,3}[.-][0-9]{1,3})', re.I)
+__static_host = re.compile(r'(colo|dedi|hosting|mail|mx[^$]|smtp|static)', re.I)
 
 
 def reverse_ip(ip):
@@ -110,18 +110,16 @@ def check_helo(params):
     @rtype:        int
     @return:       the score of the HELO
     '''
-    if (params['helo_name'].startswith('[') and
-       params['helo_name'].endswith(']')):
+    if (params['helo_name'].startswith('[') and params['helo_name'].endswith(']')):
         try:
             params['helo_name'] = '[%s]' % ipaddress.ip_address(params['helo_name'].strip('[]')).exploded
-        except:
+        except Exception:
             pass
 
-    if (params['client_name'] != 'unknown' and
-       params['client_name'] == params['helo_name']):
+    if (params['client_name'] != 'unknown' and params['client_name'] == params['helo_name']):
         score = 0
-    elif (domain_from_host(params['helo_name']) == domain_from_host(params['client_name']) or
-          params['helo_name'] == '[%s]' % params['client_address']):
+    elif (domain_from_host(params['helo_name']) == domain_from_host(params['client_name'])
+          or params['helo_name'] == '[%s]' % params['client_address']):
         score = 1
     else:
         score = 2
@@ -156,7 +154,7 @@ def check_spf(params, guess):
                 score = 1
             elif r[0] in ['pass']:
                 score = 0
-    except:
+    except Exception:
         # DNS Errors, yay...
         print('something went wrong in check_spf()')
     return score

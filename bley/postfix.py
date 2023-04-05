@@ -65,12 +65,12 @@ class PostfixPolicy(LineOnlyReceiver):
                 try:
                     pkey = pkey.decode('ascii', 'ignore')
                     pval = pval.decode('ascii', 'ignore')
-                except:
+                except Exception:
                     pass
                 if pkey == 'client_address':
                     pval = ipaddress.ip_address(pval).exploded
                 self.params[pkey] = pval
-            except:
+            except Exception:
                 print('Could not parse "%s"' % line)
 
     def check_policy(self):

@@ -253,5 +253,6 @@ def main():
     f.write(__HTML_TEMPLATE % html)
     f.close()
 
+
 if __name__ == '__main__':
     main()
