@@ -53,6 +53,10 @@ jobs:
         with:
           python-version: ${{ matrix.python }}
           cache: 'pip'
+      - name: Install my_virtualenv
+        run: |
+          sudo curl --location --create-dirs --output /usr/local/bin/my_virtualenv https://raw.githubusercontent.com/evgeni/my_virtualenv/devel/my_virtualenv
+          sudo chmod +x /usr/local/bin/*
       - name: Install dependencies
         run: pip install tox tox-gh-actions
       - name: Run tests
