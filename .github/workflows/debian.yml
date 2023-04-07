@@ -117,7 +117,7 @@ jobs:
       - uses: actions/download-artifact@v3
         with:
           name: debian-binary
-      - run: autopkgtest *.changes --setup-commands="apt-get update; sed -i 's/exit 101/exit 0/' /usr/sbin/policy-rc.d" -- docker --remote debian:sid
+      - run: autopkgtest *.changes --setup-commands="apt-get update; sed -i 's/exit 101/exit 0/' /usr/sbin/policy-rc.d" -- docker debian:sid
 
   piuparts:
     runs-on: ubuntu-latest
