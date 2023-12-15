@@ -25,11 +25,11 @@ jobs:
         with:
           python-version: '3.9'
       - run: make sdist
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: upstream-source
           path: dist/
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: upstream-debian-source
           path: debian/
@@ -68,7 +68,7 @@ jobs:
           DEBFULLNAME: GitHub Actions
       - run: dpkg-buildpackage -us -uc -S
         working-directory: source
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: debian-source
           path: ${{ needs.source.outputs.project-name }}_${{ needs.source.outputs.project-version }}*
@@ -87,7 +87,7 @@ jobs:
         working-directory: source
       - run: dpkg-buildpackage -us -uc
         working-directory: source
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: debian-binary
           path: |
