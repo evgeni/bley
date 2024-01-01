@@ -120,7 +120,7 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
           name: debian-binary
-      - uses: evgeni/action-piuparts@v0
+      - uses: evgeni/action-piuparts@v0.0.3
         with:
           fake-essential-packages: dbconfig-no-thanks
 
