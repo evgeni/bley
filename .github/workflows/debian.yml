@@ -47,13 +47,13 @@ jobs:
       project-name: ${{ needs.source.outputs.project-name }}
       project-version: ${{ needs.source.outputs.project-version }}
     steps:
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4
         with:
           name: upstream-source
       - run: echo PROJECT_ORIG_TAR=${{ needs.source.outputs.project-name }}_${{ needs.source.outputs.project-version }}.orig.tar.$(echo '${{ needs.source.outputs.project-source }}' | sed -E 's/.*\.tar\.([^.]+)$/\1/') >> $GITHUB_ENV
       - run: mv ${{ needs.source.outputs.project-source }} ${{ env.PROJECT_ORIG_TAR }}
       - run: tar --strip-components=1 --one-top-level=source -xf ${{ env.PROJECT_ORIG_TAR }}
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4
         with:
           name: upstream-debian-source
           path: source/debian/
@@ -78,7 +78,7 @@ jobs:
     runs-on: ubuntu-latest
     container: debian/buildd:bullseye
     steps:
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4
         with:
           name: debian-source
       - run: apt-get update
@@ -99,7 +99,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: debian-binary
     steps:
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4
         with:
           name: debian-binary
       - uses: evgeni/action-lintian@v0
@@ -108,7 +108,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: debian-binary
     steps:
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4
         with:
           name: debian-binary
       - uses: evgeni/action-autopkgtest@v0
@@ -117,7 +117,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: debian-binary
     steps:
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4
         with:
           name: debian-binary
       - uses: evgeni/action-piuparts@v0
@@ -133,7 +133,7 @@ jobs:
       - autopkgtest
       - piuparts
     steps:
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4
         with:
           name: debian-binary
       - uses: actions/setup-python@v5
