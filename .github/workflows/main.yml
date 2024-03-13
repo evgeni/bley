@@ -33,6 +33,7 @@ jobs:
         twisted:
           - "22.4.0"
           - "23.10.0"
+          - "24.3.0"
         include:
           - python: "3.6"
             twisted: "16.6.0"
