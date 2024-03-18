@@ -2,9 +2,9 @@
 	.post-breadcrumb();
 }
 
-.post {
+article.post-text {
 
-	h1.title {
+	h1.entry-title {
 		.post-title();
 	}
 
@@ -12,11 +12,11 @@
 		.post-breadcrumb();
 	}
 
-	.meta {
+	.metadata {
 		.post-metadata();
 	}
 
-	.body {
+	.entry-content {
 		margin-bottom: @baseLineHeight * 1.5;
 
 		.figure {
@@ -45,7 +45,7 @@
 		}
 	}
 
-	&+ .post {
+	&+ article.post-text {
 		margin-top: @baseLineHeight * 2;
 	}
 }

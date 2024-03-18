@@ -1,4 +1,5 @@
 .post-title() {
+	text-align: center;
 	margin: @baseLineHeight/4 0;
 	a {
 		color: inherit;
@@ -16,44 +17,31 @@
 	margin-bottom: @baseLineHeight/2;
 	margin-top: @baseLineHeight/4 * -1;
 
-	.authordate {
+	.commentline {
+		.pull-right;
+	}
+
+	p {
+		margin: 0;
 		display: inline-block;
-		.pull-left;
-
-		.transition(color .1s linear);
-
-		&:before {
-			.icon(@time);
-			margin-left: 5px;
+		color: @grayLight;
+		a {
+			color: @grayLight;
 		}
 
-		&:hover {
+		a:hover, &:hover {
 			color: @textColor;
+			.transition(color 1s linear);
 		}
 	}
 
-	.stats {
-		.pull-right;
-		p {
-			margin: 0;
-			padding: 0;
-		}
-		a {
-			color: @grayLight;
-			.transition(color 1s linear);
 
-			&:after {
-				.icon(@comment);
-				margin-left: 5px;
-			}
-
-			&:hover,
-			&:focus,
-			&:active {
-				color: @textColor;
-				text-decoration: none;
-			}
-		}
+	h3 {
+		font-size: initial !important;
+		display: inline;
+		margin: 0;
+		padding: 0;
+		line-height: initial;
 	}
 
 	.tags {
@@ -69,6 +57,7 @@
 		ul {
 			margin: 0;
 			list-style: none;
+			display: inline-block;
 			> li {
 			  display: inline-block;
 			  .ie7-inline-block();

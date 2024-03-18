@@ -1,3 +1,4 @@
-assets/css/all-nocdn.css=bitter.css,main.css,rst.css,code.css,custom.css
-assets/css/all.css=main.css,rst.css,code.css,custom.css
-assets/js/all-nocdn.js=jquery-1.10.2.min.js,jquery.timeago.js
+assets/css/all-nocdn.css=rst_base.css,nikola_rst.css,code.css,baguetteBox.min.css,theme.css,custom.css
+assets/css/all.css=rst_base.css,nikola_rst.css,code.css,baguetteBox.min.css,theme.css,custom.css
+assets/js/all-nocdn.js=baguetteBox.min.js,fancydates.min.js
+assets/js/all.js=fancydates.min.js

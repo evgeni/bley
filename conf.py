@@ -135,12 +135,12 @@ TRANSLATIONS_PATTERN = "{path}.{lang}.{ext}"
 
 NAVIGATION_LINKS = {
     DEFAULT_LANG: (
-        ('/index.html', 'Home', 'icon-home'),
-        ("/download.html", "Download", 'icon-download-alt'),
-        ("/docs.html", "Documentation", 'icon-book'),
-        ("/license.html", "License", 'icon-dollar'),
-        ("/imprint.html", "Imprint", 'icon-envelope'),
-        ("/rss.xml", "RSS feed", 'icon-rss'),
+        ('/index.html', 'Home', 'fa fa-home'),
+        ("/download.html", "Download", 'fa fa-download'),
+        ("/docs.html", "Documentation", 'fa fa-book'),
+        ("/license.html", "License", 'fa fa-dollar-sign'),
+        ("/imprint.html", "Imprint", 'fa fa-envelope'),
+        ("/rss.xml", "RSS feed", 'fa fa-rss'),
     ),
 }
 
