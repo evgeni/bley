@@ -1,13 +1,17 @@
 <!DOCTYPE html>
-<html prefix="og: http://ogp.me/ns# article: http://ogp.me/ns/article# " lang="en">
+<html prefix="        og: http://ogp.me/ns# article: http://ogp.me/ns/article#     " vocab="http://ogp.me/ns" lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width">
 <title>docs | bley</title>
+<link href="https://fonts.googleapis.com/css?family=Bitter:400,400i,700" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
 <link href="assets/css/all-nocdn.css" rel="stylesheet" type="text/css">
-<link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
+<meta name="theme-color" content="#5670d4">
+<meta name="generator" content="Nikola (getnikola.com)">
+<link rel="alternate" type="application/rss+xml" title="RSS" hreflang="en" href="rss.xml">
 <link rel="canonical" href="https://bley.mx/docs.html">
-<!--[if lt IE 9]><script src="/assets/js/html5.js"></script><![endif]--><link rel="stylesheet" href="assets/css/gh-fork-ribbon.css">
+<!--[if lt IE 9]><script src="assets/js/html5shiv-printshiv.min.js"></script><![endif]--><link rel="stylesheet" href="assets/css/gh-fork-ribbon.css">
 <!--[if IE]>
         <link rel="stylesheet" href="/assets/css/gh-fork-ribbon.ie.css" />
     <![endif]--><meta name="author" content="Evgeni Golov">
@@ -19,7 +23,7 @@ bley is an intelligent greylisting daemon for Postfix (and Exim).
 It uses various test (incl. RBL and SPF) to decide whether a sender
 should be greylisted or not, thus mostly eliminating the usu">
 <meta property="og:type" content="article">
-<meta property="article:published_time" content="2018-06-03T07:37:56Z">
+<meta property="article:published_time" content="2024-03-18T18:25:33Z">
 <meta name="author" content="Evgeni Golov">
 <meta property="og:site_name" content="bley">
 <meta property="og:title" content="docs">
@@ -29,16 +33,20 @@ bley is an intelligent greylisting daemon for Postfix (and Exim).
 It uses various test (incl. RBL and SPF) to decide whether a sender
 should be greylisted or not, thus mostly eliminating the usu">
 <meta property="og:type" content="article">
-<meta property="article:published_time" content="2018-06-03T07:37:56Z">
+<meta property="article:published_time" content="2024-03-18T18:25:33Z">
 </head>
 <body>
+    <a href="#page-content" class="sr-only sr-only-focusable">Skip to main content</a>
+    
     <section class="social"><ul>
-<li><a href="index.html" title="Home"><i class="icon-home"></i></a></li>
-            <li><a href="download.html" title="Download"><i class="icon-download-alt"></i></a></li>
-            <li><a href="#" title="Documentation"><i class="icon-book"></i></a></li>
-            <li><a href="license.html" title="License"><i class="icon-dollar"></i></a></li>
-            <li><a href="imprint.html" title="Imprint"><i class="icon-envelope"></i></a></li>
-            <li><a href="rss.xml" title="RSS feed"><i class="icon-rss"></i></a></li>
+<li><a href="index.html" title="Home"><i class="fa fa-home"></i></a></li>
+            <li><a href="download.html" title="Download"><i class="fa fa-download"></i></a></li>
+            <li class="active"><a href="#" title="Documentation (active)"><i class="fa fa-book"></i></a></li>
+            <li><a href="license.html" title="License"><i class="fa fa-dollar-sign"></i></a></li>
+            <li><a href="imprint.html" title="Imprint"><i class="fa fa-envelope"></i></a></li>
+            <li><a href="rss.xml" title="RSS feed"><i class="fa fa-rss"></i></a></li>
+    
+    
 
         </ul></section><section class="page-content"><div class="content" rel="main">
             
@@ -47,8 +55,7 @@ should be greylisted or not, thus mostly eliminating the usu">
         
 
     </header><div itemprop="articleBody text">
-    <div>
-<h2>ABOUT</h2>
+    <h2>ABOUT</h2>
 <p><code>bley</code> is an intelligent greylisting daemon for Postfix (and Exim).</p>
 <p>It uses various test (incl. RBL and SPF) to decide whether a sender
 should be greylisted or not, thus mostly eliminating the usual
@@ -81,16 +88,15 @@ to <code>/etc/bley/bley.conf</code>, adjust it to your needs (see CONFIGURATION 
 and run <code>/usr/bin/bley</code>.</p>
 <h2>CONFIGURATION</h2>
 <p>Basically you just have to configure the database:</p>
-<pre class="code literal-block"><span></span>dbtype = pgsql for PostgreSQL, mysql for MySQL or sqlite3 for SQLite
-dbhost = the host where the database runs on (usually localhost)
-dbport = the port where the database runs on (can be left unset for
-         the default 5432 for PostgreSQL and 3306 for MySQL)
-dbuser = the name of the database user
-dbpass = the password of the database user
-dbname = the name (or path in case of SQLite) of the database
-dbpath = you can also set the path separately and load <span class="cp">${</span><span class="n">dbpath</span><span class="cp">}</span>/<span class="cp">${</span><span class="n">dbname</span><span class="cp">}</span>
-</pre>
-
+<div class="code"><pre class="code literal-block"><span class="n">dbtype</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pgsql</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">PostgreSQL</span><span class="p">,</span><span class="w"> </span><span class="n">mysql</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">MySQL</span><span class="w"> </span><span class="ow">or</span><span class="w"> </span><span class="n">sqlite3</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">SQLite</span>
+<span class="n">dbhost</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">host</span><span class="w"> </span><span class="n">where</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">database</span><span class="w"> </span><span class="n">runs</span><span class="w"> </span><span class="n">on</span><span class="w"> </span><span class="p">(</span><span class="n">usually</span><span class="w"> </span><span class="n">localhost</span><span class="p">)</span>
+<span class="n">dbport</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">port</span><span class="w"> </span><span class="n">where</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">database</span><span class="w"> </span><span class="n">runs</span><span class="w"> </span><span class="n">on</span><span class="w"> </span><span class="p">(</span><span class="n">can</span><span class="w"> </span><span class="n">be</span><span class="w"> </span><span class="n">left</span><span class="w"> </span><span class="n">unset</span><span class="w"> </span><span class="k">for</span>
+<span class="w">         </span><span class="n">the</span><span class="w"> </span><span class="n">default</span><span class="w"> </span><span class="mi">5432</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">PostgreSQL</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="mi">3306</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">MySQL</span><span class="p">)</span>
+<span class="n">dbuser</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="n">of</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">database</span><span class="w"> </span><span class="n">user</span>
+<span class="n">dbpass</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">password</span><span class="w"> </span><span class="n">of</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">database</span><span class="w"> </span><span class="n">user</span>
+<span class="n">dbname</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="p">(</span><span class="ow">or</span><span class="w"> </span><span class="n">path</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">case</span><span class="w"> </span><span class="n">of</span><span class="w"> </span><span class="n">SQLite</span><span class="p">)</span><span class="w"> </span><span class="n">of</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">database</span>
+<span class="n">dbpath</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">you</span><span class="w"> </span><span class="n">can</span><span class="w"> </span><span class="n">also</span><span class="w"> </span><span class="n">set</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">path</span><span class="w"> </span><span class="n">separately</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="nb">load</span><span class="w"> </span><span class="o">$</span><span class="p">{</span><span class="n">dbpath</span><span class="p">}</span><span class="o">/$</span><span class="p">{</span><span class="n">dbname</span><span class="p">}</span>
+</pre></div>
 
 <p>After that you can point your Postfix to <code>bley</code> as a 
 <a href="http://www.postfix.org/SMTPD_POLICY_README.html">policy server</a> by
@@ -102,102 +108,90 @@ and the hit thresholds).</p>
 <h3>Additional Configuration</h3>
 <p>Sometimes, you want to bind <code>bley</code> to something else than <code>127.0.0.1:1337</code>,
 this can be achieved with the following two parameters.</p>
-<pre class="code literal-block"><span></span>listen_addr = 127.0.0.1
-listen_port = 1337
-</pre>
-
+<div class="code"><pre class="code literal-block"><span class="nx">listen_addr</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="m m-Double">127.0.0.1</span>
+<span class="nx">listen_port</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">1337</span>
+</pre></div>
 
 <p>As <code>bley</code> is designed to be a deamon, it will write a pid file and a log file.
 The locations of the two can be configured with the following parameters.</p>
-<pre class="code literal-block"><span></span>pid_file = bley.pid
+<div class="code"><pre class="code literal-block">pid_file = bley.pid
 log_file = bley.log
-</pre>
-
+</pre></div>
 
 <p>Setting <code>log_file</code> to the special word <code>syslog</code> will make <code>bley</code> log to
 <code>syslog</code> instead of a file, using the <code>mail</code> facility.</p>
 <p>If you want to inform the sender about the greylisting, you can adjust
 the message sent via</p>
-<pre class="code literal-block"><span></span>reject_msg = greylisted, try again later
-</pre>
-
+<div class="code"><pre class="code literal-block">reject_msg = greylisted, try again later
+</pre></div>
 
 <p>The DNSWLs and DNSBLs <code>bley</code> uses for its tests can be set via</p>
-<pre class="code literal-block"><span></span>dnsbls = ix.dnsbl.manitu.net, dnsbl.ahbl.org, dnsbl.sorbs.net
+<div class="code"><pre class="code literal-block">dnsbls = ix.dnsbl.manitu.net, dnsbl.ahbl.org, dnsbl.sorbs.net
 dnswls = list.dnswl.org
-</pre>
-
+</pre></div>
 
 <p>Thresholds define how many sub-checks have to hit, to trigger a feature
 (whitelisting in case of dnswl, greylisting in case of dnsbl and rfc).</p>
-<pre class="code literal-block"><span></span>dnswl_threshold = 1
+<div class="code"><pre class="code literal-block">dnswl_threshold = 1
 dnsbl_threshold = 1
 rfc_threshold = 2
-</pre>
-
+</pre></div>
 
 <p>How long should a sender be greylisted, when should we allow him in at
 the very last and how long should he have to wait more, if he retries to
 early (all in minutes)?</p>
-<pre class="code literal-block"><span></span>greylist_period = 29
+<div class="code"><pre class="code literal-block">greylist_period = 29
 greylist_max    = 720
 greylist_penalty= 10
-</pre>
-
+</pre></div>
 
 <p>After how many days should old entries be deleted from the database?
 Entries of senders who have not verified to be "good" should be purged
 earlier.</p>
-<pre class="code literal-block"><span></span>purge_days = 40
+<div class="code"><pre class="code literal-block">purge_days = 40
 purge_bad_days = 10
-</pre>
-
+</pre></div>
 
 <p>SPF (<a href="http://www.openspf.org">Sender Policy Framework</a>) checks can be turned
 off. <a href="http://www.openspf.net/Best_Practices/No_Best_Guess">SPF Best Guess</a>
 should always be turned off.</p>
-<pre class="code literal-block"><span></span>use_spf = 1
+<div class="code"><pre class="code literal-block">use_spf = 1
 use_spf_guess = 0
-</pre>
-
+</pre></div>
 
 <p>If you use Exim instead of Postfix, set this to 1. It will automatically
 close connections after the decision is sent. While Postfix supports
 checking multiple senders over the same connections, Exim does not. In fact
 it even closes the sending part of the socket as soon all details have been
 transmitted.</p>
-<pre class="code literal-block"><span></span>exim_workaround = 0
-</pre>
-
+<div class="code"><pre class="code literal-block">exim_workaround = 0
+</pre></div>
 
 <h3>Whitelisting</h3>
 <p>In some situations, it is useful to be able to whitelist senders or recipients.
 This can be done by providing lists as files (syntax is <a href="http://postgrey.schweikert.ch/">postgrey</a> compatible).</p>
-<pre class="code literal-block"><span></span>whitelist_recipients_file = ./whitelist_recipients
+<div class="code"><pre class="code literal-block">whitelist_recipients_file = ./whitelist_recipients
 whitelist_clients_file = ./whitelist_clients
-</pre>
-
+</pre></div>
 
 <h4>whitelist_recipients_file</h4>
 <p>This file contains a list of recipients who are excluded from greylisting.
 One entry per line. An entry can be either a full email address, the local part,
 a domain name or a regular expression:</p>
-<pre class="code literal-block"><span></span>user@example.com
-postmaster@
-example.com
-/app.*example/
-</pre>
-
+<div class="code"><pre class="code literal-block"><span class="k">user</span><span class="nv">@example</span><span class="p">.</span><span class="n">com</span>
+<span class="n">postmaster</span><span class="err">@</span>
+<span class="n">example</span><span class="p">.</span><span class="n">com</span>
+<span class="o">/</span><span class="n">app</span><span class="p">.</span><span class="o">*</span><span class="n">example</span><span class="o">/</span>
+</pre></div>
 
 <h4>whitelist_clients_file</h4>
 <p>This file contains a list of clients who are excluded from greylisting.
 One entry per line. An entry can be either an IP adress, a subnet, a domain name
 or a regular expression.</p>
-<pre class="code literal-block"><span></span>192.0.2.200/30
-example.net
-/sender.*example/
-</pre>
-
+<div class="code"><pre class="code literal-block"><span class="mf">192.0.2.200</span><span class="o">/</span><span class="mf">30</span>
+<span class="n">example</span><span class="mf">.</span><span class="n">net</span>
+<span class="o">/</span><span class="n">sender</span><span class="mf">.</span><span class="o">*</span><span class="n">example</span><span class="o">/</span>
+</pre></div>
 
 <h2>CHECKS</h2>
 <h3>Known sender</h3>
@@ -231,26 +225,23 @@ using <a href="http://matplotlib.org/">matplotlib</a>.</p>
 settings are taken from the <code>bley</code> section of <code>bley.conf</code> and the path
 for the graph output (<code>destdir</code>) is the only setting in the <code>bleygraph</code>
 section of the configuration file.</p>
-</div>
     </div>
-</article><footer id="footer"><p>Contents © 2018         <a href="mailto:evgeni@golov.de">Evgeni Golov</a> - Powered by         <a href="http://getnikola.com" rel="nofollow">Nikola</a> - Theme is <a href="http://www.damian.oquanta.info/categories/zen.html">Zen</a>        <br><a href="https://www.openhub.net/p/bley?ref=sample" target="_blank"><img alt="Open Hub project report for bley" border="0" src="https://www.openhub.net/p/bley/widgets/project_thin_badge.gif"></a>
- <a href="https://travis-ci.org/evgeni/bley"><img alt="Build Status" src="https://travis-ci.org/evgeni/bley.png?branch=master"></a>
-</p>
+</article><footer id="footer"><p>Contents © 2024         <a href="mailto:evgeni@golov.de">Evgeni Golov</a> - Powered by         <a href="http://getnikola.com" rel="nofollow">Nikola</a> - Theme is <a href="http://www.damian.oquanta.info/categories/zen.html">Zen</a>        <br></p>
             
         </footer>
 </div>
-    </section><div id="github" class="github-fork-ribbon-wrapper right fixed">
+    </section><script src="assets/js/all-nocdn.js"></script><script>
+    baguetteBox.run('div#content', {
+        ignoreClass: 'islink',
+        captions: function(element) {
+            return element.getElementsByTagName('img')[0].alt;
+    }});
+    </script><div id="github" class="github-fork-ribbon-wrapper right fixed">
         <div class="github-fork-ribbon">
             <a href="https://github.com/evgeni/bley">Fork me on GitHub</a>
         </div>
     </div>
 
     
-    
-            <script src="assets/js/all-nocdn.js" type="text/javascript"></script><script type="text/javascript">
-            $(function(){
-                $('.timeago').timeago();
-            });
-        </script>
 </body>
 </html>

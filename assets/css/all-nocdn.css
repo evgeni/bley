@@ -1,25 +1,693 @@
-@font-face {
-  font-family: 'Bitter';
-  font-style: normal;
-  font-weight: 400;
-  src: local('Bitter-Regular'), url('../fonts/SHIcXhdd5RknatSgOzyEkA.woff') format('woff');
+/* Minimal style sheet for the HTML output of Docutils.                    */
+/*                                                                         */
+/* :Author: Günter Milde, based on html4css1.css by David Goodger          */
+/* :Id: $Id: minimal.css 9079 2022-06-19 14:00:56Z milde $                                                               */
+/* :Copyright: © 2015, 2021 Günter Milde.                                  */
+/* :License: Released under the terms of the `2-Clause BSD license`_,      */
+/*    in short:                                                            */
+/*                                                                         */
+/*    Copying and distribution of this file, with or without modification, */
+/*    are permitted in any medium without royalty provided the copyright   */
+/*    notice and this notice are preserved.                                */
+/*                                                                         */
+/*    This file is offered as-is, without any warranty.                    */
+/*                                                                         */
+/* .. _2-Clause BSD license: http://www.spdx.org/licenses/BSD-2-Clause     */
+
+/* This CSS3 stylesheet defines rules for Docutils elements without        */
+/* HTML equivalent. It is required to make the document semantics visible. */
+/*                                                                         */
+/* .. _validates: http://jigsaw.w3.org/css-validator/validator$link        */
+
+/* titles */
+p.topic-title,
+p.admonition-title,
+p.system-message-title {
+  font-weight: bold;
 }
-@font-face {
-  font-family: 'Bitter';
-  font-style: normal;
-  font-weight: 700;
-  src: local('Bitter-Bold'), url('../fonts/evC1haE-MsorTl_A7_uSGT8E0i7KZn-EPnyo3HZu7kw.woff') format('woff');
+p.sidebar-title,
+p.rubric {
+  font-weight: bold;
+  font-size: larger;
 }
-@font-face {
-  font-family: 'Bitter';
-  font-style: italic;
-  font-weight: 400;
-  src: local('Bitter-Italic'), url('../fonts/eMS0tViDqryBl0EG1pqFZfesZW2xOQ-xsNqO47m55DA.woff') format('woff');
+p.rubric {
+  color: maroon;
+}
+p.subtitle,
+p.section-subtitle,
+p.sidebar-subtitle {
+  font-weight: bold;
+  margin-top: -0.5em;
+}
+h1 + p.subtitle {
+  font-size: 1.6em;
+}
+a.toc-backref {
+  color: inherit;
+  text-decoration: none;
 }
 
-.addthis_peekaboo_style a {
-  font-family: 'Bitter';
+/* Warnings, Errors */
+.system-messages h2,
+.system-message-title,
+span.problematic {
+  color: red;
 }
+
+/* Inline Literals */
+.docutils.literal {
+  font-family: monospace;
+  white-space: pre-wrap;
+}
+/* do not wrap at hyphens and similar: */
+.literal > span.pre { white-space: nowrap; }
+
+/* Lists */
+
+/* compact and simple lists: no margin between items */
+.simple  li, .simple  ul, .simple  ol,
+.compact li, .compact ul, .compact ol,
+.simple  > li p, dl.simple  > dd,
+.compact > li p, dl.compact > dd {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+/* Nested Paragraphs
+p:first-child { margin-top: 0; }
+p:last-child { margin-bottom: 0; }
+details > p:last-child { margin-bottom: 1em; }
+ */
+
+/* Table of Contents */
+.contents ul.auto-toc { /* section numbers present */
+  list-style-type: none;
+}
+
+/* Enumerated Lists */
+ol.arabic     { list-style: decimal }
+ol.loweralpha { list-style: lower-alpha }
+ol.upperalpha { list-style: upper-alpha }
+ol.lowerroman { list-style: lower-roman }
+ol.upperroman { list-style: upper-roman }
+
+/* Definition Lists and Derivatives */
+dt .classifier { font-style: italic }
+dt .classifier:before {
+  font-style: normal;
+  margin: 0.5em;
+  content: ":";
+}
+/* Field Lists and similar */
+/* bold field name, content starts on the same line */
+dl.field-list,
+dl.option-list,
+dl.docinfo,
+dl.footnote,
+dl.citation {
+  display: flow-root;
+}
+dl.field-list > dt,
+dl.option-list > dt,
+dl.docinfo > dt,
+dl.footnote > dt,
+dl.citation > dt {
+  font-weight: bold;
+  clear: left;
+  float: left;
+  margin: 0;
+  padding: 0;
+  padding-right: 0.2em;
+}
+/* Offset for field content (corresponds to the --field-name-limit option) */
+dl.field-list > dd,
+dl.option-list > dd,
+dl.docinfo > dd {
+  margin-left:  9em; /* ca. 14 chars in the test examples, fit all Docinfo fields */
+}
+/* start nested lists on new line */
+dd > dl:first-child,
+dd > ul:first-child,
+dd > ol:first-child {
+  clear: left;
+}
+/* start field-body on a new line after long field names */
+dl.field-list > dd > *:first-child,
+dl.option-list > dd > *:first-child
+{
+  display: inline-block;
+  width: 100%;
+  margin: 0;
+}
+
+/* Bibliographic Fields (docinfo) */
+dl.docinfo pre.address {
+  font: inherit;
+  margin: 0.5em 0;
+}
+dl.docinfo > dd.authors > p { margin: 0; }
+
+/* Option Lists */
+dl.option-list > dt { font-weight: normal; }
+span.option { white-space: nowrap; }
+
+/* Footnotes and Citations  */
+
+.footnote, .citation { margin: 1em 0; } /* default paragraph skip (Firefox) */
+/* hanging indent */
+.citation { padding-left: 2em; }
+.footnote { padding-left: 1.7em; }
+.footnote.superscript { padding-left: 1.0em; }
+.citation > .label { margin-left: -2em; }
+.footnote > .label { margin-left: -1.7em; }
+.footnote.superscript > .label { margin-left: -1.0em; }
+
+.footnote > .label + *,
+.citation > .label + * {
+  display: inline-block;
+  margin-top: 0;
+  vertical-align: top;
+}
+.footnote > .backrefs + *,
+.citation > .backrefs + * {
+  margin-top: 0;
+}
+.footnote > .label + p, .footnote > .backrefs + p,
+.citation > .label + p, .citation > .backrefs + p {
+  display: inline;
+  vertical-align: inherit;
+}
+
+.backrefs { user-select: none; }
+.backrefs > a { font-style: italic; }
+
+/* superscript footnotes */
+a[role="doc-noteref"].superscript,
+.footnote.superscript > .label,
+.footnote.superscript > .backrefs {
+  vertical-align: super;
+  font-size: smaller;
+  line-height: 1;
+}
+a[role="doc-noteref"].superscript > .fn-bracket,
+.footnote.superscript > .label > .fn-bracket {
+  /* hide brackets in display but leave for copy/paste */
+  display: inline-block;
+  width: 0;
+  overflow: hidden;
+}
+[role="doc-noteref"].superscript + [role="doc-noteref"].superscript {
+  padding-left: 0.15em; /* separate consecutive footnote references */
+  /* TODO: unfortunately, "+" also selects with text between the references. */
+}
+
+/* Legacy Footnotes and Citations */
+dl.footnote.superscript > dd { margin-left: 1em; }
+dl.footnote.brackets > dd { margin-left: 2em; }
+dl.footnote > dt { font-weight: normal; }
+dt.label > span.brackets:before { content: "["; }
+dt.label > span.brackets:after { content: "]"; }
+a.footnote-reference.superscript,
+dl.footnote.superscript > dt.label {
+  vertical-align: super;
+  font-size: small;
+}
+dt.label > span.fn-backref {
+  margin-left: 0.2em;
+  font-weight: normal;
+}
+dt.label > span.fn-backref > a { font-style: italic; }
+
+/* Alignment */
+.align-left   {
+  text-align: left;
+  margin-right: auto;
+}
+.align-center {
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+.align-right  {
+  text-align: right;
+  margin-left: auto;
+}
+.align-top    { vertical-align: top; }
+.align-middle { vertical-align: middle; }
+.align-bottom { vertical-align: bottom; }
+
+img.align-left, img.align-center, img.align-right,
+.figure.align-left, .figure.align-center, .figure.align-right,
+object.align-left, object.align-center, object.align-right {
+  display: block;
+}
+
+/* reset inner alignment in figures and tables */
+figure.align-left, figure.align-right,
+table.align-left, table.align-center, table.align-right {
+  text-align: inherit;
+}
+
+/* Text Blocks */
+.topic { margin: 1em 2em; }
+.sidebar,
+.admonition,
+.system-message {
+  margin: 1em 2em;
+  border: thin solid;
+  padding: 0.5em 1em;
+}
+div.line-block { display: block; }
+div.line-block div.line-block, pre { margin-left: 2em; }
+
+/* Code line numbers: dropped when copying text from the page */
+pre.code .ln { display: none; }
+pre.code code:before {
+  content: attr(data-lineno); /* …, none) fallback not supported by any browser */
+  color: gray;
+}
+
+/* Tables */
+td > p:first-child, th > p:first-child { margin-top: 0; }
+td > p, th > p { margin-bottom: 0; }
+
+.borderless td, .borderless th {
+  border: 0;
+  padding: 0;
+  padding-right: 0.5em /* separate table cells */
+}
+
+table > caption {
+  text-align: left;
+  margin-top: 0.2em;
+  margin-bottom: 0.2em;
+}
+table.captionbelow {
+  caption-side: bottom;
+}
+
+/* CSS31_ style sheet for the output of Docutils HTML writers.             */
+/* Rules for easy reading and pre-defined style variants.                  */
+/*                                                                         */
+/* :Author: Günter Milde, based on html4css1.css by David Goodger          */
+/* :Id: $Id: plain.css 9081 2022-06-19 20:23:12Z milde $                                                               */
+/* :Copyright: © 2015 Günter Milde.                                        */
+/* :License: Released under the terms of the `2-Clause BSD license`_,      */
+/*    in short:                                                            */
+/*                                                                         */
+/*    Copying and distribution of this file, with or without modification, */
+/*    are permitted in any medium without royalty provided the copyright   */
+/*    notice and this notice are preserved.                                */
+/*                                                                         */
+/*    This file is offered as-is, without any warranty.                    */
+/*                                                                         */
+/* .. _2-Clause BSD license: http://www.spdx.org/licenses/BSD-2-Clause     */
+/* .. _CSS3: https://www.w3.org/Style/CSS/                                 */
+
+
+/* Document Structure */
+/* ****************** */
+
+/* Table of Contents */
+ul.auto-toc > li > p {
+  padding-left: 1em;
+  text-indent: -1em;
+}
+nav.contents ul {
+  padding-left: 1em;
+}
+main > nav.contents ul ul ul ul:not(.auto-toc) {
+  list-style-type: '\2B29\ ';
+}
+main > nav.contents ul ul ul ul ul:not(.auto-toc) {
+  list-style-type: '\2B1D\ ';
+}
+
+/* Transitions */
+hr.docutils {
+  width: 80%;
+  margin-top: 1em;
+  margin-bottom: 1em;
+  clear: both;
+}
+
+dl > dd {
+  margin-bottom: 0.5em;
+}
+
+/* Lists */
+/* ===== */
+
+/* Definition Lists */
+/* Indent lists nested in definition lists */
+dd > ul:only-child, dd > ol:only-child { padding-left: 1em; }
+
+/* Description Lists */
+/* styled like in most dictionaries, encyclopedias etc. */
+dl.description {
+  display: flow-root;
+}
+dl.description > dt {
+  font-weight: bold;
+  clear: left;
+  float: left;
+  margin: 0;
+  padding: 0;
+  padding-right: 0.3em;
+}
+dl.description > dd:after {
+  display: table;
+  content: "";
+  clear: left; /* clearfix for empty descriptions */
+}
+
+/* Field Lists */
+
+dl.field-list > dd,
+dl.docinfo > dd {
+  margin-left: var(--field-indent); /* adapted in media queries or HTML */
+}
+
+/* example for custom field-name width */
+dl.field-list.narrow > dd {
+  --field-indent: 5em;
+}
+/* run-in: start field-body on same line after long field names */
+dl.field-list.run-in > dd p {
+  display: block;
+}
+
+/* Bibliographic Fields */
+
+/* generally, bibliographic fields use dl.docinfo */
+/* but dedication and abstract are placed into divs */
+div.abstract p.topic-title {
+  text-align: center;
+}
+div.dedication {
+  margin: 2em 5em;
+  text-align: center;
+  font-style: italic;
+}
+div.dedication p.topic-title {
+  font-style: normal;
+}
+
+/* disclosures */
+details { padding-left: 1em; }
+summary { margin-left: -1em; }
+
+/* Text Blocks */
+/* =========== */
+
+/* Literal Blocks */
+pre.literal-block, pre.doctest-block,
+pre.math, pre.code {
+  font-family: monospace;
+}
+
+/* Block Quotes and Topics */
+blockquote p.attribution,
+.topic p.attribution {
+  text-align: right;
+  margin-left: 20%;
+}
+
+/* Tables */
+/* ====== */
+
+/* th { vertical-align: bottom; } */
+
+table tr { text-align: left; }
+
+/* "booktabs" style (no vertical lines) */
+table.booktabs {
+  border: 0;
+  border-top: 2px solid;
+  border-bottom: 2px solid;
+  border-collapse: collapse;
+}
+table.booktabs * {
+  border: 0;
+}
+table.booktabs th {
+  border-bottom: thin solid;
+}
+
+/* numbered tables (counter defined in div.document) */
+table.numbered > caption:before {
+  counter-increment: table;
+  content: "Table " counter(table) ": ";
+  font-weight: bold;
+}
+
+/* Explicit Markup Blocks */
+/* ====================== */
+
+/* Footnotes and Citations */
+/* ----------------------- */
+
+/* line on the left */
+.footnote-list {
+  border-left: solid thin;
+  padding-left: 0.25em;
+}
+
+/* same thing for old docutils versions */
+dl.footnote {
+  padding-left: 1ex;
+  border-left: solid;
+  border-left-width: thin;
+}
+
+/* Directives */
+/* ---------- */
+
+/* Body Elements */
+/* ~~~~~~~~~~~~~ */
+
+/* Images and Figures */
+
+/* let content flow to the side of aligned images and figures */
+figure.align-left,
+img.align-left,
+video.align-left,
+object.align-left {
+  clear: left;
+  float: left;
+  margin-right: 1em;
+}
+figure.align-right,
+img.align-right,
+video.align-right,
+object.align-right {
+  clear: right;
+  float: right;
+  margin-left: 1em;
+}
+
+/* Numbered figures */
+figure.numbered > figcaption > p:before {
+  counter-increment: figure;
+  content: "Figure " counter(figure) ": ";
+  font-weight: bold;
+}
+
+/* Admonitions and System Messages */
+.caution p.admonition-title,
+.attention p.admonition-title,
+.danger p.admonition-title,
+.error p.admonition-title,
+.warning p.admonition-title,
+div.error {
+  color: red;
+}
+
+/* Sidebar */
+/* Move right. In a layout with fixed margins, */
+/* it can be moved into the margin.            */
+aside.sidebar {
+  width: 30%;
+  max-width: 26em;
+  float: right;
+  clear: right;
+  margin-left: 1em;
+  margin-right: -1%;
+  background-color: #fffffa;
+}
+
+div.admonition, div.attention, div.caution, div.danger, div.error,
+div.hint, div.important, div.note, div.tip, div.warning, div.sidebar,
+div.system-message {
+/* stolen from Boostrap 4 (.card) */
+  margin-bottom: 2rem;
+  position: relative;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  min-width: 0;
+  word-wrap: break-word;
+  background-color: #fff;
+  color: #212529;
+  background-clip: border-box;
+  border: 1px solid rgba(0,0,0,.125);
+  border-radius: .25rem;
+  padding: 0;
+}
+
+div.attention, div.caution, div.danger, div.error, div.warning {
+  /* stolen from Boostrap 3 (.border-danger) */
+  border-color: #dc3545!important;
+}
+
+div.admonition p, div.hint p,
+div.important p, div.note p,
+div.tip p, div.sidebar p,
+div.attention p, div.caution p,
+div.danger p, div.error p,
+div.warning p, div.system-message p {
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+div.admonition p.admonition-title, div.hint p.admonition-title,
+div.important p.admonition-title, div.note p.admonition-title,
+div.tip p.admonition-title, div.sidebar p.sidebar-title,
+div.attention p.admonition-title, div.caution p.admonition-title,
+div.danger p.admonition-title, div.error p.admonition-title,
+div.warning p.admonition-title, div.system-message p.system-message-title {
+/* stolen from Boostrap 4 (.card .card-header) */
+  font-weight: 400;
+  font-size: 1.25rem;
+  padding: .75rem 1.25rem;
+  margin-bottom: 1rem;
+  background-color: rgba(0,0,0,.03);
+  border-bottom: 1px solid rgba(0,0,0,.125);
+}
+
+div.attention p.admonition-title, div.caution p.admonition-title,
+div.danger p.admonition-title, div.error p.admonition-title,
+div.warning p.admonition-title, div.system-message p.system-message-title {
+  /* stolen from Boostrap 4 (.card .card-header .bg-danger) */
+  background-color: #dc3545;
+  color: white;
+}
+
+div.sidebar {
+    margin-right: 0;
+}
+
+/* Improved margin overrides */
+div.topic,
+pre.literal-block,
+pre.doctest-block,
+pre.math,
+pre.code,
+div.code {
+    margin-left: 1rem;
+    margin-right: 1rem;
+}
+
+div.code {
+    margin-bottom: 1rem;
+}
+
+/* code.css file generated by Nikola */
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+pre.code .hll, .code .codetable .hll, .highlight pre .hll { background-color: #ffffcc }
+pre.code , .code .codetable , .highlight pre { background: #f8f8f8; }
+pre.code .c, .code .codetable .c, .highlight pre .c { color: #3D7B7B; font-style: italic } /* Comment */
+pre.code .err, .code .codetable .err, .highlight pre .err { border: 1px solid #FF0000 } /* Error */
+pre.code .k, .code .codetable .k, .highlight pre .k { color: #008000; font-weight: bold } /* Keyword */
+pre.code .o, .code .codetable .o, .highlight pre .o { color: #666666 } /* Operator */
+pre.code .ch, .code .codetable .ch, .highlight pre .ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+pre.code .cm, .code .codetable .cm, .highlight pre .cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+pre.code .cp, .code .codetable .cp, .highlight pre .cp { color: #9C6500 } /* Comment.Preproc */
+pre.code .cpf, .code .codetable .cpf, .highlight pre .cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+pre.code .c1, .code .codetable .c1, .highlight pre .c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+pre.code .cs, .code .codetable .cs, .highlight pre .cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+pre.code .gd, .code .codetable .gd, .highlight pre .gd { color: #A00000 } /* Generic.Deleted */
+pre.code .ge, .code .codetable .ge, .highlight pre .ge { font-style: italic } /* Generic.Emph */
+pre.code .ges, .code .codetable .ges, .highlight pre .ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+pre.code .gr, .code .codetable .gr, .highlight pre .gr { color: #E40000 } /* Generic.Error */
+pre.code .gh, .code .codetable .gh, .highlight pre .gh { color: #000080; font-weight: bold } /* Generic.Heading */
+pre.code .gi, .code .codetable .gi, .highlight pre .gi { color: #008400 } /* Generic.Inserted */
+pre.code .go, .code .codetable .go, .highlight pre .go { color: #717171 } /* Generic.Output */
+pre.code .gp, .code .codetable .gp, .highlight pre .gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+pre.code .gs, .code .codetable .gs, .highlight pre .gs { font-weight: bold } /* Generic.Strong */
+pre.code .gu, .code .codetable .gu, .highlight pre .gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+pre.code .gt, .code .codetable .gt, .highlight pre .gt { color: #0044DD } /* Generic.Traceback */
+pre.code .kc, .code .codetable .kc, .highlight pre .kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+pre.code .kd, .code .codetable .kd, .highlight pre .kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+pre.code .kn, .code .codetable .kn, .highlight pre .kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+pre.code .kp, .code .codetable .kp, .highlight pre .kp { color: #008000 } /* Keyword.Pseudo */
+pre.code .kr, .code .codetable .kr, .highlight pre .kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+pre.code .kt, .code .codetable .kt, .highlight pre .kt { color: #B00040 } /* Keyword.Type */
+pre.code .m, .code .codetable .m, .highlight pre .m { color: #666666 } /* Literal.Number */
+pre.code .s, .code .codetable .s, .highlight pre .s { color: #BA2121 } /* Literal.String */
+pre.code .na, .code .codetable .na, .highlight pre .na { color: #687822 } /* Name.Attribute */
+pre.code .nb, .code .codetable .nb, .highlight pre .nb { color: #008000 } /* Name.Builtin */
+pre.code .nc, .code .codetable .nc, .highlight pre .nc { color: #0000FF; font-weight: bold } /* Name.Class */
+pre.code .no, .code .codetable .no, .highlight pre .no { color: #880000 } /* Name.Constant */
+pre.code .nd, .code .codetable .nd, .highlight pre .nd { color: #AA22FF } /* Name.Decorator */
+pre.code .ni, .code .codetable .ni, .highlight pre .ni { color: #717171; font-weight: bold } /* Name.Entity */
+pre.code .ne, .code .codetable .ne, .highlight pre .ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+pre.code .nf, .code .codetable .nf, .highlight pre .nf { color: #0000FF } /* Name.Function */
+pre.code .nl, .code .codetable .nl, .highlight pre .nl { color: #767600 } /* Name.Label */
+pre.code .nn, .code .codetable .nn, .highlight pre .nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+pre.code .nt, .code .codetable .nt, .highlight pre .nt { color: #008000; font-weight: bold } /* Name.Tag */
+pre.code .nv, .code .codetable .nv, .highlight pre .nv { color: #19177C } /* Name.Variable */
+pre.code .ow, .code .codetable .ow, .highlight pre .ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+pre.code .w, .code .codetable .w, .highlight pre .w { color: #bbbbbb } /* Text.Whitespace */
+pre.code .mb, .code .codetable .mb, .highlight pre .mb { color: #666666 } /* Literal.Number.Bin */
+pre.code .mf, .code .codetable .mf, .highlight pre .mf { color: #666666 } /* Literal.Number.Float */
+pre.code .mh, .code .codetable .mh, .highlight pre .mh { color: #666666 } /* Literal.Number.Hex */
+pre.code .mi, .code .codetable .mi, .highlight pre .mi { color: #666666 } /* Literal.Number.Integer */
+pre.code .mo, .code .codetable .mo, .highlight pre .mo { color: #666666 } /* Literal.Number.Oct */
+pre.code .sa, .code .codetable .sa, .highlight pre .sa { color: #BA2121 } /* Literal.String.Affix */
+pre.code .sb, .code .codetable .sb, .highlight pre .sb { color: #BA2121 } /* Literal.String.Backtick */
+pre.code .sc, .code .codetable .sc, .highlight pre .sc { color: #BA2121 } /* Literal.String.Char */
+pre.code .dl, .code .codetable .dl, .highlight pre .dl { color: #BA2121 } /* Literal.String.Delimiter */
+pre.code .sd, .code .codetable .sd, .highlight pre .sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+pre.code .s2, .code .codetable .s2, .highlight pre .s2 { color: #BA2121 } /* Literal.String.Double */
+pre.code .se, .code .codetable .se, .highlight pre .se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+pre.code .sh, .code .codetable .sh, .highlight pre .sh { color: #BA2121 } /* Literal.String.Heredoc */
+pre.code .si, .code .codetable .si, .highlight pre .si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+pre.code .sx, .code .codetable .sx, .highlight pre .sx { color: #008000 } /* Literal.String.Other */
+pre.code .sr, .code .codetable .sr, .highlight pre .sr { color: #A45A77 } /* Literal.String.Regex */
+pre.code .s1, .code .codetable .s1, .highlight pre .s1 { color: #BA2121 } /* Literal.String.Single */
+pre.code .ss, .code .codetable .ss, .highlight pre .ss { color: #19177C } /* Literal.String.Symbol */
+pre.code .bp, .code .codetable .bp, .highlight pre .bp { color: #008000 } /* Name.Builtin.Pseudo */
+pre.code .fm, .code .codetable .fm, .highlight pre .fm { color: #0000FF } /* Name.Function.Magic */
+pre.code .vc, .code .codetable .vc, .highlight pre .vc { color: #19177C } /* Name.Variable.Class */
+pre.code .vg, .code .codetable .vg, .highlight pre .vg { color: #19177C } /* Name.Variable.Global */
+pre.code .vi, .code .codetable .vi, .highlight pre .vi { color: #19177C } /* Name.Variable.Instance */
+pre.code .vm, .code .codetable .vm, .highlight pre .vm { color: #19177C } /* Name.Variable.Magic */
+pre.code .il, .code .codetable .il, .highlight pre .il { color: #666666 } /* Literal.Number.Integer.Long */
+.highlight table, .highlight tr, .highlight td, .code table, .code tr, .code td { border-spacing: 0; border-collapse: separate; padding: 0 }
+.highlight pre, .code pre { white-space: pre-wrap; line-height: normal }
+.highlighttable td.linenos, .codetable td.linenos { vertical-align: top; padding-left: 10px; padding-right: 10px; user-select: none; -webkit-user-select: none }
+.highlighttable td.linenos code:before, .codetable td.linenos code:before { content: attr(data-line-number) }
+.highlighttable td.code, .codetable td.code { overflow-wrap: normal; border-collapse: collapse }
+.highlighttable td.code code, .codetable td.code code { overflow: unset; border: none; padding: 0; margin: 0; white-space: pre-wrap; line-height: unset; background: none }
+.highlight .lineno.nonumber, .code .lineno.nonumber { list-style: none }
+table.codetable, table.highlighttable { width: 100%;}
+.codetable td.linenos, td.linenos { text-align: right; width: 3.5em; padding-right: 0.5em; background: rgba(127, 127, 127, 0.2) }
+.codetable td.code, td.code { padding-left: 0.5em; }
+
+/*!
+ * baguetteBox.js
+ * @author  feimosi
+ * @version 1.11.1
+ * @url https://github.com/feimosi/baguetteBox.js
+ */#baguetteBox-overlay{display:none;opacity:0;position:fixed;overflow:hidden;top:0;left:0;width:100%;height:100%;z-index:1000000;background-color:#222;background-color:rgba(0,0,0,.8);-webkit-transition:opacity .5s ease;transition:opacity .5s ease}#baguetteBox-overlay.visible{opacity:1}#baguetteBox-overlay .full-image{display:inline-block;position:relative;width:100%;height:100%;text-align:center}#baguetteBox-overlay .full-image figure{display:inline;margin:0;height:100%}#baguetteBox-overlay .full-image img{display:inline-block;width:auto;height:auto;max-height:100%;max-width:100%;vertical-align:middle;-webkit-box-shadow:0 0 8px rgba(0,0,0,.6);-moz-box-shadow:0 0 8px rgba(0,0,0,.6);box-shadow:0 0 8px rgba(0,0,0,.6)}#baguetteBox-overlay .full-image figcaption{display:block;position:absolute;bottom:0;width:100%;text-align:center;line-height:1.8;white-space:normal;color:#ccc;background-color:#000;background-color:rgba(0,0,0,.6);font-family:sans-serif}#baguetteBox-overlay .full-image:before{content:"";display:inline-block;height:50%;width:1px;margin-right:-1px}#baguetteBox-slider{position:absolute;left:0;top:0;height:100%;width:100%;white-space:nowrap;-webkit-transition:left .4s ease,-webkit-transform .4s ease;transition:left .4s ease,-webkit-transform .4s ease;transition:left .4s ease,transform .4s ease;transition:left .4s ease,transform .4s ease,-webkit-transform .4s ease,-moz-transform .4s ease}#baguetteBox-slider.bounce-from-right{-webkit-animation:bounceFromRight .4s ease-out;animation:bounceFromRight .4s ease-out}#baguetteBox-slider.bounce-from-left{-webkit-animation:bounceFromLeft .4s ease-out;animation:bounceFromLeft .4s ease-out}@-webkit-keyframes bounceFromRight{0%,100%{margin-left:0}50%{margin-left:-30px}}@keyframes bounceFromRight{0%,100%{margin-left:0}50%{margin-left:-30px}}@-webkit-keyframes bounceFromLeft{0%,100%{margin-left:0}50%{margin-left:30px}}@keyframes bounceFromLeft{0%,100%{margin-left:0}50%{margin-left:30px}}.baguetteBox-button#next-button,.baguetteBox-button#previous-button{top:50%;top:calc(50% - 30px);width:44px;height:60px}.baguetteBox-button{position:absolute;cursor:pointer;outline:0;padding:0;margin:0;border:0;-moz-border-radius:15%;border-radius:15%;background-color:#323232;background-color:rgba(50,50,50,.5);color:#ddd;font:1.6em sans-serif;-webkit-transition:background-color .4s ease;transition:background-color .4s ease}.baguetteBox-button:focus,.baguetteBox-button:hover{background-color:rgba(50,50,50,.9)}.baguetteBox-button#next-button{right:2%}.baguetteBox-button#previous-button{left:2%}.baguetteBox-button#close-button{top:20px;right:2%;right:calc(2% + 6px);width:30px;height:30px}.baguetteBox-button svg{position:absolute;left:0;top:0}.baguetteBox-spinner{width:40px;height:40px;display:inline-block;position:absolute;top:50%;left:50%;margin-top:-20px;margin-left:-20px}.baguetteBox-double-bounce1,.baguetteBox-double-bounce2{width:100%;height:100%;-moz-border-radius:50%;border-radius:50%;background-color:#fff;opacity:.6;position:absolute;top:0;left:0;-webkit-animation:bounce 2s infinite ease-in-out;animation:bounce 2s infinite ease-in-out}.baguetteBox-double-bounce2{-webkit-animation-delay:-1s;animation-delay:-1s}@-webkit-keyframes bounce{0%,100%{-webkit-transform:scale(0);transform:scale(0)}50%{-webkit-transform:scale(1);transform:scale(1)}}@keyframes bounce{0%,100%{-webkit-transform:scale(0);-moz-transform:scale(0);transform:scale(0)}50%{-webkit-transform:scale(1);-moz-transform:scale(1);transform:scale(1)}}
 .clearfix {
   *zoom: 1;
 }
@@ -31,6 +699,12 @@
 }
 .clearfix:after {
   clear: both;
+}
+.pull-right {
+  float: right !important;
+}
+.pull-left {
+  float: left !important;
 }
 .hide-text {
   font: 0/0 a;
@@ -175,18 +849,15 @@ sup {
 sub {
   bottom: -0.25em;
 }
-img {
+img,
+svg {
   /* Responsive images (ensure images don't scale beyond their parents) */
-
   max-width: 100%;
   /* Part 1: Set a maxium relative to the parent */
-
   width: auto\9;
   /* IE7-8 need help adjusting responsive images */
-
   height: auto;
   /* Part 2: Scale the height according to the width, otherwise you get stretching */
-
   vertical-align: middle;
   border: 0;
   -ms-interpolation-mode: bicubic;
@@ -229,10 +900,11 @@ img {
   img {
     page-break-inside: avoid;
   }
+  svg,
   img {
     max-width: 100% !important;
   }
-  @page  {
+  @page {
     margin: 0.5cm;
   }
   p,
@@ -252,7 +924,7 @@ html {
 }
 body {
   height: 100%;
-  background: url('../images/cream-dust.png') #ffffff;
+  background: url('../images/cream-dust.png') #fff;
 }
 section {
   margin: 0;
@@ -315,7 +987,7 @@ section {
 @media (max-width: 773px) {
   .social ul li {
     padding-top: 5%;
-    padding-left: 3%;
+    padding-left: 1em;
     text-align: left;
     display: table-cell;
   }
@@ -367,1485 +1039,6 @@ section {
     margin-left: auto;
   }
 }
-/*!
- *  Font Awesome 3.2.1
- *  the iconic font designed for Bootstrap
- *  ------------------------------------------------------------------------------
- *  The full suite of pictographic icons, examples, and documentation can be
- *  found at http://fontawesome.io.  Stay up to date on Twitter at
- *  http://twitter.com/fontawesome.
- *
- *  License
- *  ------------------------------------------------------------------------------
- *  - The Font Awesome font is licensed under SIL OFL 1.1 -
- *    http://scripts.sil.org/OFL
- *  - Font Awesome CSS, LESS, and SASS files are licensed under MIT License -
- *    http://opensource.org/licenses/mit-license.html
- *  - Font Awesome documentation licensed under CC BY 3.0 -
- *    http://creativecommons.org/licenses/by/3.0/
- *  - Attribution is no longer required in Font Awesome 3.0, but much appreciated:
- *    "Font Awesome by Dave Gandy - http://fontawesome.io"
- *
- *  Author - Dave Gandy
- *  ------------------------------------------------------------------------------
- *  Email: dave@fontawesome.io
- *  Twitter: http://twitter.com/davegandy
- *  Work: Lead Product Designer @ Kyruus - http://kyruus.com
- */
-/* FONT PATH
- * -------------------------- */
-@font-face {
-  font-family: 'FontAwesome';
-  src: url('../fonts/fontawesome-webfont.eot?v=3.2.1');
-  src: url('../fonts/fontawesome-webfont.eot?#iefix&v=3.2.1') format('embedded-opentype'), url('../fonts/fontawesome-webfont.woff?v=3.2.1') format('woff'), url('../fonts/fontawesome-webfont.ttf?v=3.2.1') format('truetype'), url('../fonts/fontawesome-webfont.svg#fontawesomeregular?v=3.2.1') format('svg');
-  font-weight: normal;
-  font-style: normal;
-}
-/* FONT AWESOME CORE
- * -------------------------- */
-[class^="icon-"],
-[class*=" icon-"] {
-  font-family: FontAwesome;
-  font-weight: normal;
-  font-style: normal;
-  text-decoration: inherit;
-  -webkit-font-smoothing: antialiased;
-  *margin-right: .3em;
-}
-[class^="icon-"]:before,
-[class*=" icon-"]:before {
-  text-decoration: inherit;
-  display: inline-block;
-  speak: none;
-}
-/* makes the font 33% larger relative to the icon container */
-.icon-large:before {
-  vertical-align: -10%;
-  font-size: 1.3333333333333333em;
-}
-/* makes sure icons active on rollover in links */
-a [class^="icon-"],
-a [class*=" icon-"] {
-  display: inline;
-}
-/* increased font size for icon-large */
-[class^="icon-"].icon-fixed-width,
-[class*=" icon-"].icon-fixed-width {
-  display: inline-block;
-  width: 1.1428571428571428em;
-  text-align: right;
-  padding-right: 0.2857142857142857em;
-}
-[class^="icon-"].icon-fixed-width.icon-large,
-[class*=" icon-"].icon-fixed-width.icon-large {
-  width: 1.4285714285714286em;
-}
-.icons-ul {
-  margin-left: 2.142857142857143em;
-  list-style-type: none;
-}
-.icons-ul > li {
-  position: relative;
-}
-.icons-ul .icon-li {
-  position: absolute;
-  left: -2.142857142857143em;
-  width: 2.142857142857143em;
-  text-align: center;
-  line-height: inherit;
-}
-[class^="icon-"].hide,
-[class*=" icon-"].hide {
-  display: none;
-}
-.icon-muted {
-  color: #eeeeee;
-}
-.icon-light {
-  color: #ffffff;
-}
-.icon-dark {
-  color: #333333;
-}
-.icon-border {
-  border: solid 1px #eeeeee;
-  padding: .2em .25em .15em;
-  -webkit-border-radius: 3px;
-  -moz-border-radius: 3px;
-  border-radius: 3px;
-}
-.icon-2x {
-  font-size: 2em;
-}
-.icon-2x.icon-border {
-  border-width: 2px;
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
-  border-radius: 4px;
-}
-.icon-3x {
-  font-size: 3em;
-}
-.icon-3x.icon-border {
-  border-width: 3px;
-  -webkit-border-radius: 5px;
-  -moz-border-radius: 5px;
-  border-radius: 5px;
-}
-.icon-4x {
-  font-size: 4em;
-}
-.icon-4x.icon-border {
-  border-width: 4px;
-  -webkit-border-radius: 6px;
-  -moz-border-radius: 6px;
-  border-radius: 6px;
-}
-.icon-5x {
-  font-size: 5em;
-}
-.icon-5x.icon-border {
-  border-width: 5px;
-  -webkit-border-radius: 7px;
-  -moz-border-radius: 7px;
-  border-radius: 7px;
-}
-.pull-right {
-  float: right;
-}
-.pull-left {
-  float: left;
-}
-[class^="icon-"].pull-left,
-[class*=" icon-"].pull-left {
-  margin-right: .3em;
-}
-[class^="icon-"].pull-right,
-[class*=" icon-"].pull-right {
-  margin-left: .3em;
-}
-/* BOOTSTRAP SPECIFIC CLASSES
- * -------------------------- */
-/* Bootstrap 2.0 sprites.less reset */
-[class^="icon-"],
-[class*=" icon-"] {
-  display: inline;
-  width: auto;
-  height: auto;
-  line-height: normal;
-  vertical-align: baseline;
-  background-image: none;
-  background-position: 0% 0%;
-  background-repeat: repeat;
-  margin-top: 0;
-}
-/* more sprites.less reset */
-.icon-white,
-.nav-pills > .active > a > [class^="icon-"],
-.nav-pills > .active > a > [class*=" icon-"],
-.nav-list > .active > a > [class^="icon-"],
-.nav-list > .active > a > [class*=" icon-"],
-.navbar-inverse .nav > .active > a > [class^="icon-"],
-.navbar-inverse .nav > .active > a > [class*=" icon-"],
-.dropdown-menu > li > a:hover > [class^="icon-"],
-.dropdown-menu > li > a:hover > [class*=" icon-"],
-.dropdown-menu > .active > a > [class^="icon-"],
-.dropdown-menu > .active > a > [class*=" icon-"],
-.dropdown-submenu:hover > a > [class^="icon-"],
-.dropdown-submenu:hover > a > [class*=" icon-"] {
-  background-image: none;
-}
-/* keeps Bootstrap styles with and without icons the same */
-.btn [class^="icon-"].icon-large,
-.nav [class^="icon-"].icon-large,
-.btn [class*=" icon-"].icon-large,
-.nav [class*=" icon-"].icon-large {
-  line-height: .9em;
-}
-.btn [class^="icon-"].icon-spin,
-.nav [class^="icon-"].icon-spin,
-.btn [class*=" icon-"].icon-spin,
-.nav [class*=" icon-"].icon-spin {
-  display: inline-block;
-}
-.nav-tabs [class^="icon-"],
-.nav-pills [class^="icon-"],
-.nav-tabs [class*=" icon-"],
-.nav-pills [class*=" icon-"],
-.nav-tabs [class^="icon-"].icon-large,
-.nav-pills [class^="icon-"].icon-large,
-.nav-tabs [class*=" icon-"].icon-large,
-.nav-pills [class*=" icon-"].icon-large {
-  line-height: .9em;
-}
-.btn [class^="icon-"].pull-left.icon-2x,
-.btn [class*=" icon-"].pull-left.icon-2x,
-.btn [class^="icon-"].pull-right.icon-2x,
-.btn [class*=" icon-"].pull-right.icon-2x {
-  margin-top: .18em;
-}
-.btn [class^="icon-"].icon-spin.icon-large,
-.btn [class*=" icon-"].icon-spin.icon-large {
-  line-height: .8em;
-}
-.btn.btn-small [class^="icon-"].pull-left.icon-2x,
-.btn.btn-small [class*=" icon-"].pull-left.icon-2x,
-.btn.btn-small [class^="icon-"].pull-right.icon-2x,
-.btn.btn-small [class*=" icon-"].pull-right.icon-2x {
-  margin-top: .25em;
-}
-.btn.btn-large [class^="icon-"],
-.btn.btn-large [class*=" icon-"] {
-  margin-top: 0;
-}
-.btn.btn-large [class^="icon-"].pull-left.icon-2x,
-.btn.btn-large [class*=" icon-"].pull-left.icon-2x,
-.btn.btn-large [class^="icon-"].pull-right.icon-2x,
-.btn.btn-large [class*=" icon-"].pull-right.icon-2x {
-  margin-top: .05em;
-}
-.btn.btn-large [class^="icon-"].pull-left.icon-2x,
-.btn.btn-large [class*=" icon-"].pull-left.icon-2x {
-  margin-right: .2em;
-}
-.btn.btn-large [class^="icon-"].pull-right.icon-2x,
-.btn.btn-large [class*=" icon-"].pull-right.icon-2x {
-  margin-left: .2em;
-}
-/* Fixes alignment in nav lists */
-.nav-list [class^="icon-"],
-.nav-list [class*=" icon-"] {
-  line-height: inherit;
-}
-/* EXTRAS
- * -------------------------- */
-/* Stacked and layered icon */
-.icon-stack {
-  position: relative;
-  display: inline-block;
-  width: 2em;
-  height: 2em;
-  line-height: 2em;
-  vertical-align: -35%;
-}
-.icon-stack [class^="icon-"],
-.icon-stack [class*=" icon-"] {
-  display: block;
-  text-align: center;
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  font-size: 1em;
-  line-height: inherit;
-  *line-height: 2em;
-}
-.icon-stack .icon-stack-base {
-  font-size: 2em;
-  *line-height: 1em;
-}
-/* Animated rotating icon */
-.icon-spin {
-  display: inline-block;
-  -moz-animation: spin 2s infinite linear;
-  -o-animation: spin 2s infinite linear;
-  -webkit-animation: spin 2s infinite linear;
-  animation: spin 2s infinite linear;
-}
-/* Prevent stack and spinners from being taken inline when inside a link */
-a .icon-stack,
-a .icon-spin {
-  display: inline-block;
-  text-decoration: none;
-}
-@-moz-keyframes spin {
-  0% {
-    -moz-transform: rotate(0deg);
-  }
-  100% {
-    -moz-transform: rotate(359deg);
-  }
-}
-@-webkit-keyframes spin {
-  0% {
-    -webkit-transform: rotate(0deg);
-  }
-  100% {
-    -webkit-transform: rotate(359deg);
-  }
-}
-@-o-keyframes spin {
-  0% {
-    -o-transform: rotate(0deg);
-  }
-  100% {
-    -o-transform: rotate(359deg);
-  }
-}
-@-ms-keyframes spin {
-  0% {
-    -ms-transform: rotate(0deg);
-  }
-  100% {
-    -ms-transform: rotate(359deg);
-  }
-}
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(359deg);
-  }
-}
-/* Icon rotations and mirroring */
-.icon-rotate-90:before {
-  -webkit-transform: rotate(90deg);
-  -moz-transform: rotate(90deg);
-  -ms-transform: rotate(90deg);
-  -o-transform: rotate(90deg);
-  transform: rotate(90deg);
-  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=1);
-}
-.icon-rotate-180:before {
-  -webkit-transform: rotate(180deg);
-  -moz-transform: rotate(180deg);
-  -ms-transform: rotate(180deg);
-  -o-transform: rotate(180deg);
-  transform: rotate(180deg);
-  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=2);
-}
-.icon-rotate-270:before {
-  -webkit-transform: rotate(270deg);
-  -moz-transform: rotate(270deg);
-  -ms-transform: rotate(270deg);
-  -o-transform: rotate(270deg);
-  transform: rotate(270deg);
-  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
-}
-.icon-flip-horizontal:before {
-  -webkit-transform: scale(-1, 1);
-  -moz-transform: scale(-1, 1);
-  -ms-transform: scale(-1, 1);
-  -o-transform: scale(-1, 1);
-  transform: scale(-1, 1);
-}
-.icon-flip-vertical:before {
-  -webkit-transform: scale(1, -1);
-  -moz-transform: scale(1, -1);
-  -ms-transform: scale(1, -1);
-  -o-transform: scale(1, -1);
-  transform: scale(1, -1);
-}
-/* ensure rotation occurs inside anchor tags */
-a .icon-rotate-90:before,
-a .icon-rotate-180:before,
-a .icon-rotate-270:before,
-a .icon-flip-horizontal:before,
-a .icon-flip-vertical:before {
-  display: inline-block;
-}
-/* Font Awesome uses the Unicode Private Use Area (PUA) to ensure screen
-   readers do not read off random characters that represent icons */
-.icon-glass:before {
-  content: "\f000";
-}
-.icon-music:before {
-  content: "\f001";
-}
-.icon-search:before {
-  content: "\f002";
-}
-.icon-envelope-alt:before {
-  content: "\f003";
-}
-.icon-heart:before {
-  content: "\f004";
-}
-.icon-star:before {
-  content: "\f005";
-}
-.icon-star-empty:before {
-  content: "\f006";
-}
-.icon-user:before {
-  content: "\f007";
-}
-.icon-film:before {
-  content: "\f008";
-}
-.icon-th-large:before {
-  content: "\f009";
-}
-.icon-th:before {
-  content: "\f00a";
-}
-.icon-th-list:before {
-  content: "\f00b";
-}
-.icon-ok:before {
-  content: "\f00c";
-}
-.icon-remove:before {
-  content: "\f00d";
-}
-.icon-zoom-in:before {
-  content: "\f00e";
-}
-.icon-zoom-out:before {
-  content: "\f010";
-}
-.icon-power-off:before,
-.icon-off:before {
-  content: "\f011";
-}
-.icon-signal:before {
-  content: "\f012";
-}
-.icon-gear:before,
-.icon-cog:before {
-  content: "\f013";
-}
-.icon-trash:before {
-  content: "\f014";
-}
-.icon-home:before {
-  content: "\f015";
-}
-.icon-file-alt:before {
-  content: "\f016";
-}
-.icon-time:before {
-  content: "\f017";
-}
-.icon-road:before {
-  content: "\f018";
-}
-.icon-download-alt:before {
-  content: "\f019";
-}
-.icon-download:before {
-  content: "\f01a";
-}
-.icon-upload:before {
-  content: "\f01b";
-}
-.icon-inbox:before {
-  content: "\f01c";
-}
-.icon-play-circle:before {
-  content: "\f01d";
-}
-.icon-rotate-right:before,
-.icon-repeat:before {
-  content: "\f01e";
-}
-.icon-refresh:before {
-  content: "\f021";
-}
-.icon-list-alt:before {
-  content: "\f022";
-}
-.icon-lock:before {
-  content: "\f023";
-}
-.icon-flag:before {
-  content: "\f024";
-}
-.icon-headphones:before {
-  content: "\f025";
-}
-.icon-volume-off:before {
-  content: "\f026";
-}
-.icon-volume-down:before {
-  content: "\f027";
-}
-.icon-volume-up:before {
-  content: "\f028";
-}
-.icon-qrcode:before {
-  content: "\f029";
-}
-.icon-barcode:before {
-  content: "\f02a";
-}
-.icon-tag:before {
-  content: "\f02b";
-}
-.icon-tags:before {
-  content: "\f02c";
-}
-.icon-book:before {
-  content: "\f02d";
-}
-.icon-bookmark:before {
-  content: "\f02e";
-}
-.icon-print:before {
-  content: "\f02f";
-}
-.icon-camera:before {
-  content: "\f030";
-}
-.icon-font:before {
-  content: "\f031";
-}
-.icon-bold:before {
-  content: "\f032";
-}
-.icon-italic:before {
-  content: "\f033";
-}
-.icon-text-height:before {
-  content: "\f034";
-}
-.icon-text-width:before {
-  content: "\f035";
-}
-.icon-align-left:before {
-  content: "\f036";
-}
-.icon-align-center:before {
-  content: "\f037";
-}
-.icon-align-right:before {
-  content: "\f038";
-}
-.icon-align-justify:before {
-  content: "\f039";
-}
-.icon-list:before {
-  content: "\f03a";
-}
-.icon-indent-left:before {
-  content: "\f03b";
-}
-.icon-indent-right:before {
-  content: "\f03c";
-}
-.icon-facetime-video:before {
-  content: "\f03d";
-}
-.icon-picture:before {
-  content: "\f03e";
-}
-.icon-pencil:before {
-  content: "\f040";
-}
-.icon-map-marker:before {
-  content: "\f041";
-}
-.icon-adjust:before {
-  content: "\f042";
-}
-.icon-tint:before {
-  content: "\f043";
-}
-.icon-edit:before {
-  content: "\f044";
-}
-.icon-share:before {
-  content: "\f045";
-}
-.icon-check:before {
-  content: "\f046";
-}
-.icon-move:before {
-  content: "\f047";
-}
-.icon-step-backward:before {
-  content: "\f048";
-}
-.icon-fast-backward:before {
-  content: "\f049";
-}
-.icon-backward:before {
-  content: "\f04a";
-}
-.icon-play:before {
-  content: "\f04b";
-}
-.icon-pause:before {
-  content: "\f04c";
-}
-.icon-stop:before {
-  content: "\f04d";
-}
-.icon-forward:before {
-  content: "\f04e";
-}
-.icon-fast-forward:before {
-  content: "\f050";
-}
-.icon-step-forward:before {
-  content: "\f051";
-}
-.icon-eject:before {
-  content: "\f052";
-}
-.icon-chevron-left:before {
-  content: "\f053";
-}
-.icon-chevron-right:before {
-  content: "\f054";
-}
-.icon-plus-sign:before {
-  content: "\f055";
-}
-.icon-minus-sign:before {
-  content: "\f056";
-}
-.icon-remove-sign:before {
-  content: "\f057";
-}
-.icon-ok-sign:before {
-  content: "\f058";
-}
-.icon-question-sign:before {
-  content: "\f059";
-}
-.icon-info-sign:before {
-  content: "\f05a";
-}
-.icon-screenshot:before {
-  content: "\f05b";
-}
-.icon-remove-circle:before {
-  content: "\f05c";
-}
-.icon-ok-circle:before {
-  content: "\f05d";
-}
-.icon-ban-circle:before {
-  content: "\f05e";
-}
-.icon-arrow-left:before {
-  content: "\f060";
-}
-.icon-arrow-right:before {
-  content: "\f061";
-}
-.icon-arrow-up:before {
-  content: "\f062";
-}
-.icon-arrow-down:before {
-  content: "\f063";
-}
-.icon-mail-forward:before,
-.icon-share-alt:before {
-  content: "\f064";
-}
-.icon-resize-full:before {
-  content: "\f065";
-}
-.icon-resize-small:before {
-  content: "\f066";
-}
-.icon-plus:before {
-  content: "\f067";
-}
-.icon-minus:before {
-  content: "\f068";
-}
-.icon-asterisk:before {
-  content: "\f069";
-}
-.icon-exclamation-sign:before {
-  content: "\f06a";
-}
-.icon-gift:before {
-  content: "\f06b";
-}
-.icon-leaf:before {
-  content: "\f06c";
-}
-.icon-fire:before {
-  content: "\f06d";
-}
-.icon-eye-open:before {
-  content: "\f06e";
-}
-.icon-eye-close:before {
-  content: "\f070";
-}
-.icon-warning-sign:before {
-  content: "\f071";
-}
-.icon-plane:before {
-  content: "\f072";
-}
-.icon-calendar:before {
-  content: "\f073";
-}
-.icon-random:before {
-  content: "\f074";
-}
-.icon-comment:before {
-  content: "\f075";
-}
-.icon-magnet:before {
-  content: "\f076";
-}
-.icon-chevron-up:before {
-  content: "\f077";
-}
-.icon-chevron-down:before {
-  content: "\f078";
-}
-.icon-retweet:before {
-  content: "\f079";
-}
-.icon-shopping-cart:before {
-  content: "\f07a";
-}
-.icon-folder-close:before {
-  content: "\f07b";
-}
-.icon-folder-open:before {
-  content: "\f07c";
-}
-.icon-resize-vertical:before {
-  content: "\f07d";
-}
-.icon-resize-horizontal:before {
-  content: "\f07e";
-}
-.icon-bar-chart:before {
-  content: "\f080";
-}
-.icon-twitter-sign:before {
-  content: "\f081";
-}
-.icon-facebook-sign:before {
-  content: "\f082";
-}
-.icon-camera-retro:before {
-  content: "\f083";
-}
-.icon-key:before {
-  content: "\f084";
-}
-.icon-gears:before,
-.icon-cogs:before {
-  content: "\f085";
-}
-.icon-comments:before {
-  content: "\f086";
-}
-.icon-thumbs-up-alt:before {
-  content: "\f087";
-}
-.icon-thumbs-down-alt:before {
-  content: "\f088";
-}
-.icon-star-half:before {
-  content: "\f089";
-}
-.icon-heart-empty:before {
-  content: "\f08a";
-}
-.icon-signout:before {
-  content: "\f08b";
-}
-.icon-linkedin-sign:before {
-  content: "\f08c";
-}
-.icon-pushpin:before {
-  content: "\f08d";
-}
-.icon-external-link:before {
-  content: "\f08e";
-}
-.icon-signin:before {
-  content: "\f090";
-}
-.icon-trophy:before {
-  content: "\f091";
-}
-.icon-github-sign:before {
-  content: "\f092";
-}
-.icon-upload-alt:before {
-  content: "\f093";
-}
-.icon-lemon:before {
-  content: "\f094";
-}
-.icon-phone:before {
-  content: "\f095";
-}
-.icon-unchecked:before,
-.icon-check-empty:before {
-  content: "\f096";
-}
-.icon-bookmark-empty:before {
-  content: "\f097";
-}
-.icon-phone-sign:before {
-  content: "\f098";
-}
-.icon-twitter:before {
-  content: "\f099";
-}
-.icon-facebook:before {
-  content: "\f09a";
-}
-.icon-github:before {
-  content: "\f09b";
-}
-.icon-unlock:before {
-  content: "\f09c";
-}
-.icon-credit-card:before {
-  content: "\f09d";
-}
-.icon-rss:before {
-  content: "\f09e";
-}
-.icon-hdd:before {
-  content: "\f0a0";
-}
-.icon-bullhorn:before {
-  content: "\f0a1";
-}
-.icon-bell:before {
-  content: "\f0a2";
-}
-.icon-certificate:before {
-  content: "\f0a3";
-}
-.icon-hand-right:before {
-  content: "\f0a4";
-}
-.icon-hand-left:before {
-  content: "\f0a5";
-}
-.icon-hand-up:before {
-  content: "\f0a6";
-}
-.icon-hand-down:before {
-  content: "\f0a7";
-}
-.icon-circle-arrow-left:before {
-  content: "\f0a8";
-}
-.icon-circle-arrow-right:before {
-  content: "\f0a9";
-}
-.icon-circle-arrow-up:before {
-  content: "\f0aa";
-}
-.icon-circle-arrow-down:before {
-  content: "\f0ab";
-}
-.icon-globe:before {
-  content: "\f0ac";
-}
-.icon-wrench:before {
-  content: "\f0ad";
-}
-.icon-tasks:before {
-  content: "\f0ae";
-}
-.icon-filter:before {
-  content: "\f0b0";
-}
-.icon-briefcase:before {
-  content: "\f0b1";
-}
-.icon-fullscreen:before {
-  content: "\f0b2";
-}
-.icon-group:before {
-  content: "\f0c0";
-}
-.icon-link:before {
-  content: "\f0c1";
-}
-.icon-cloud:before {
-  content: "\f0c2";
-}
-.icon-beaker:before {
-  content: "\f0c3";
-}
-.icon-cut:before {
-  content: "\f0c4";
-}
-.icon-copy:before {
-  content: "\f0c5";
-}
-.icon-paperclip:before,
-.icon-paper-clip:before {
-  content: "\f0c6";
-}
-.icon-save:before {
-  content: "\f0c7";
-}
-.icon-sign-blank:before {
-  content: "\f0c8";
-}
-.icon-reorder:before {
-  content: "\f0c9";
-}
-.icon-list-ul:before {
-  content: "\f0ca";
-}
-.icon-list-ol:before {
-  content: "\f0cb";
-}
-.icon-strikethrough:before {
-  content: "\f0cc";
-}
-.icon-underline:before {
-  content: "\f0cd";
-}
-.icon-table:before {
-  content: "\f0ce";
-}
-.icon-magic:before {
-  content: "\f0d0";
-}
-.icon-truck:before {
-  content: "\f0d1";
-}
-.icon-pinterest:before {
-  content: "\f0d2";
-}
-.icon-pinterest-sign:before {
-  content: "\f0d3";
-}
-.icon-google-plus-sign:before {
-  content: "\f0d4";
-}
-.icon-google-plus:before {
-  content: "\f0d5";
-}
-.icon-money:before {
-  content: "\f0d6";
-}
-.icon-caret-down:before {
-  content: "\f0d7";
-}
-.icon-caret-up:before {
-  content: "\f0d8";
-}
-.icon-caret-left:before {
-  content: "\f0d9";
-}
-.icon-caret-right:before {
-  content: "\f0da";
-}
-.icon-columns:before {
-  content: "\f0db";
-}
-.icon-sort:before {
-  content: "\f0dc";
-}
-.icon-sort-down:before {
-  content: "\f0dd";
-}
-.icon-sort-up:before {
-  content: "\f0de";
-}
-.icon-envelope:before {
-  content: "\f0e0";
-}
-.icon-linkedin:before {
-  content: "\f0e1";
-}
-.icon-rotate-left:before,
-.icon-undo:before {
-  content: "\f0e2";
-}
-.icon-legal:before {
-  content: "\f0e3";
-}
-.icon-dashboard:before {
-  content: "\f0e4";
-}
-.icon-comment-alt:before {
-  content: "\f0e5";
-}
-.icon-comments-alt:before {
-  content: "\f0e6";
-}
-.icon-bolt:before {
-  content: "\f0e7";
-}
-.icon-sitemap:before {
-  content: "\f0e8";
-}
-.icon-umbrella:before {
-  content: "\f0e9";
-}
-.icon-paste:before {
-  content: "\f0ea";
-}
-.icon-lightbulb:before {
-  content: "\f0eb";
-}
-.icon-exchange:before {
-  content: "\f0ec";
-}
-.icon-cloud-download:before {
-  content: "\f0ed";
-}
-.icon-cloud-upload:before {
-  content: "\f0ee";
-}
-.icon-user-md:before {
-  content: "\f0f0";
-}
-.icon-stethoscope:before {
-  content: "\f0f1";
-}
-.icon-suitcase:before {
-  content: "\f0f2";
-}
-.icon-bell-alt:before {
-  content: "\f0f3";
-}
-.icon-coffee:before {
-  content: "\f0f4";
-}
-.icon-food:before {
-  content: "\f0f5";
-}
-.icon-file-text-alt:before {
-  content: "\f0f6";
-}
-.icon-building:before {
-  content: "\f0f7";
-}
-.icon-hospital:before {
-  content: "\f0f8";
-}
-.icon-ambulance:before {
-  content: "\f0f9";
-}
-.icon-medkit:before {
-  content: "\f0fa";
-}
-.icon-fighter-jet:before {
-  content: "\f0fb";
-}
-.icon-beer:before {
-  content: "\f0fc";
-}
-.icon-h-sign:before {
-  content: "\f0fd";
-}
-.icon-plus-sign-alt:before {
-  content: "\f0fe";
-}
-.icon-double-angle-left:before {
-  content: "\f100";
-}
-.icon-double-angle-right:before {
-  content: "\f101";
-}
-.icon-double-angle-up:before {
-  content: "\f102";
-}
-.icon-double-angle-down:before {
-  content: "\f103";
-}
-.icon-angle-left:before {
-  content: "\f104";
-}
-.icon-angle-right:before {
-  content: "\f105";
-}
-.icon-angle-up:before {
-  content: "\f106";
-}
-.icon-angle-down:before {
-  content: "\f107";
-}
-.icon-desktop:before {
-  content: "\f108";
-}
-.icon-laptop:before {
-  content: "\f109";
-}
-.icon-tablet:before {
-  content: "\f10a";
-}
-.icon-mobile-phone:before {
-  content: "\f10b";
-}
-.icon-circle-blank:before {
-  content: "\f10c";
-}
-.icon-quote-left:before {
-  content: "\f10d";
-}
-.icon-quote-right:before {
-  content: "\f10e";
-}
-.icon-spinner:before {
-  content: "\f110";
-}
-.icon-circle:before {
-  content: "\f111";
-}
-.icon-mail-reply:before,
-.icon-reply:before {
-  content: "\f112";
-}
-.icon-github-alt:before {
-  content: "\f113";
-}
-.icon-folder-close-alt:before {
-  content: "\f114";
-}
-.icon-folder-open-alt:before {
-  content: "\f115";
-}
-.icon-expand-alt:before {
-  content: "\f116";
-}
-.icon-collapse-alt:before {
-  content: "\f117";
-}
-.icon-smile:before {
-  content: "\f118";
-}
-.icon-frown:before {
-  content: "\f119";
-}
-.icon-meh:before {
-  content: "\f11a";
-}
-.icon-gamepad:before {
-  content: "\f11b";
-}
-.icon-keyboard:before {
-  content: "\f11c";
-}
-.icon-flag-alt:before {
-  content: "\f11d";
-}
-.icon-flag-checkered:before {
-  content: "\f11e";
-}
-.icon-terminal:before {
-  content: "\f120";
-}
-.icon-code:before {
-  content: "\f121";
-}
-.icon-reply-all:before {
-  content: "\f122";
-}
-.icon-mail-reply-all:before {
-  content: "\f122";
-}
-.icon-star-half-full:before,
-.icon-star-half-empty:before {
-  content: "\f123";
-}
-.icon-location-arrow:before {
-  content: "\f124";
-}
-.icon-crop:before {
-  content: "\f125";
-}
-.icon-code-fork:before {
-  content: "\f126";
-}
-.icon-unlink:before {
-  content: "\f127";
-}
-.icon-question:before {
-  content: "\f128";
-}
-.icon-info:before {
-  content: "\f129";
-}
-.icon-exclamation:before {
-  content: "\f12a";
-}
-.icon-superscript:before {
-  content: "\f12b";
-}
-.icon-subscript:before {
-  content: "\f12c";
-}
-.icon-eraser:before {
-  content: "\f12d";
-}
-.icon-puzzle-piece:before {
-  content: "\f12e";
-}
-.icon-microphone:before {
-  content: "\f130";
-}
-.icon-microphone-off:before {
-  content: "\f131";
-}
-.icon-shield:before {
-  content: "\f132";
-}
-.icon-calendar-empty:before {
-  content: "\f133";
-}
-.icon-fire-extinguisher:before {
-  content: "\f134";
-}
-.icon-rocket:before {
-  content: "\f135";
-}
-.icon-maxcdn:before {
-  content: "\f136";
-}
-.icon-chevron-sign-left:before {
-  content: "\f137";
-}
-.icon-chevron-sign-right:before {
-  content: "\f138";
-}
-.icon-chevron-sign-up:before {
-  content: "\f139";
-}
-.icon-chevron-sign-down:before {
-  content: "\f13a";
-}
-.icon-html5:before {
-  content: "\f13b";
-}
-.icon-css3:before {
-  content: "\f13c";
-}
-.icon-anchor:before {
-  content: "\f13d";
-}
-.icon-unlock-alt:before {
-  content: "\f13e";
-}
-.icon-bullseye:before {
-  content: "\f140";
-}
-.icon-ellipsis-horizontal:before {
-  content: "\f141";
-}
-.icon-ellipsis-vertical:before {
-  content: "\f142";
-}
-.icon-rss-sign:before {
-  content: "\f143";
-}
-.icon-play-sign:before {
-  content: "\f144";
-}
-.icon-ticket:before {
-  content: "\f145";
-}
-.icon-minus-sign-alt:before {
-  content: "\f146";
-}
-.icon-check-minus:before {
-  content: "\f147";
-}
-.icon-level-up:before {
-  content: "\f148";
-}
-.icon-level-down:before {
-  content: "\f149";
-}
-.icon-check-sign:before {
-  content: "\f14a";
-}
-.icon-edit-sign:before {
-  content: "\f14b";
-}
-.icon-external-link-sign:before {
-  content: "\f14c";
-}
-.icon-share-sign:before {
-  content: "\f14d";
-}
-.icon-compass:before {
-  content: "\f14e";
-}
-.icon-collapse:before {
-  content: "\f150";
-}
-.icon-collapse-top:before {
-  content: "\f151";
-}
-.icon-expand:before {
-  content: "\f152";
-}
-.icon-euro:before,
-.icon-eur:before {
-  content: "\f153";
-}
-.icon-gbp:before {
-  content: "\f154";
-}
-.icon-dollar:before,
-.icon-usd:before {
-  content: "\f155";
-}
-.icon-rupee:before,
-.icon-inr:before {
-  content: "\f156";
-}
-.icon-yen:before,
-.icon-jpy:before {
-  content: "\f157";
-}
-.icon-renminbi:before,
-.icon-cny:before {
-  content: "\f158";
-}
-.icon-won:before,
-.icon-krw:before {
-  content: "\f159";
-}
-.icon-bitcoin:before,
-.icon-btc:before {
-  content: "\f15a";
-}
-.icon-file:before {
-  content: "\f15b";
-}
-.icon-file-text:before {
-  content: "\f15c";
-}
-.icon-sort-by-alphabet:before {
-  content: "\f15d";
-}
-.icon-sort-by-alphabet-alt:before {
-  content: "\f15e";
-}
-.icon-sort-by-attributes:before {
-  content: "\f160";
-}
-.icon-sort-by-attributes-alt:before {
-  content: "\f161";
-}
-.icon-sort-by-order:before {
-  content: "\f162";
-}
-.icon-sort-by-order-alt:before {
-  content: "\f163";
-}
-.icon-thumbs-up:before {
-  content: "\f164";
-}
-.icon-thumbs-down:before {
-  content: "\f165";
-}
-.icon-youtube-sign:before {
-  content: "\f166";
-}
-.icon-youtube:before {
-  content: "\f167";
-}
-.icon-xing:before {
-  content: "\f168";
-}
-.icon-xing-sign:before {
-  content: "\f169";
-}
-.icon-youtube-play:before {
-  content: "\f16a";
-}
-.icon-dropbox:before {
-  content: "\f16b";
-}
-.icon-stackexchange:before {
-  content: "\f16c";
-}
-.icon-instagram:before {
-  content: "\f16d";
-}
-.icon-flickr:before {
-  content: "\f16e";
-}
-.icon-adn:before {
-  content: "\f170";
-}
-.icon-bitbucket:before {
-  content: "\f171";
-}
-.icon-bitbucket-sign:before {
-  content: "\f172";
-}
-.icon-tumblr:before {
-  content: "\f173";
-}
-.icon-tumblr-sign:before {
-  content: "\f174";
-}
-.icon-long-arrow-down:before {
-  content: "\f175";
-}
-.icon-long-arrow-up:before {
-  content: "\f176";
-}
-.icon-long-arrow-left:before {
-  content: "\f177";
-}
-.icon-long-arrow-right:before {
-  content: "\f178";
-}
-.icon-apple:before {
-  content: "\f179";
-}
-.icon-windows:before {
-  content: "\f17a";
-}
-.icon-android:before {
-  content: "\f17b";
-}
-.icon-linux:before {
-  content: "\f17c";
-}
-.icon-dribbble:before {
-  content: "\f17d";
-}
-.icon-skype:before {
-  content: "\f17e";
-}
-.icon-foursquare:before {
-  content: "\f180";
-}
-.icon-trello:before {
-  content: "\f181";
-}
-.icon-female:before {
-  content: "\f182";
-}
-.icon-male:before {
-  content: "\f183";
-}
-.icon-gittip:before {
-  content: "\f184";
-}
-.icon-sun:before {
-  content: "\f185";
-}
-.icon-moon:before {
-  content: "\f186";
-}
-.icon-archive:before {
-  content: "\f187";
-}
-.icon-bug:before {
-  content: "\f188";
-}
-.icon-vk:before {
-  content: "\f189";
-}
-.icon-weibo:before {
-  content: "\f18a";
-}
-.icon-renren:before {
-  content: "\f18b";
-}
 ul,
 ol {
   padding: 0;
@@ -1875,7 +1068,6 @@ ol.inline > li {
   display: inline-block;
   *display: inline;
   /* IE7 inline-block hack */
-
   *zoom: 1;
   padding-left: 5px;
   padding-right: 5px;
@@ -1924,7 +1116,6 @@ dd {
   display: inline-block;
   *display: inline;
   /* IE7 inline-block hack */
-
   *zoom: 1;
   margin-left: 0;
   margin-bottom: 0;
@@ -1944,8 +1135,8 @@ dd {
   padding: 4px 12px;
   line-height: 24px;
   text-decoration: none;
-  background-color: #ffffff;
-  border: 1px solid #dddddd;
+  background-color: #fff;
+  border: 1px solid #ddd;
   border-left-width: 0;
 }
 .pagination ul > li > a:hover,
@@ -1956,14 +1147,14 @@ dd {
 }
 .pagination ul > .active > a,
 .pagination ul > .active > span {
-  color: #999999;
+  color: #999;
   cursor: default;
 }
 .pagination ul > .disabled > span,
 .pagination ul > .disabled > a,
 .pagination ul > .disabled > a:hover,
 .pagination ul > .disabled > a:focus {
-  color: #999999;
+  color: #999;
   background-color: transparent;
   cursor: default;
 }
@@ -2092,7 +1283,7 @@ dd {
 .pager .disabled > a:hover,
 .pager .disabled > a:focus,
 .pager .disabled > span {
-  color: #999999;
+  color: #999;
   background-color: #fff;
   cursor: default;
 }
@@ -2100,10 +1291,10 @@ body {
   font-size: 16px;
   font-size: 15px;
   line-height: 24px;
-  color: #333333;
+  color: #333;
 }
 a {
-  color: #0088cc;
+  color: #08c;
   text-decoration: none;
 }
 a:hover,
@@ -2112,8 +1303,8 @@ a:focus {
   text-decoration: underline;
 }
 .social a {
-  color: #ffffff;
-  line-height: 44.400000000000006px;
+  color: #fff;
+  line-height: 44.4px;
   -webkit-transition: text-shadow 0.5s;
   -moz-transition: text-shadow 0.5s;
   -o-transition: text-shadow 0.5s;
@@ -2130,7 +1321,7 @@ a:focus {
 .social a:hover,
 .social a:focus {
   text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
-  color: #ffffff;
+  color: #fff;
   text-decoration: none;
   opacity: 0.9;
   filter: alpha(opacity=90);
@@ -2142,28 +1333,16 @@ a:focus {
     filter: alpha(opacity=100);
   }
 }
-.social a [class^="icon-"] {
+.social a i {
   -webkit-transition: opacity 0.5s;
   -moz-transition: opacity 0.5s;
   -o-transition: opacity 0.5s;
   transition: opacity 0.5s;
   font-size: 3em;
 }
-.social a [class^="icon-"].icon-border {
-  border-width: 3px;
-  -webkit-border-radius: 5px;
-  -moz-border-radius: 5px;
-  border-radius: 5px;
-}
 @media (max-width: 773px) {
-  .social a [class^="icon-"] {
+  .social a i {
     font-size: 2em;
-  }
-  .social a [class^="icon-"].icon-border {
-    border-width: 2px;
-    -webkit-border-radius: 4px;
-    -moz-border-radius: 4px;
-    border-radius: 4px;
   }
 }
 .social a .label {
@@ -2210,7 +1389,7 @@ a:focus {
 .page-content > .content .h6 small {
   font-weight: normal;
   line-height: 1;
-  color: #999999;
+  color: #999;
 }
 .page-content > .content h1,
 .page-content > .content .h1,
@@ -2278,7 +1457,7 @@ a:focus {
 blockquote {
   padding: 0 0 0 15px;
   margin: 0 0 24px;
-  border-left: 5px solid #eeeeee;
+  border-left: 5px solid #eee;
 }
 blockquote p {
   margin-bottom: 0;
@@ -2286,7 +1465,7 @@ blockquote p {
 blockquote small {
   display: block;
   line-height: 24px;
-  color: #999999;
+  color: #999;
 }
 blockquote small:before {
   content: '\2014 \00A0';
@@ -2295,7 +1474,7 @@ blockquote.pull-right {
   float: right;
   padding-right: 15px;
   padding-left: 0;
-  border-right: 5px solid #eeeeee;
+  border-right: 5px solid #eee;
   border-left: 0;
 }
 blockquote.pull-right p,
@@ -2319,6 +1498,24 @@ address {
   margin-bottom: 24px;
   font-style: normal;
   line-height: 24px;
+}
+.breadcrumb {
+  padding: 8px 15px;
+  margin-bottom: 20px;
+  list-style: none;
+  background-color: #f5f5f5;
+  border-radius: 4px;
+}
+.breadcrumb > li {
+  display: inline-block;
+}
+.breadcrumb > li + li:before {
+  padding: 0 5px;
+  color: #ccc;
+  content: "/\00a0";
+}
+.breadcrumb > .active {
+  color: #777;
 }
 .thumbnails {
   margin-left: 0;
@@ -2360,7 +1557,7 @@ address {
 }
 a.thumbnail:hover,
 a.thumbnail:focus {
-  border-color: #0088cc;
+  border-color: #08c;
   -webkit-box-shadow: 0 1px 4px rgba(0, 105, 214, 0.25);
   -moz-box-shadow: 0 1px 4px rgba(0, 105, 214, 0.25);
   box-shadow: 0 1px 4px rgba(0, 105, 214, 0.25);
@@ -2373,19 +1570,21 @@ a.thumbnail:focus {
 }
 .thumbnail .caption {
   padding: 9px;
-  color: #555555;
+  color: #555;
 }
 code,
+tt,
 pre {
   padding: 0 3px 2px;
   font-family: Monaco, Menlo, Consolas, "Courier New", monospace;
   font-size: 13px;
-  color: #333333;
+  color: #333;
   -webkit-border-radius: 3px;
   -moz-border-radius: 3px;
   border-radius: 3px;
 }
-code {
+code,
+tt {
   padding: 2px 4px;
   background-color: #f7f7f9;
   border: 1px solid #e1e1e8;
@@ -2440,94 +1639,70 @@ pre.code {
 .backlink + h1.title {
   margin-top: 0;
 }
-.post h1.title {
+article.post-text h1.entry-title {
+  text-align: center;
   margin: 6px 0;
 }
-.post h1.title a {
+article.post-text h1.entry-title a {
   color: inherit;
 }
-.post h1.title a:hover,
-.post h1.title a:focus {
+article.post-text h1.entry-title a:hover,
+article.post-text h1.entry-title a:focus {
   color: inherit;
 }
-.post .backlink {
+article.post-text .backlink {
   margin-top: 6px;
 }
-.post .backlink a:after {
+article.post-text .backlink a:after {
   content: ' /';
 }
-.post .backlink + .postbox > h1.title,
-.post .backlink + .post > h1.title,
-.post .backlink + h1.title {
+article.post-text .backlink + .postbox > h1.title,
+article.post-text .backlink + .post > h1.title,
+article.post-text .backlink + h1.title {
   margin-top: 0;
 }
-.post .meta {
+article.post-text .metadata {
   *zoom: 1;
-  color: #999999;
+  color: #999;
   margin-bottom: 12px;
   margin-top: -6px;
 }
-.post .meta:before,
-.post .meta:after {
+article.post-text .metadata:before,
+article.post-text .metadata:after {
   display: table;
   content: "";
   line-height: 0;
 }
-.post .meta:after {
+article.post-text .metadata:after {
   clear: both;
 }
-.post .meta .authordate {
-  display: inline-block;
-  float: left;
-  -webkit-transition: color 0.1s linear;
-  -moz-transition: color 0.1s linear;
-  -o-transition: color 0.1s linear;
-  transition: color 0.1s linear;
+article.post-text .metadata .commentline {
+  float: right !important;
 }
-.post .meta .authordate:before {
-  font-family: FontAwesome;
-  font-weight: normal;
-  font-style: normal;
-  text-decoration: inherit;
-  -webkit-font-smoothing: antialiased;
-  *margin-right: .3em;
-  content: "\f017";
-  margin-left: 5px;
-}
-.post .meta .authordate:hover {
-  color: #333333;
-}
-.post .meta .stats {
-  float: right;
-}
-.post .meta .stats p {
+article.post-text .metadata p {
   margin: 0;
-  padding: 0;
+  display: inline-block;
+  color: #999;
 }
-.post .meta .stats a {
-  color: #999999;
+article.post-text .metadata p a {
+  color: #999;
+}
+article.post-text .metadata p a:hover,
+article.post-text .metadata p:hover {
+  color: #333;
   -webkit-transition: color 1s linear;
   -moz-transition: color 1s linear;
   -o-transition: color 1s linear;
   transition: color 1s linear;
 }
-.post .meta .stats a:after {
-  font-family: FontAwesome;
-  font-weight: normal;
-  font-style: normal;
-  text-decoration: inherit;
-  -webkit-font-smoothing: antialiased;
-  *margin-right: .3em;
-  content: "\f075";
-  margin-left: 5px;
+article.post-text .metadata h3 {
+  font-size: initial !important;
+  display: inline;
+  margin: 0;
+  padding: 0;
+  line-height: initial;
 }
-.post .meta .stats a:hover,
-.post .meta .stats a:focus,
-.post .meta .stats a:active {
-  color: #333333;
-  text-decoration: none;
-}
-.post .meta .tags {
+article.post-text .metadata .tags {
   clear: both;
   display: block;
   opacity: 0.2;
@@ -2537,26 +1712,26 @@ pre.code {
   -o-transition: opacity 0.1s linear;
   transition: opacity 0.1s linear;
 }
-.post .meta .tags:hover {
+article.post-text .metadata .tags:hover {
   opacity: 1;
   filter: alpha(opacity=100);
 }
-.post .meta .tags ul {
+article.post-text .metadata .tags ul {
   margin: 0;
   list-style: none;
+  display: inline-block;
 }
-.post .meta .tags ul > li {
+article.post-text .metadata .tags ul > li {
   display: inline-block;
   *display: inline;
   /* IE7 inline-block hack */
-
   *zoom: 1;
   margin-right: 10px;
 }
-.post .body {
+article.post-text .entry-content {
   margin-bottom: 36px;
 }
-.post .body .figure {
+article.post-text .entry-content .figure {
   display: block;
   padding: 4px;
   line-height: 24px;
@@ -2575,100 +1750,29 @@ pre.code {
   margin: 0 auto 24px;
 }
 @media (max-width: 773px) {
-  .post .body .figure {
+  article.post-text .entry-content .figure {
     display: block;
     width: 97%;
   }
 }
-.post .body .figure > a,
-.post .body .figure > a > img {
+article.post-text .entry-content .figure > a,
+article.post-text .entry-content .figure > a > img {
   max-width: 100%;
   height: auto;
   overflow: hidden;
   margin-left: auto;
   margin-right: auto;
 }
-.post .body .figure .caption {
+article.post-text .entry-content .figure .caption {
   padding: 9px;
-  color: #555555;
+  color: #555;
   font-style: italic;
   padding-bottom: 0;
 }
-.post + .post {
+article.post-text + article.post-text {
   margin-top: 48px;
 }
+a.listtitle {
+  margin-left: 6px;
+}
 
-@import url("html4css1.css");
-@import url("nikola_rst.css");
-
-/* code.css file generated by Nikola */
-pre.code .hll { background-color: #ffffcc }
-pre.code  { background: #f8f8f8; }
-pre.code .c { color: #408080; font-style: italic } /* Comment */
-pre.code .err { border: 1px solid #FF0000 } /* Error */
-pre.code .k { color: #008000; font-weight: bold } /* Keyword */
-pre.code .o { color: #666666 } /* Operator */
-pre.code .ch { color: #408080; font-style: italic } /* Comment.Hashbang */
-pre.code .cm { color: #408080; font-style: italic } /* Comment.Multiline */
-pre.code .cp { color: #BC7A00 } /* Comment.Preproc */
-pre.code .cpf { color: #408080; font-style: italic } /* Comment.PreprocFile */
-pre.code .c1 { color: #408080; font-style: italic } /* Comment.Single */
-pre.code .cs { color: #408080; font-style: italic } /* Comment.Special */
-pre.code .gd { color: #A00000 } /* Generic.Deleted */
-pre.code .ge { font-style: italic } /* Generic.Emph */
-pre.code .gr { color: #FF0000 } /* Generic.Error */
-pre.code .gh { color: #000080; font-weight: bold } /* Generic.Heading */
-pre.code .gi { color: #00A000 } /* Generic.Inserted */
-pre.code .go { color: #888888 } /* Generic.Output */
-pre.code .gp { color: #000080; font-weight: bold } /* Generic.Prompt */
-pre.code .gs { font-weight: bold } /* Generic.Strong */
-pre.code .gu { color: #800080; font-weight: bold } /* Generic.Subheading */
-pre.code .gt { color: #0044DD } /* Generic.Traceback */
-pre.code .kc { color: #008000; font-weight: bold } /* Keyword.Constant */
-pre.code .kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
-pre.code .kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
-pre.code .kp { color: #008000 } /* Keyword.Pseudo */
-pre.code .kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
-pre.code .kt { color: #B00040 } /* Keyword.Type */
-pre.code .m { color: #666666 } /* Literal.Number */
-pre.code .s { color: #BA2121 } /* Literal.String */
-pre.code .na { color: #7D9029 } /* Name.Attribute */
-pre.code .nb { color: #008000 } /* Name.Builtin */
-pre.code .nc { color: #0000FF; font-weight: bold } /* Name.Class */
-pre.code .no { color: #880000 } /* Name.Constant */
-pre.code .nd { color: #AA22FF } /* Name.Decorator */
-pre.code .ni { color: #999999; font-weight: bold } /* Name.Entity */
-pre.code .ne { color: #D2413A; font-weight: bold } /* Name.Exception */
-pre.code .nf { color: #0000FF } /* Name.Function */
-pre.code .nl { color: #A0A000 } /* Name.Label */
-pre.code .nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
-pre.code .nt { color: #008000; font-weight: bold } /* Name.Tag */
-pre.code .nv { color: #19177C } /* Name.Variable */
-pre.code .ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
-pre.code .w { color: #bbbbbb } /* Text.Whitespace */
-pre.code .mb { color: #666666 } /* Literal.Number.Bin */
-pre.code .mf { color: #666666 } /* Literal.Number.Float */
-pre.code .mh { color: #666666 } /* Literal.Number.Hex */
-pre.code .mi { color: #666666 } /* Literal.Number.Integer */
-pre.code .mo { color: #666666 } /* Literal.Number.Oct */
-pre.code .sa { color: #BA2121 } /* Literal.String.Affix */
-pre.code .sb { color: #BA2121 } /* Literal.String.Backtick */
-pre.code .sc { color: #BA2121 } /* Literal.String.Char */
-pre.code .dl { color: #BA2121 } /* Literal.String.Delimiter */
-pre.code .sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
-pre.code .s2 { color: #BA2121 } /* Literal.String.Double */
-pre.code .se { color: #BB6622; font-weight: bold } /* Literal.String.Escape */
-pre.code .sh { color: #BA2121 } /* Literal.String.Heredoc */
-pre.code .si { color: #BB6688; font-weight: bold } /* Literal.String.Interpol */
-pre.code .sx { color: #008000 } /* Literal.String.Other */
-pre.code .sr { color: #BB6688 } /* Literal.String.Regex */
-pre.code .s1 { color: #BA2121 } /* Literal.String.Single */
-pre.code .ss { color: #19177C } /* Literal.String.Symbol */
-pre.code .bp { color: #008000 } /* Name.Builtin.Pseudo */
-pre.code .fm { color: #0000FF } /* Name.Function.Magic */
-pre.code .vc { color: #19177C } /* Name.Variable.Class */
-pre.code .vg { color: #19177C } /* Name.Variable.Global */
-pre.code .vi { color: #19177C } /* Name.Variable.Instance */
-pre.code .vm { color: #19177C } /* Name.Variable.Magic */
-pre.code .il { color: #666666 } /* Literal.Number.Integer.Long */
-table.codetable { width: 100%;} td.linenos {text-align: right; width: 4em;}
