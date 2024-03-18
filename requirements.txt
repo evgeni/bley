@@ -1,1 +1,1 @@
-Nikola<8
+Nikola==8.3.0

@@ -1,4 +1,6 @@
-title: download
+<!-- 
+.. title: download
+-->
 
 source tarballs
 ===============
