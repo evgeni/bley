@@ -944,7 +944,6 @@ LICENSE = ""
 # (translatable)
 CONTENT_FOOTER = '''Contents &copy; {date}         <a href="mailto:{email}">{author}</a> - Powered by         <a href="http://getnikola.com" rel="nofollow">Nikola</a> - Theme is <a href="http://www.damian.oquanta.info/categories/zen.html">Zen</a>        {license}<br/>
  <a href='https://www.openhub.net/p/bley?ref=sample' target='_blank'><img alt='Open Hub project report for bley' border='0' src='https://www.openhub.net/p/bley/widgets/project_thin_badge.gif' /></a>
- <a href="https://travis-ci.org/evgeni/bley"><img alt="Build Status" src="https://travis-ci.org/evgeni/bley.png?branch=master"></a>
 '''
 
 # Things that will be passed to CONTENT_FOOTER.format().  This is done
