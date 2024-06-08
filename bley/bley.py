@@ -61,7 +61,7 @@ DEFAULT_CONFIG = {
     'dbport': '0',
     'whitelist_recipients_file': './whitelist_recipients',
     'whitelist_clients_file': './whitelist_clients',
-    'dnsbls': 'ix.dnsbl.manitu.net, dnsbl.sorbs.net',
+    'dnsbls': 'ix.dnsbl.manitu.net',
     'dnswls': 'list.dnswl.org',
     'dnswl_threshold': '1',
     'dnsbl_threshold': '1',
