@@ -22,11 +22,9 @@ jobs:
     trigger: pull_request
     targets:
       - fedora-stable
-      - epel-8
       - epel-9
 
   - job: tests
     trigger: pull_request
     targets:
       - fedora-stable
-      - epel-8
