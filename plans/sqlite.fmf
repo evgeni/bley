@@ -2,9 +2,11 @@ summary: Run with SQLite backend
 execute:
   how: tmt
   script:
-    - echo '[bley]' > /etc/bley/bley.conf
+    - cp test/whitelist_* /etc/bley
+    - grep -vE '(^(#|$|db)|bleygraph)' test/bley_test.conf.in > /etc/bley/bley.conf
     - echo 'log_file = /tmp/bley.log' >> /etc/bley/bley.conf
     - echo 'dbtype = sqlite3' >> /etc/bley/bley.conf
     - echo 'dbname = /tmp/bley.db' >> /etc/bley/bley.conf
     - systemctl enable --now bley
     - systemctl status bley
+    - trial test/test_*.py
