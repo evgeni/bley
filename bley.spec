@@ -53,6 +53,7 @@ for file in bley.conf whitelist_clients whitelist_recipients; do
     $RPM_BUILD_ROOT%{_sysconfdir}/%{name}/${file}
 done
 
+install -D -m644 %{name}-sysusers.conf $RPM_BUILD_ROOT%{_sysusersdir}/%{name}.conf
 
 %post
 %systemd_post %{name}.service
@@ -75,6 +76,7 @@ done
 %{_mandir}/man1/%{name}.1.gz
 %{_mandir}/man1/%{name}graph.1.gz
 %{_unitdir}/%{name}.service
+%{_sysusersdir}/%{name}.conf
 
 %files logcheck
 %doc CHANGELOG.md README.md
