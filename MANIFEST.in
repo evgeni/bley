@@ -3,6 +3,7 @@ include *.example
 include *.1
 include bley.service
 include bley.logcheck
+include bley-sysusers.conf
 include CHANGELOG.md
 include README.md
 include LICENSE
