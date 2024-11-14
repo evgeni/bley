@@ -29,3 +29,8 @@ jobs:
     targets:
       - fedora-stable
       - epel-9
+    fmf_url: https://gitlab.com/zhenech/testing-farm-tests/
+    fmf_ref: correct-repo
+    tmt_plan: /packit/installation
+    env:
+      REPOSITORY: packit/evgeni-bley-109
