@@ -11,7 +11,7 @@ BuildArch:      noarch
 BuildRequires:  python3-devel
 BuildRequires:  python3-setuptools
 
-Requires:       python3-mysql
+Requires:       python3-mysqlclient
 Requires:       python3-py3dns
 Requires:       python3-pyspf
 Requires:       python3-psycopg2
