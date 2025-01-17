@@ -100,7 +100,7 @@ the message sent via
 
 The DNSWLs and DNSBLs `bley` uses for its tests can be set via
 
-    dnsbls = ix.dnsbl.manitu.net
+    dnsbls = zen.spamhaus.org
     dnswls = list.dnswl.org
 
 Thresholds define how many sub-checks have to hit, to trigger a feature
