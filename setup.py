@@ -8,7 +8,7 @@ def systemd_unit_path():
         path = subprocess.check_output(command, stderr=subprocess.STDOUT, universal_newlines=True)
         return path.strip()
     except (subprocess.CalledProcessError, OSError):
-        return "/lib/systemd/system"
+        return "/usr/lib/systemd/system"
 
 
 setup(
