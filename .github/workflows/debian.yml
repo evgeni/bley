@@ -14,7 +14,7 @@ concurrency:
 
 jobs:
   source:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     outputs:
       project-name: ${{ steps.project-details.outputs.project-name }}
       project-version: ${{ steps.project-details.outputs.project-version }}
@@ -41,7 +41,7 @@ jobs:
 
   debian-source:
     needs: source
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     container: debian/buildd:bullseye
     outputs:
       project-name: ${{ needs.source.outputs.project-name }}
@@ -75,7 +75,7 @@ jobs:
 
   debian-binary:
     needs: debian-source
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     container: debian/buildd:bullseye
     steps:
       - uses: actions/download-artifact@v4
@@ -96,7 +96,7 @@ jobs:
             !*_source.*
 
   lintian:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: debian-binary
     steps:
       - uses: actions/download-artifact@v4
@@ -105,7 +105,7 @@ jobs:
       - uses: evgeni/action-lintian@v0
 
   autopkgtest:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: debian-binary
     steps:
       - uses: actions/download-artifact@v4
@@ -114,7 +114,7 @@ jobs:
       - uses: evgeni/action-autopkgtest@v0
 
   piuparts:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: debian-binary
     steps:
       - uses: actions/download-artifact@v4
@@ -126,7 +126,7 @@ jobs:
 
   cloudsmith:
     if: github.repository_owner == 'evgeni' && github.event_name == 'push'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs:
       - debian-binary
       - lintian
