@@ -51,7 +51,7 @@ jobs:
       - name: Install my_virtualenv
         run: |
           sudo curl --location --create-dirs --output /usr/local/bin/my_virtualenv https://raw.githubusercontent.com/evgeni/my_virtualenv/devel/my_virtualenv
-          sudo chmod +x /usr/local/bin/*
+          sudo chmod +x /usr/local/bin/my_virtualenv
       - name: Install dependencies
         run: pip install tox tox-gh-actions
       - name: Run tests
