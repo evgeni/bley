@@ -317,7 +317,7 @@ class BleyPolicy(PostfixPolicy):
         '''Check the arg ipstr against a whitelist
         The whitelist consists of ip objects generated from the whitelist file
         Return 1 if
-            ipstr is a valie ip address
+            ipstr is a valid ip address
             -- AND --
             ipstr matches one of the entries in the whitelist_ip list
         '''
