@@ -65,5 +65,10 @@
 # and %(date) for the current date
 #greylist_header = X-Greylist: delayed %(delta)s seconds by bley-%(version)s at %(hostname)s; %(date)s
 
+# Classify all systems belonging to the same subnet as one.
+# Helpful when you have senders with big clusters, where each sending system has an own IP address.
+#subnet_mask_v4 = 32
+#subnet_mask_v6 = 128
+
 [bleygraph]
 #destdir = stats
