@@ -132,6 +132,7 @@ class BleyPolicy(PostfixPolicy):
                          'SPF': 0, 'S_EQ_R': 0, 'WHITELISTED': 0, 'CACHE': 0}
         action = 'DUNNO'
         self.params['now'] = datetime.datetime.now()
+        self.params['client_address_key'] = self.params['client_address']
         postfix_params = self.params
 
         # sanitize sender and recipient parameters
@@ -145,8 +146,8 @@ class BleyPolicy(PostfixPolicy):
             if len(postfix_params[param]) > 254:
                 postfix_params[param] = postfix_params[param][:254]
 
-        if postfix_params['client_address'] in self.factory.bad_cache.keys():
-            delta = datetime.datetime.now() - self.factory.bad_cache[postfix_params['client_address']]
+        if postfix_params['client_address_key'] in self.factory.bad_cache.keys():
+            delta = datetime.datetime.now() - self.factory.bad_cache[postfix_params['client_address_key']]
             if delta < datetime.timedelta(0, self.factory.settings.cache_valid, 0):
                 action = 'DEFER_IF_PERMIT %s (cached result)' % self.factory.settings.reject_msg
                 check_results['CACHE'] = 1
@@ -161,10 +162,10 @@ class BleyPolicy(PostfixPolicy):
                 self.factory.log_action(postfix_params, action, check_results)
                 return
             else:
-                del self.factory.bad_cache[postfix_params['client_address']]
+                del self.factory.bad_cache[postfix_params['client_address_key']]
 
-        if postfix_params['client_address'] in self.factory.good_cache.keys():
-            delta = datetime.datetime.now() - self.factory.good_cache[postfix_params['client_address']]
+        if postfix_params['client_address_key'] in self.factory.good_cache.keys():
+            delta = datetime.datetime.now() - self.factory.good_cache[postfix_params['client_address_key']]
             if delta < datetime.timedelta(0, self.factory.settings.cache_valid, 0):
                 action = 'DUNNO'
                 check_results['CACHE'] = 1
@@ -179,7 +180,7 @@ class BleyPolicy(PostfixPolicy):
                 self.factory.log_action(postfix_params, action, check_results)
                 return
             else:
-                del self.factory.good_cache[postfix_params['client_address']]
+                del self.factory.good_cache[postfix_params['client_address_key']]
 
         status = self.check_local_db(postfix_params)
         # -1 : not found
@@ -216,11 +217,11 @@ class BleyPolicy(PostfixPolicy):
                 if check_results['DNSBL'] >= self.factory.settings.dnsbl_threshold or check_results['HELO'] + check_results['DYN'] + check_results['SPF'] + check_results['S_EQ_R'] >= self.factory.settings.rfc_threshold:
                     new_status = 2
                     action = 'DEFER_IF_PERMIT %s' % self.factory.settings.reject_msg
-                    self.factory.bad_cache[postfix_params['client_address']] = datetime.datetime.now()
+                    self.factory.bad_cache[postfix_params['client_address_key']] = datetime.datetime.now()
                 else:
                     new_status = 0
-                    self.factory.good_cache[postfix_params['client_address']] = datetime.datetime.now()
-            query = "INSERT INTO bley_status (ip, status, last_action, sender, recipient) VALUES(%(client_address)s, %(new_status)s, %(now)s, %(sender)s, %(recipient)s)"
+                    self.factory.good_cache[postfix_params['client_address_key']] = datetime.datetime.now()
+            query = "INSERT INTO bley_status (ip, status, last_action, sender, recipient) VALUES(%(client_address_key)s, %(new_status)s, %(now)s, %(sender)s, %(recipient)s)"
             postfix_params['new_status'] = new_status
             try:
                 self.safe_execute(query, postfix_params)
@@ -238,20 +239,20 @@ class BleyPolicy(PostfixPolicy):
                     action = 'PREPEND %s' % header
                 else:
                     action = 'DUNNO'
-                query = "UPDATE bley_status SET status=0, last_action=%(now)s WHERE ip=%(client_address)s AND sender=%(sender)s AND recipient=%(recipient)s"
-                self.factory.good_cache[postfix_params['client_address']] = datetime.datetime.now()
+                query = "UPDATE bley_status SET status=0, last_action=%(now)s WHERE ip=%(client_address_key)s AND sender=%(sender)s AND recipient=%(recipient)s"
+                self.factory.good_cache[postfix_params['client_address_key']] = datetime.datetime.now()
             else:
                 action = 'DEFER_IF_PERMIT %s' % self.factory.settings.reject_msg
-                query = "UPDATE bley_status SET fail_count=fail_count+1 WHERE ip=%(client_address)s AND sender=%(sender)s AND recipient=%(recipient)s"
-                self.factory.bad_cache[postfix_params['client_address']] = datetime.datetime.now()
+                query = "UPDATE bley_status SET fail_count=fail_count+1 WHERE ip=%(client_address_key)s AND sender=%(sender)s AND recipient=%(recipient)s"
+                self.factory.bad_cache[postfix_params['client_address_key']] = datetime.datetime.now()
             self.safe_execute(query, postfix_params)
 
         else:  # found to be clean
             check_results['DB'] = status[0]
             action = 'DUNNO'
-            query = "UPDATE bley_status SET last_action=%(now)s WHERE ip=%(client_address)s AND sender=%(sender)s AND recipient=%(recipient)s"
+            query = "UPDATE bley_status SET last_action=%(now)s WHERE ip=%(client_address_key)s AND sender=%(sender)s AND recipient=%(recipient)s"
             self.safe_execute(query, postfix_params)
-            self.factory.good_cache[postfix_params['client_address']] = datetime.datetime.now()
+            self.factory.good_cache[postfix_params['client_address_key']] = datetime.datetime.now()
 
         if self.factory.settings.verbose:
             logger.info('decided action=%s, checks: %s, postfix: %s' %
@@ -345,7 +346,7 @@ class BleyPolicy(PostfixPolicy):
 
         query = """SELECT status,last_action,fail_count,sender,recipient
                     FROM bley_status
-                    WHERE ip=%(client_address)s
+                    WHERE ip=%(client_address_key)s
                     AND sender=%(sender)s AND recipient=%(recipient)s
                     ORDER BY status ASC
                     LIMIT 1"""
