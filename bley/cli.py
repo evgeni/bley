@@ -269,6 +269,9 @@ def bley_start():
     settings.use_spf = config.getint('bley', 'use_spf')
     settings.use_spf_guess = config.getint('bley', 'use_spf_guess')
 
+    settings.subnet_mask_v4 = config.get('bley', 'subnet_mask_v4')
+    settings.subnet_mask_v6 = config.get('bley', 'subnet_mask_v6')
+
     settings.exim_workaround = config.getboolean('bley', 'exim_workaround')
 
     if settings.debug:

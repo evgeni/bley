@@ -77,6 +77,8 @@ DEFAULT_CONFIG = {
     'cache_valid': '60',
     'greylist_header': 'X-Greylist: delayed %(delta)s seconds by bley-%(version)s at %(hostname)s; %(date)s',
     'destdir': 'stats',
+    'subnet_mask_v4': '32',
+    'subnet_mask_v6': '128',
 }
 
 
@@ -132,7 +134,12 @@ class BleyPolicy(PostfixPolicy):
                          'SPF': 0, 'S_EQ_R': 0, 'WHITELISTED': 0, 'CACHE': 0}
         action = 'DUNNO'
         self.params['now'] = datetime.datetime.now()
-        self.params['client_address_key'] = self.params['client_address']
+        if ':' in self.params['client_address']:
+            subnet_mask = self.factory.settings.subnet_mask_v6
+        else:
+            subnet_mask = self.factory.settings.subnet_mask_v4
+        interface = ipaddress.ip_interface(f"{self.params['client_address']}/{subnet_mask}")
+        self.params['client_address_key'] = str(interface.network.network_address)
         postfix_params = self.params
 
         # sanitize sender and recipient parameters
