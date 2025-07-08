@@ -81,6 +81,11 @@ DEFAULT_CONFIG = {
     'subnet_mask_v6': '128',
 }
 
+STATUS_UNKNOWN = -1
+STATUS_OK = 0
+STATUS_IN_DNSWL = 1
+STATUS_GREYLISTED = 2
+
 
 def parse_config(conffile):
     config = ConfigParser(DEFAULT_CONFIG)
@@ -206,10 +211,10 @@ class BleyPolicy(PostfixPolicy):
                                      self.factory.settings.whitelist_clients_ip):
             action = 'DUNNO'
             check_results['WHITELISTED'] = 1
-        elif status == -1:  # not found in local db...
+        elif status[0] == STATUS_UNKNOWN:  # not found in local db...
             check_results['DNSWL'] = yield self.check_dnswls(postfix_params['client_address'], self.factory.settings.dnswl_threshold)
             if check_results['DNSWL'] >= self.factory.settings.dnswl_threshold:
-                new_status = 1
+                new_status = STATUS_IN_DNSWL
             else:
                 check_results['DNSBL'] = yield self.check_dnsbls(postfix_params['client_address'], self.factory.settings.dnsbl_threshold)
                 check_results['HELO'] = bley.helpers.check_helo(postfix_params)
@@ -222,11 +227,11 @@ class BleyPolicy(PostfixPolicy):
                 else:
                     check_results['SPF'] = 0
                 if check_results['DNSBL'] >= self.factory.settings.dnsbl_threshold or check_results['HELO'] + check_results['DYN'] + check_results['SPF'] + check_results['S_EQ_R'] >= self.factory.settings.rfc_threshold:
-                    new_status = 2
+                    new_status = STATUS_GREYLISTED
                     action = 'DEFER_IF_PERMIT %s' % self.factory.settings.reject_msg
                     self.factory.bad_cache[postfix_params['client_address_key']] = datetime.datetime.now()
                 else:
-                    new_status = 0
+                    new_status = STATUS_OK
                     self.factory.good_cache[postfix_params['client_address_key']] = datetime.datetime.now()
             query = "INSERT INTO bley_status (ip, status, last_action, sender, recipient) VALUES(%(client_address_key)s, %(new_status)s, %(now)s, %(sender)s, %(recipient)s)"
             postfix_params['new_status'] = new_status
@@ -236,7 +241,7 @@ class BleyPolicy(PostfixPolicy):
                 # the other thread already commited while we checked, ignore
                 pass
 
-        elif status[0] >= 2:  # found to be greyed
+        elif status[0] >= STATUS_GREYLISTED:  # found to be greyed
             check_results['DB'] = status[0]
             delta = datetime.datetime.now() - status[1]
             if delta > self.factory.settings.greylist_period + status[2] * self.factory.settings.greylist_penalty or delta > self.factory.settings.greylist_max:
@@ -246,7 +251,9 @@ class BleyPolicy(PostfixPolicy):
                     action = 'PREPEND %s' % header
                 else:
                     action = 'DUNNO'
-                query = "UPDATE bley_status SET status=0, last_action=%(now)s WHERE ip=%(client_address_key)s AND sender=%(sender)s AND recipient=%(recipient)s"
+                new_status = STATUS_OK
+                postfix_params['new_status'] = new_status
+                query = "UPDATE bley_status SET status=%(new_status)s, last_action=%(now)s WHERE ip=%(client_address_key)s AND sender=%(sender)s AND recipient=%(recipient)s"
                 self.factory.good_cache[postfix_params['client_address_key']] = datetime.datetime.now()
             else:
                 action = 'DEFER_IF_PERMIT %s' % self.factory.settings.reject_msg
@@ -364,7 +371,7 @@ class BleyPolicy(PostfixPolicy):
             result = None
             logger.info('check_local_db failed. sending unknown.')
         if not result:
-            return -1
+            return [STATUS_UNKNOWN, None, None, None, None]
         else:
             return result
 
