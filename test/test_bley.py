@@ -124,7 +124,7 @@ class BleyTestCase(unittest.TestCase):
         ip = self._get_next_ipv6()
         return self._test_good_client(ip)
 
-    def _test_ip_help_and_dyn_host(self, ip):
+    def _test_ip_helo_and_dyn_host(self, ip):
         data = {
             'sender': 'nothinguseful@example.com',
             'recipient': 'nothinguseful@example.com',
@@ -138,13 +138,13 @@ class BleyTestCase(unittest.TestCase):
 
         return d
 
-    def test_ip_help_and_dyn_host_v4(self):
+    def test_ip_helo_and_dyn_host_v4(self):
         ip = self._get_next_ipv4()
-        return self._test_ip_help_and_dyn_host(ip)
+        return self._test_ip_helo_and_dyn_host(ip)
 
-    def test_ip_help_and_dyn_host_v6(self):
+    def test_ip_helo_and_dyn_host_v6(self):
         ip = self._get_next_ipv6()
-        return self._test_ip_help_and_dyn_host(ip)
+        return self._test_ip_helo_and_dyn_host(ip)
 
     def _test_same_sender_recipient_and_dyn_host(self, ip):
         data = {
