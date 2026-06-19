@@ -42,7 +42,7 @@ jobs:
       TWISTED_VERSION: ${{ matrix.twisted }}
       BLEY_TEST_ALLOW_NETWORK: "true"
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: Set up Python
         uses: actions/setup-python@v6
         with:
