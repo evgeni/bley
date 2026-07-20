@@ -21,7 +21,7 @@ jobs:
       project-source: ${{ steps.project-details.outputs.project-source }}
     steps:
       - uses: actions/checkout@v7
-      - uses: actions/setup-python@v6
+      - uses: actions/setup-python@v7
         with:
           python-version: '3.9'
       - run: make sdist
@@ -136,7 +136,7 @@ jobs:
       - uses: actions/download-artifact@v8
         with:
           name: debian-binary
-      - uses: actions/setup-python@v6
+      - uses: actions/setup-python@v7
         with:
           python-version: '3.9'
       - run: pip install cloudsmith-cli
